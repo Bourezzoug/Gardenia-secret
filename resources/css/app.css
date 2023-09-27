@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@media screen and (min-width:768px) {
+    header{
+        /* height:calc(100vh - 32px); */
+        background-position:center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+    }
+}
+@font-face {
+    font-family: 'TuesdayNight';
+    src: url('../font/TuesdayNight-Regular.otf') ,
+            url('../font/TuesdayNight-Regular.otf') ;
+    font-weight: normal;
+    font-style: normal;
+}
+.fade-in{
+    opacity: 1;
+    transition: opacity 2s ease-in-out;
+}
+.fade-out{
+    opacity: 1;
+    transition: opacity 2s ease-in-out;
+}
+.concept h2::after{
+    content:'Gardenia Secret';
+    position: absolute;
+    font-family: 'TuesdayNight','sans-serif' ;
+    font-size:30px;
+    text-transform: capitalize;
+    top:-20px;
+    left:50%;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    z-index:-1;
+    color:#e9b5a8
+}
+.concept-s h2::after{
+    content:'Gardenia Secret';
+    position: absolute;
+    font-family: 'TuesdayNight','sans-serif' ;
+    font-size:15px;
+    text-transform: capitalize;
+    top:-15px;
+    left:40px;
+    z-index:-1;
+    color:#E5E5E5
+}
+.concept-m h2::after{
+    content:'Gardenia Secret';
+    position: absolute;
+    font-family: 'TuesdayNight','sans-serif' ;
+    font-size:18px;
+    text-transform: capitalize;
+    top:-15px;
+    left:50%;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    z-index:-1;
+    color:#E5E5E5
+}
+@media screen and (max-width:768px) {
+    .concept h2::after{
+        font-size:20px;
+    }
+}
+#social .social-pic:hover span{
+    opacity: 1;
+    transition: .3s all ease;
+    -webkit-transition: .3s all ease;
+    -moz-transition: .3s all ease;
+    -ms-transition: .3s all ease;
+    -o-transition: .3s all ease;
+}
+#blog .blog-content .more::before{
+    content:'';
+    position: absolute;
+    top:50%;
+    left:0;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    height: 1px;
+    width: 10px;
+    background-color: #000;
+    transition: .3s all ease;
+    -webkit-transition: .3s all ease-in-out;
+    -moz-transition: .3s all ease;
+    -ms-transition: .3s all ease;
+    -o-transition: .3s all ease;
+}
+#blog .blog-content .more:hover{
+    padding-left: 29px;
+    transition: .3s all ease-in-out;
+    -webkit-transition: .3s all ease-in-out;
+    -moz-transition: .3s all ease-in-out;
+    -ms-transition: .3s all ease-in-out;
+    -o-transition: .3s all ease-in-out;
+}
+#blog .blog-content .more:hover::before{
+width: 27px;
+}
+.bg{
+    background-color:#fbf9fa
+}
+.card-img:hover .bg {
+    opacity: 100;
+}
+.card-img:hover .icons{
+    display: flex;
+}
+/* Make one item center */
+.owl-item.center {
+    display: flex !important;
+    justify-content: center;
+}
+.insta-card:hover .insta-overlay{
+    height: 100%;
+}
+
+
+
+
+#signUpForm {
+    max-width: 900px;
+}
+#signUpForm .form-header .stepIndicator.active {
+    font-weight: 600;
+}
+#signUpForm .form-header .stepIndicator.finish {
+    font-weight: 600;
+    color: #af8d6a;
+}
+#signUpForm .form-header .stepIndicator::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    z-index: 9;
+    width: 20px;
+    height: 20px;
+    background-color: #e3bd9f;
+    border-radius: 50%;
+    border: 3px solid #fde8d6;
+}
+#signUpForm .form-header .stepIndicator.active::before {
+    background-color: #c9a285;
+    border: 3px solid #e3bd9f;
+}
+#signUpForm .form-header .stepIndicator.finish::before {
+    background-color: #af8d6a;
+    border: 3px solid #e3bd9f;
+}
+#signUpForm .form-header .stepIndicator::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 8px;
+    width: 100%;
+    height: 3px;
+    background-color: #fef5ee;
+}
+#signUpForm .form-header .stepIndicator.active::after {
+    background-color: #c9a285;
+}
+#signUpForm .form-header .stepIndicator.finish::after {
+    background-color: #af8d6a;
+}
+#signUpForm .form-header .stepIndicator:last-child:after {
+    display: none;
+}
+#signUpForm input.invalid {
+    border: 2px solid #ffaba5;
+}
+#signUpForm .step {
+  display: none;
+}
+.radio-button {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.radio-button .button-text {
+    color: initial;
+}
+ .radio-button .button-text{
+    position: relative;
+ }
+ input[type="radio"]:checked + .radio-button div{
+    border: 10px solid rgba(255, 255, 255, 0.5)
+
+ }
+ input[type=range]::-webkit-slider-thumb {
+	pointer-events: all;
+	width: 24px;
+	height: 24px;
+	-webkit-appearance: none;
+  
+/* @apply w-6 h-6 appearance-none pointer-events-auto; */
+}
+
+
+#html-spinner{
+    border:4px solid #af8d6a;
+    border-top:4px solid white;
+    border-radius:50%;
+}
+#html-spinner{
+    -webkit-transition-property: -webkit-transform;
+    -webkit-transition-duration: 1.2s;
+    -webkit-animation-name: rotate;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    
+    -moz-transition-property: -moz-transform;
+    -moz-animation-name: rotate; 
+    -moz-animation-duration: 1.2s; 
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-timing-function: linear;
+    
+    transition-property: transform;
+    animation-name: rotate; 
+    animation-duration: 1.2s; 
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+  
+  @-webkit-keyframes rotate {
+      from {-webkit-transform: rotate(0deg);}
+      to {-webkit-transform: rotate(360deg);}
+  }
+  
+  @-moz-keyframes rotate {
+      from {-moz-transform: rotate(0deg);}
+      to {-moz-transform: rotate(360deg);}
+  }
+  
+  @keyframes rotate {
+      from {transform: rotate(0deg);}
+      to {transform: rotate(360deg);}
+  }
+  
+  
+
+  .fade-in {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.fade-in.active {
+    opacity: 1;
+}
+
+
+  
