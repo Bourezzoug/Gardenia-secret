@@ -1,9 +1,10 @@
 @extends('layouts.frontend')
-
+@section('title', 'Gardenia Secret - ' . $category->name)
+@section('meta_description',  $category->name)
 @section('content')
 
 @include('pages.components.header')
-<div class="xl:container mx-auto px-3 sm:px-4 xl:px-2 flex justify-center py-6" id="hero-section">
+<div class="xl:container mx-auto px-3 sm:px-4 xl:px-2 flex justify-center pt-6" id="hero-section">
     {{-- <div class="title" style="background-image: url('https://admanager.linformation.ma/storage/banniers/September2023/q62Ug4A7SUCsGieMG3My.jpg')">
         <div class="h-56 relative">
             <div class="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2">
@@ -13,140 +14,6 @@
     </div> --}}
     <img src="{{ asset('images/banner.jpeg') }}" alt="">
 </div>
-@php
-  $categorie = App\Models\Categorie::find($first_article->categorie_id);
-@endphp
-<div class="bg-white pb-6">
-    <div class="xl:container mx-auto px-3 sm:px-4 xl:px-2">
-      <!-- big grid 1 -->
-      <div class="flex flex-row flex-wrap">
-        <!--Start left cover-->
-        <div class="flex-shrink max-w-full w-full lg:w-1/2 pb-1 lg:pb-0 lg:pr-1">
-          <div class="relative hover-img max-h-98 xl:h-[508px] mt-1 overflow-hidden ">
-            <a href="#">
-              <img class="max-w-full w-full mx-auto h-full object-cover" src="{{ $first_article->image }}" alt="Image description">
-            </a>
-            <div class="absolute px-5 pt-8 pb-5 bottom-0 w-full  h-full  bg-black bg-opacity-70 flex justify-end flex-col">
-              <a href="#">
-                <h2 class="text-3xl font-bold capitalize text-white mb-3 font-Roboto-condensed">{{ $first_article->title }}</h2>
-              </a>
-              <p class="text-gray-100 hidden sm:inline-block font-Roboto-condensed">{!! Illuminate\Support\Str::limit(strip_tags($first_article->body), 150, '[...]') !!}</p>
-              <div class="pt-1">
-                <div class="text-gray-100">
-                    <a href="{{ $categorie->name }}"  class="text-sm px-2 py-1 rounded mr-2 font-Roboto-condensed" style="background-color:{{ $categorie->color }}">{{ $categorie->name }}</a>
-                    <span class="text-xs">- {{ \Carbon\Carbon::parse($first_article->created_at)->format('F j, Y') }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!--Start box news-->
-        <div class="flex-shrink max-w-full w-full  lg:w-1/2">
-          <div class="grid grid-cols-6">
-            @foreach($articles as $key => $article)
-            @php
-              $categorie_article = App\Models\Categorie::find($article->categorie_id);
-            @endphp
-            @if($key == 0)
-            <article class="col-span-6 p-1">
-              <div class="relative hover-img xl:h-[250px] overflow-hidden">
-                <a href="#">
-                  <img class="max-w-full w-full mx-auto h-full object-cover" src="{{ $article->image }}" alt="Image description">
-                </a>
-                <div class="absolute px-4 pt-7 pb-4 bottom-0 h-full w-full bg-black bg-opacity-70 flex justify-end flex-col">
-                  <a href="#">
-                    <h2 class="text-lg font-bold capitalize leading-tight font-Roboto-condensed text-white mb-1">{{ $article->title }}</h2>
-                  </a>
-                  <div class="pt-1">
-                    <div class="text-gray-100">
-                        <a href="{{ $categorie_article->name }}"  class="text-sm px-2 py-1 rounded mr-2 font-Roboto-condensed" style="background-color: {{ $categorie_article->color }}">{{ $categorie_article->name }}</a>
-                        <span class="text-xs">- {{ \Carbon\Carbon::parse($article->created_at)->format('F j, Y') }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
-            @else
-            <article class="col-span-3 p-1">
-              <div class="relative hover-img xl:h-[250px] overflow-hidden">
-                <a href="#">
-                  <img class="max-w-full w-full mx-auto h-full object-cover" src="{{ $article->image }}" alt="Image description">
-                </a>
-                <div class="absolute px-4 pt-7 pb-4 bottom-0 h-full w-full bg-black bg-opacity-70 flex justify-end flex-col">
-                  <a href="#">
-                    <h2 class="text-lg font-bold capitalize leading-tight font-Roboto-condensed text-white mb-1">{{ $article->title }}</h2>
-                  </a>
-                  <div class="pt-1">
-                    <div class="text-gray-100">
-                        <a href="{{ $categorie_article->name }}" class="text-sm px-2 py-1 rounded mr-2 font-Roboto-condensed" style="background-color:{{ $categorie_article->color }}">{{ $categorie_article->name }}</a>
-                        <span class="text-xs">- {{ \Carbon\Carbon::parse($article->created_at)->format('F j, Y') }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
-            @endif
-            @endforeach
-            {{-- <article class="col-span-6 p-1">
-              <div class="relative hover-img xl:h-[250px] overflow-hidden">
-                <a href="#">
-                  <img class="max-w-full w-full mx-auto h-full object-cover" src="http://127.0.0.1:8000/storage/images/DANRzgBCtzwqQBMU6LXjhz2rrDOUAaiVDpmF3r7R.jpg" alt="Image description">
-                </a>
-                <div class="absolute px-4 pt-7 pb-4 bottom-0 h-full w-full bg-black bg-opacity-70 flex justify-end flex-col">
-                  <a href="#">
-                    <h2 class="text-lg font-bold capitalize leading-tight text-white mb-1">News magazines are becoming obsolete, replaced by gadgets</h2>
-                  </a>
-                  <div class="pt-1">
-                    <div class="text-gray-100">
-                        <span class="bg-orange-600 text-sm px-2 py-1 rounded mr-2">Interior</span>
-                        <span class="text-xs">- October 2, 2023</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
-            <article class="col-span-3 p-1">
-              <div class="relative hover-img xl:h-[250px] overflow-hidden">
-                <a href="#">
-                  <img class="max-w-full w-full mx-auto h-full object-cover" src="http://127.0.0.1:8000/storage/images/DANRzgBCtzwqQBMU6LXjhz2rrDOUAaiVDpmF3r7R.jpg" alt="">
-                </a>
-                <div class="absolute px-4 pt-7 pb-4 bottom-0 h-full w-full bg-black bg-opacity-70 flex justify-end flex-col">
-                  <a href="#">
-                    <h2 class="text-lg font-bold capitalize leading-tight text-white mb-1">Tips for decorating the interior of the living room</h2>
-                  </a>
-                  <div class="pt-1">
-                    <div class="text-gray-100">
-                        <span class="bg-red-600 text-sm px-2 py-1 rounded mr-2">Interior</span>
-                        <span class="text-xs">- October 2, 2023</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
-            <article class="col-span-3 p-1">
-              <div class="relative hover-img xl:h-[250px] overflow-hidden">
-                <a href="#">
-                  <img class="max-w-full w-full mx-auto h-full object-cover" src="http://127.0.0.1:8000/storage/images/DANRzgBCtzwqQBMU6LXjhz2rrDOUAaiVDpmF3r7R.jpg" alt="Image description">
-                </a>
-                <div class="absolute px-4 pt-7 pb-4 bottom-0 h-full w-full bg-black bg-opacity-70 flex justify-end flex-col">
-                  <a href="#">
-                    <h2 class="text-lg font-bold capitalize leading-tight text-white mb-1">Online taxi users are increasing drastically ahead of the new year</h2>
-                  </a>
-                  <div class="pt-1">
-                    <div class="text-gray-100">
-                        <span class="bg-purple-600 text-sm px-2 py-1 rounded mr-2">Interior</span>
-                        <span class="text-xs">- October 2, 2023</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article> --}}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 <div class="max-w-screen-xl container p-6 mx-auto">
 
     <main class="mt-10">
@@ -166,7 +33,7 @@
                     </a>
                 </div>
                 <div class="col-span-1">
-                  <div class="text-gray-100 pb-2">
+                  {{-- <div class="text-gray-100 pb-2">
                     @php
                         $category = App\Models\Categorie::find($post->categorie_id);
                     @endphp
@@ -176,7 +43,7 @@
                     @else
                         <span class="bg-red-600 text-sm px-2 py-1 rounded mr-2">No Category</span>
                     @endif
-                </div>
+                </div> --}}
                 
                     <div class="flex flex-col items-start">
                             <a href="/blog/{{ $post->slug }}" class="text-[22px] leading-tight font-Roboto-condensed font-bold py-2">
@@ -186,7 +53,7 @@
                                 {{ strftime('%A %e %B %Y', strtotime($post->created_at)) }}
                             </span>
                             <p class=" text-gray-500 font-Roboto-condensed text-[16px] my-3">
-                                {!! Illuminate\Support\Str::limit(strip_tags($post->body), 110, ' [...]') !!}
+                                {!! Illuminate\Support\Str::limit(strip_tags($post->body), 110, '...') !!}
                             </p>
                     </div>
                     <div class="flex items-center my-2 gap-2">
@@ -237,23 +104,24 @@
                     </label>
                 </div>
                 <div class="mt-5">
-                  <div class="my-2 flex items-center justify-between space-x-1">
-                      <h4 class="capitalize rounded mb-2 font-Roboto-condensed text-[18px] bg-second-color font-bold" style="padding:0 10px 1px">Categories</h4>
-                      <div class="flex-1 border-t-[1.5px] border-gray-200"></div>
-                  </div>
-                  <div class="mt-3 flex flex-col">
-                      @forelse ($categories as $categorie)
-                          <a href="?categorie={{ $categorie->name }}" class="font-Roboto text-[16px] py-1 text-gray-500 hover:text-gray-800 transition-colors">{{ $categorie->name }}</a>
-                      @empty
-                      
-                      @endforelse
-                  </div>
-              </div> 
+                    <div class="my-2 flex items-center justify-between space-x-1">
+                        <h4 class="capitalize rounded mb-2 font-Roboto-condensed text-[18px] bg-second-color font-bold" style="padding:0 10px 1px">Categories</h4>
+                        <div class="flex-1 border-t-[1.5px] border-gray-200"></div>
+                    </div>
+                    <div class="mt-3 flex flex-col">
+                        @forelse ($categories as $categorie)
+                            <a href="?categorie={{ $categorie->name }}" class="font-Roboto text-[16px] py-1 text-gray-500 hover:text-gray-800 transition-colors">{{ $categorie->name }}</a>
+                        @empty
+                        
+                        @endforelse
+                    </div>
+                </div> 
                 <div class="mt-5">
                     <a href="#">
                         <img src="{{ asset('images/mcdo.jpeg') }}" style="height:600px;width:300px" alt="">
                     </a>
                 </div>
+
                 <div class="mt-5 flex flex-col space-y-5">
                     <h4 class="font-Lato text-[17px] uppercase">Social Media</h4>
                     <a href="#" class="w-full bg-[#506fbf] rounded-full flex justify-between items-center">
@@ -341,14 +209,9 @@
     <!-- main ends here -->
 
 </div>
-
-
-
 @include('pages.components.popup')
 @include('pages.components.top')
 
 @include('pages.components.footer')
-@include('pages.components.cart')
-@include('pages.components.wishlist')
 
 @endsection

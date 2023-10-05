@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin\Blog;
 
 use App\Models\Blog;
+use App\Models\Categorie;
 use Illuminate\Support\Facades\Redirect;
 use Livewire\Component;
 use Laravel\Jetstream\InteractsWithBanner;
@@ -60,7 +61,6 @@ class BlogUpdate extends Component
 
     public function edit(){
         $this->validate();
-        $publicationDate = date('Y-m-d H:i:s', strtotime($this->publication_date));
         $this->slug = str_replace(' ', '-', $this->slug);
         $data = [
             'title' => $this->title,
@@ -69,9 +69,8 @@ class BlogUpdate extends Component
             'slug' => $this->slug,
             'seo_title' => $this->seo_title,
             'meta_description' => $this->meta_description,
-            'publication_date' => $publicationDate,
             'status' => $this->status,
-            'categorie' => $this->categorie,
+            'categorie_id' => $this->categorieID,
         ];
 
         if (!empty($this->image)) {
@@ -99,7 +98,9 @@ class BlogUpdate extends Component
 
     public function render()
     {
-        return view('livewire.admin.blog.blog-update');
+        return view('livewire.admin.blog.blog-update',[
+            'categories'    =>  Categorie::all()->pluck('name','id'),
+        ]);
     }
 }
 

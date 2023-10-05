@@ -195,18 +195,15 @@
                                           </div>
                                           
                                           <div class="py-5 mr-5 pl-3">
-                                            <x-select wire:model="categorie"  class="input-field mt-1">
-                                              <option value="" readonly="true" hidden="true" selected>{{ __('Categorie de l\'article') }}</option>
-                                              <option value="Femme Inspirante">Femme Inspirante</option>
-                                              <option value="Féminovation">Féminovation</option>
-                                              <option value="Style & Élégance">Style & Élégance</option>
-                                              <option value="Guide Shopping">Guide Shopping</option>
-                                              <option value="Décoration & Astuces">Décoration & Astuces</option>
-                                              <option value="Saveurs du Royaume">Saveurs du Royaume</option>
-                                              <option value="Bien-être">Bien-être</option>
-                                              <option value="Voyages & Découvertes au Royaume">Voyages & Découvertes au Royaume</option>
+                                            <x-label class="text-xs" for="categorieID" value="{{ __('Catégories') }}"/>
+                                            <x-select wire:model="categorieID" class="input-field mt-1">
+                                                <option value="" readonly="true" hidden="true" selected>{{ __('Selectionner une catégorie') }}</option>
+                                                @forelse($categories as $key => $value)
+                                                    <option value="{{ $key }}">{{ $value }}</option>
+                                                @empty
+                                                @endforelse
                                             </x-select>
-                                            <x-input-error for="Categorie" class="mt-2 input-error"/>
+                                            <x-input-error for="categorieID" class="mt-2 input-error"/>
                                           </div>
                                           
                                           <div class="pb-5 mr-5 pl-3">

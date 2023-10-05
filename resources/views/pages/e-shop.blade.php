@@ -20,9 +20,9 @@
                     <h4 class="pb-5 font-Lato text-[17px] uppercase" >Filtre</h4>
                     <div x-data="range()" x-init="mintrigger(); maxtrigger()" class="relative max-w-xl w-full">
                       <div>
-                        <input type="range" step="100" x-bind:min="min" x-bind:max="max" x-on:input="mintrigger" x-model="minprice" name="minPrice" class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
+                        <input id="minPrice" type="range" step="100" x-bind:min="min" x-bind:max="max" x-on:input="mintrigger" x-model="minprice" name="minPrice" class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
                   
-                        <input type="range" step="100" x-bind:min="min" x-bind:max="max" x-on:input="maxtrigger" x-model="maxprice" name="maxPrice" class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
+                        <input id="maxPrice" type="range" step="100" x-bind:min="min" x-bind:max="max" x-on:input="maxtrigger" x-model="maxprice" name="maxPrice" class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
                   
                         <div class="relative z-10 h-1">
                   
@@ -120,7 +120,7 @@
                   </div>
             </div>
             <div class="lg:col-span-9 col-span-8">
-                <div class="grid grid-cols-6 gap-5">
+                <div id="products-container" class="grid grid-cols-6 gap-5">
                     @forelse ($products as $product)
                     <div class="col-span-3 lg:col-span-2 card ">
                         <div class="card-img relative transition-all lg:h-[350px]">
@@ -340,6 +340,91 @@
     }
 </script>
 {{-- Script to add the products to the wishlists --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    function sendAjaxRequest() {
+        var minPrice = document.getElementById('minPrice').value;
+        var maxPrice = document.getElementById('maxPrice').value;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '{{ route('e-shop.index') }}?minPrice=' + minPrice + '&maxPrice=' + maxPrice, true);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest'); // Set a header to indicate an AJAX request
+
+        xhr.onload = function() {
+            if (xhr.status >= 200 && xhr.status < 400) {
+                var responseData = JSON.parse(xhr.responseText);
+                // renderProducts(responseData.products);
+                console.log(responseData);
+            } else {
+                console.error('Error fetching data');
+            }
+        };
+
+        xhr.onerror = function() {
+            console.error('Error fetching data');
+        };
+
+        xhr.send();
+    }
+
+    function renderProducts(data) {
+        var productsContainer = document.getElementById('products-container');
+        productsContainer.innerHTML = ''; // Clear existing content
+
+        data.forEach(function(product) {
+            var productElement = document.createElement('div');
+            productElement.classList.add('col-span-3', 'lg:col-span-2', 'card');
+
+            var innerHTML = 
+            `
+    <div class="col-span-3 lg:col-span-2 card ">
+        <div class="card-img relative transition-all lg:h-[350px]">
+            <a href="#">
+                <div class="bg h-full opacity-0 w-full absolute top-0 left-0 transition-all"></div>
+            </a>
+            <a href="#">
+                <img src="{{ $product->photo }}" class="w-full h-full border border-gray-100" alt="">
+            </a>
+            <div class="icons  gap-3 items-center absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 hidden z-30">
+                <a href="/produit/{{ $product->id }}">
+                    <span class="w-8 border border-gray-200 p-2 text-center hover:bg-black hover:border-black hover:text-white">
+                        <i class="fa-solid fa-eye"></i>
+                    </span>
+                </a>
+                <form action="{{ route('wishlist.store', ['id' => $product->id]) }}" method="POST" class="wishlist-form-product w-full" data-product-id="{{ $product->id }}">
+                    @csrf
+                    <button type="submit" class="w-8 border flex justify-center py-2.5 px-4 border-gray-200  text-center hover:bg-black hover:border-black hover:text-white">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="card-title">
+            <h4 class="text-center pt-3 text-lg uppercase fo font-Lato">{{ $product->nom }}</h4>
+            <p class="text-center text-gray-400 font-cormorant">In Stock</p>
+            <p class="text-center text-gray-400 font-cormorant text-xl">${{ $product->prix }}</p>
+            <div class="flex justify-center my-1 ">
+                <img src="images/star.png" class="w-5" style="width:1.25rem !important;height:1.25rem !important" alt="">
+                <img src="images/star.png" class="w-5" style="width:1.25rem !important;height:1.25rem !important" alt="">
+                <img src="images/star.png" class="w-5" style="width:1.25rem !important;height:1.25rem !important" alt="">
+                <img src="images/star.png" class="w-5" style="width:1.25rem !important;height:1.25rem !important" alt="">
+                <img src="images/star.png" class="w-5" style="width:1.25rem !important;height:1.25rem !important" alt="">
+            </div>
+        </div>
+    </div>
+`
+            ;
+
+            productElement.innerHTML = innerHTML;
+            productsContainer.appendChild(productElement);
+        });
+    }
+
+    document.getElementById('minPrice').addEventListener('input', sendAjaxRequest);
+    document.getElementById('maxPrice').addEventListener('input', sendAjaxRequest);
+});
+
+</script>
 @include('pages.components.footer')
 @include('pages.components.top')
 @include('pages.components.popup')

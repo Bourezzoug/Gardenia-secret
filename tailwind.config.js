@@ -18,6 +18,8 @@ export default {
             'Lato' : 'Lato, sans-serif',
             'tuesday':  'TuesdayNight , sans-serif',
             'openSans':  'Open Sans , sans-serif',
+            'Roboto' : ' Roboto, sans-serif;',
+            'Roboto-condensed' : '  Roboto Condensed, sans-serif;'
           },
           colors:{
             'main-color' : '#af8d6a',

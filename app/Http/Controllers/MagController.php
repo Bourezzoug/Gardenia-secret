@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use App\Models\Cart;
+use App\Models\Categorie;
 use App\Models\UniqueView;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class MagController extends Controller
         $url = 'https://raw.githubusercontent.com/alaouy/sql-moroccan-cities/master/json/ville.json';
         $cities = json_decode(file_get_contents($url), true);
     
-        $query = Blog::orderBy('created_at', 'desc');
+        // $query = Blog::orderBy('created_at', 'desc');
 
         $showPopup = false;
         
@@ -28,12 +29,12 @@ class MagController extends Controller
         }
         
         // Check if a category filter is applied
-        if ($request->has('categorie')) {
-            $category = $request->input('categorie');
-            $query->where('categorie', $category);
-        }
+        // if ($request->has('categorie')) {
+        //     $category = $request->input('categorie');
+        //     $query->where('categorie', $category);
+        // }
     
-        $posts = $query->take(4)->paginate(8);
+
     
         $mostViewdArticle = Blog::orderBy('total_viewers_count','desc')
             ->take(4)
@@ -66,7 +67,20 @@ class MagController extends Controller
                 // Calculate the combined total price
                 $totalPrice = $cartsTotalPrice + $boxCartsTotalPrice;
             }
-    
+            $categories = Categorie::all();
+            $first_article = Blog::latest()->first();
+            $articles = Blog::where('id', '!=', $first_article->id)->take(3)->get();
+            $posts = Blog::with('categorie')
+            ->orderBy('created_at', 'desc')
+            ->where('id', '<>', $first_article->id)
+            ->where(function($query) use ($articles) {
+                foreach ($articles as $article) {
+                    $query->where('id', '<>', $article->id);
+                }
+            })
+            ->paginate(8);
+        
+        
         return view('pages.mag',[
             'cities'            =>  $cities,
             'posts'             =>  $posts,
@@ -76,6 +90,9 @@ class MagController extends Controller
             'boxCarts'          =>  $boxCarts,
             'wishlists'         =>  $wishlists,
             'totalPrice'        =>  $totalPrice,
+            'categories'        =>  $categories,
+            'first_article'     =>  $first_article,
+            'articles'          =>  $articles
         ]);
     }
     
@@ -123,11 +140,41 @@ class MagController extends Controller
 
         $url = 'https://raw.githubusercontent.com/alaouy/sql-moroccan-cities/master/json/ville.json';
         $cities = json_decode(file_get_contents($url), true);
+
+        $categories = Categorie::all();
+
+        // Find the next post
+        $nextPost = Blog::where('status', 'publié')
+            ->where('created_at', '>', $post->created_at)
+            ->orderBy('created_at', 'asc')
+            ->first();
+
+        // Find the previous post
+        $previousPost = Blog::where('status', 'publié')
+            ->where('created_at', '<', $post->created_at)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        $relatedArticles = Blog::where('id', '<>',$post->id)
+                            ->orderBy('created_at','DESC')
+                            ->take(4)
+                            ->get();
+        
+                            $famousArticle = Blog::where('status', 'publié')
+                            ->where('id','<>',$post->id)
+                            ->orderBy('total_viewers_count', 'desc')
+                            ->first();
+                        
+
         return view('pages.post',[
-            'post'          =>  $post,
-            'cities'        =>  $cities,
-            'recentArticle' =>  $recentArticle,
-            'showPopup'     =>  $showPopup,
+            'post'              =>  $post,
+            'cities'            =>  $cities,
+            'recentArticle'     =>  $recentArticle,
+            'showPopup'         =>  $showPopup,
+            'categories'        =>  $categories,
+            'prevPost'          =>  $previousPost,
+            'nextPost'          =>  $nextPost,
+            'relatedArticles'   =>  $relatedArticles,
+            'famousArticle'     =>  $famousArticle
         ]);
     }
     public function categorie(Request $request, $category)
@@ -145,20 +192,24 @@ class MagController extends Controller
             $request->session()->put("popup_$ipAddress", true);
         }
         
-        $query = Blog::orderBy('created_at', 'desc')
-            ->where('categorie', $category); // Filter by the selected category
-        
-        $posts = $query->take(4)->paginate(8);
         
         $mostViewedArticle = Blog::orderBy('total_viewers_count', 'desc')
             ->take(4)
             ->get();
+
+        $category = Categorie::where('name', $category)->firstOrFail();
         
-        return view('pages.mag', [
-            'cities' => $cities,
-            'posts' => $posts,
+        $posts = $category->post()->where('status', 'publié')->paginate(8);
+
+        
+        
+        return view('pages.BlogCategorie', [
+            'cities'            => $cities,
+            'posts'             => $posts,
             'mostViewedArticle' => $mostViewedArticle,
-            'showPopup'     =>  $showPopup,
+            'showPopup'         =>  $showPopup,
+            'category'          =>  $category,
+            'categories'        =>  Categorie::all()
         ]);
     }
 }

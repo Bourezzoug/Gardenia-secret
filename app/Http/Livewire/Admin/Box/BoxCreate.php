@@ -99,7 +99,7 @@ class BoxCreate extends Component
         $this->closeCreateModel();
         $this->emit('refreshParent');
         return Redirect::to('/admin/box');
-            // dd($this->box_gallery);
+        // dd($this->box_gallery);
     }
     
 

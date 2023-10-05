@@ -1,4 +1,6 @@
 @extends('layouts.frontend')
+@section('title','Gardenia Secret Homepage')
+@section('meta_description','Gardenia Secret Homepage')
 @section('content')
 <div class="fixed inset-0 bg-black opacity-80 z-[9999] header-overlay  hidden" id="header-overlay"></div>
 

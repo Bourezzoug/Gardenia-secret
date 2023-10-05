@@ -76,7 +76,7 @@
             </a>
         </div>
         <div class="nav-links transition-all hidden text-sm md:flex flex-col fixed top-32 md:top-0 left-0 md:left-0 md:flex-row justify-end md:static bg-white md:bg-transparent w-full font-openSans uppercase z-50">
-            <a class="nav-link active mx-2 md:my-0 my-4 md:text-left text-center" aria-current="page" href="{{ Route('BoxMois.index') }}">La Box du Mois</a>
+            <a class="nav-link active mx-2 md:my-0 my-4 md:text-left text-center" aria-current="page" href="{{ Route('BoxMois.index') }}">S'abonner</a>
             {{-- <a class="nav-link mx-2 md:my-0 my-4 md:text-left text-center " href="#">Offrir</a> --}}
             <a class="nav-link mx-2 md:my-0 my-4 md:text-left text-center " href="{{ Route('e-shop.index') }}">E-shop</a>
             <a class="nav-link mx-2 md:my-0 my-4 md:text-left text-center " href="{{ Route('mag.index') }}">Le Mag</a>

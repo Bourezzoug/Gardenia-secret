@@ -84,7 +84,7 @@ class HomeController extends Controller
         //     $midPricedBox = null; // Set $midPricedBox to null if either $cheapestBox or $expensiveBox is null
         // }
         $boxMonth = Box::latest()->first();
-        $boxMonths = Box::orderBy('created_at','DESC')->get();
+        $boxMonths = Box::orderBy('created_at','DESC')->take(3)->get();
         
     
         return view('pages.homepage', [

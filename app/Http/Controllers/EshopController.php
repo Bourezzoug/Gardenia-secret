@@ -69,8 +69,14 @@ class EshopController extends Controller
                 // Calculate the combined total price
                 $totalPrice = $cartsTotalPrice + $boxCartsTotalPrice;
             }
+
+
     
             $products = $query->paginate(9);
+
+            if ($request->ajax()) {
+                return response()->json(['products' => $products]);
+            }
     
             return view('pages.e-shop', [
                 'products'      => $products,

@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin\Blog;
 
 use App\Models\Blog;
+use App\Models\Categorie;
 use Illuminate\Support\Facades\Redirect;
 use Livewire\Component;
 use Laravel\Jetstream\InteractsWithBanner;
@@ -84,6 +85,8 @@ public function slugUpdated($slug)
     {
 
     
-        return view('livewire.admin.blog.blog-create');
+        return view('livewire.admin.blog.blog-create',[
+            'categories'    =>  Categorie::all()->pluck('name','id'),
+        ]);
     }
 }

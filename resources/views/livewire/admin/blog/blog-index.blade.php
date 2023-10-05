@@ -124,7 +124,7 @@
 
                                 <span class="inline-flex items-center gap-1 rounded-full bg-indigo-50 px-2 py-1 text-xs font-semibold text-indigo-600">
 
-                                    {{ $post->nb_vues }}
+                                    {{ $post->unique_viewers_count }}
 
                                 </span>
 

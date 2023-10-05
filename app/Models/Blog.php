@@ -9,7 +9,10 @@ class Blog extends Model
 {
     use HasFactory;
     protected $table = 'blog';
-    protected $fillable = ['title','excerpt','body','slug','seo_title','meta_description','image','status','categorie'];
+    public function categorie() {
+        return $this->belongsTo(Categorie::class);
+    }
+    protected $fillable = ['title','excerpt','body','slug','seo_title','meta_description','image','status','categorie_id'];
     public function scopeSearch($query, $term){
         $query->where(function ($query) use ($term){
             $query->where('title','like', "%$term%")
@@ -18,4 +21,5 @@ class Blog extends Model
                 ->orWhere('status','like', "%$term%");
         });
     }
+    
 }

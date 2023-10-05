@@ -93,6 +93,7 @@ Route::middleware(['auth:sanctum', 'verified','authadmin'])->group(function () {
     Route::get('/admin/box',\App\Http\Livewire\Admin\Box\BoxIndex::class)->name('box.index');
     Route::get('/admin/box/create',\App\Http\Livewire\Admin\Box\BoxCreate::class)->name('box.create');
     Route::get('/admin/box/update/{id}',\App\Http\Livewire\Admin\Box\BoxUpdate::class)->name('box.update');
+    Route::get('/admin/category',\App\Http\Livewire\Admin\Category\CategoryIndex::class)->name('category.index');
 });;
 // Route::get('/symlink', function () {
 //   $target =$_SERVER['DOCUMENT_ROOT'].'/storage/app/public';
@@ -105,11 +106,15 @@ Route::get('/box-du-mois',function() {
 });
 Route::post('/box-du-mois',[BoxMoisSubscriberController::class,'store'])->name('inscrits.store');
 Route::get('/box-subscription',[BoxController::class,'index'])->name('BoxMois.index');
-Route::get('/blog',[MagController::class,'index'])->name('mag.index');
-Route::get('/blog?categorie={categorie}',[MagController::class,'categorie'])->name('blog.categorie');
-Route::get('/blog/{slug}',[MagController::class,'show'])->name('mag.show');
+
 Route::get('/contact-us',[ContactController::class,'index'])->name('contact.index');
 Route::get('/test-paypal',function() {
     return view('testpayment');
 });
 Route::post('/contact',[ContactController::class,'contact'])->name('contact.send');
+
+
+Route::get('/blog',[MagController::class,'index'])->name('mag.index');
+Route::get('/blog/{categorie}',[MagController::class,'categorie'])->name('blog.categorie');
+Route::get('/blog/{slug}',[MagController::class,'show'])->name('mag.show');
+
