@@ -18,7 +18,7 @@ class CategoryUpdate extends Component
 
     public $categories;
 
-    public $name, $color, $slug, $order
+    public $name, $color, $slug, $type
     ,$parentId;
 
     protected $listeners = ['showUpdateModel'];
@@ -47,6 +47,7 @@ class CategoryUpdate extends Component
             $this->name = $item->name;
             $this->parentId = $item->parent_id;
             $this->color = $item->color;
+            $this->type = $item->type;
 
         }
     }
@@ -66,6 +67,7 @@ class CategoryUpdate extends Component
             'name'      =>  $this->name,
             'slug'      =>  Str::slug($this->name),
             'color'     =>  $this->color,
+            'type'      =>  $this->type,
             'parent_id' =>  $this->parentId,
         ];
 

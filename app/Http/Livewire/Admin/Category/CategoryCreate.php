@@ -18,7 +18,7 @@ class CategoryCreate extends Component
 
     public $categories;
 
-    public $name, $color, $slug, $order
+    public $name, $color, $slug, $type
     ,$parentId;
 
     protected $listeners = ['showCreateModel'];
@@ -55,6 +55,7 @@ class CategoryCreate extends Component
             'slug'      =>  Str::slug($this->name),
             'color'     =>  $this->color,
             'parent_id' =>  $this->parentId,
+            'type'      =>  $this->type,
         ];
 
         Categorie::create($data);

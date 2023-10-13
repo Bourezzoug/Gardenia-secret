@@ -9,6 +9,7 @@ use App\Models\UniqueView;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MagController extends Controller
 {
@@ -67,7 +68,7 @@ class MagController extends Controller
                 // Calculate the combined total price
                 $totalPrice = $cartsTotalPrice + $boxCartsTotalPrice;
             }
-            $categories = Categorie::all();
+            $categories = Categorie::where('type','Blog')->get();
             $first_article = Blog::latest()->first();
             $articles = Blog::where('id', '!=', $first_article->id)->take(3)->get();
             $posts = Blog::with('categorie')
@@ -80,7 +81,31 @@ class MagController extends Controller
             })
             ->paginate(8);
         
-        
+            $bannerTop = DB::table('bannieres')
+            ->join('campagnes', 'bannieres.campagne_id', '=', 'campagnes.id')
+            ->where('bannieres.position', 'zone-1')
+            ->where('bannieres.plannification', 'LIKE', '%' . date('Y-m-d') . '%')
+            ->where('campagnes.status', '1')
+            ->select('bannieres.id', 'bannieres.lien', 'bannieres.image', 'bannieres.nb_total_click')
+            ->first();
+
+
+            $bannerSmallRight = DB::table('bannieres')
+            ->join('campagnes', 'bannieres.campagne_id', '=', 'campagnes.id')
+            ->where('bannieres.position', 'zone-3')
+            ->where('bannieres.plannification', 'LIKE', '%' . date('Y-m-d') . '%')
+            ->where('campagnes.status', '1')
+            ->select('bannieres.id', 'bannieres.lien', 'bannieres.image', 'bannieres.nb_total_click')
+            ->first();
+
+            $bannerBigRight = DB::table('bannieres')
+            ->join('campagnes', 'bannieres.campagne_id', '=', 'campagnes.id')
+            ->where('bannieres.position', 'zone-4')
+            ->where('bannieres.plannification', 'LIKE', '%' . date('Y-m-d') . '%')
+            ->where('campagnes.status', '1')
+            ->select('bannieres.id', 'bannieres.lien', 'bannieres.image', 'bannieres.nb_total_click')
+            ->first();
+
         return view('pages.mag',[
             'cities'            =>  $cities,
             'posts'             =>  $posts,
@@ -92,7 +117,10 @@ class MagController extends Controller
             'totalPrice'        =>  $totalPrice,
             'categories'        =>  $categories,
             'first_article'     =>  $first_article,
-            'articles'          =>  $articles
+            'articles'          =>  $articles,
+            'bannerTop'         =>  $bannerTop,
+            'bannerSmallRight'  =>  $bannerSmallRight,
+            'bannerBigRight'    =>  $bannerBigRight,
         ]);
     }
     
@@ -141,7 +169,7 @@ class MagController extends Controller
         $url = 'https://raw.githubusercontent.com/alaouy/sql-moroccan-cities/master/json/ville.json';
         $cities = json_decode(file_get_contents($url), true);
 
-        $categories = Categorie::all();
+        $categories = Categorie::where('type','blog')->get();
 
         // Find the next post
         $nextPost = Blog::where('status', 'publié')
@@ -165,6 +193,7 @@ class MagController extends Controller
                             ->first();
                         
 
+
         return view('pages.post',[
             'post'              =>  $post,
             'cities'            =>  $cities,
@@ -174,7 +203,7 @@ class MagController extends Controller
             'prevPost'          =>  $previousPost,
             'nextPost'          =>  $nextPost,
             'relatedArticles'   =>  $relatedArticles,
-            'famousArticle'     =>  $famousArticle
+            'famousArticle'     =>  $famousArticle,
         ]);
     }
     public function categorie(Request $request, $category)
@@ -204,12 +233,12 @@ class MagController extends Controller
         
         
         return view('pages.BlogCategorie', [
-            'cities'            => $cities,
-            'posts'             => $posts,
-            'mostViewedArticle' => $mostViewedArticle,
+            'cities'            =>  $cities,
+            'posts'             =>  $posts,
+            'mostViewedArticle' =>  $mostViewedArticle,
             'showPopup'         =>  $showPopup,
             'category'          =>  $category,
-            'categories'        =>  Categorie::all()
+            'categories'        =>  Categorie::where('type','blog')->get()
         ]);
     }
 }

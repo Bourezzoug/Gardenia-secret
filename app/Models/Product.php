@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
-    protected $fillable = ['nom','prix','quantite','description','photo','gallery'];
+    protected $fillable = ['nom','prix','quantite','description','photo','gallery','slug'];
     public function scopeSearch($query, $term){
         $query->where(function ($query) use ($term){
             $query->where('nom','like', "%$term%")

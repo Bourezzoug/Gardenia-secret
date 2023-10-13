@@ -35,6 +35,15 @@
                         <x-input-error for="name" class="mt-2"/>
                     </div>
 
+                    <div class="col-span-1 md:col-span-2 lg:col-span-3">
+                        <x-label class="text-xs" for="type" value="{{ __('Type') }}"/>
+                        <x-select wire:model="type" class="mt-1">
+                                <option value="Blog">Blog</option>
+                                <option value="Products">Products</option>
+                        </x-select>
+                        <x-input-error for="type" class="mt-2"/>
+                    </div>
+
 
                     {{-- <div class="col-span-1 md:col-span-2 lg:col-span-3">
                         <x-label for="slug" value="{{ __('Slug') }}"/>

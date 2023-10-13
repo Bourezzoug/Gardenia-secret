@@ -1,97 +1,3 @@
-{{-- <div>
-    <x-dialog-modal wire:model="showUpdateModel" maxWidth='7xl'>
-        <x-slot name="title">
-            {{ __('Créer une nouvelle catégorie') }} 
-        </x-slot>
-
-        <form wire:submit.prevent="edit" autocomplete="off">
-
-            <x-slot name="content">
-                <div class="grid grid-cols-2 grid-rows-6 md:grid-cols-4 lg:grid-cols-6 gap-4">
-
-
-                    <div class="col-span-1 md:col-span-2 lg:col-span-3 lg:row-span-6">
-                        <div x-data="{photoName: null, photoPreview: null}" class="col-span-6 sm:col-span-4">
-                            <!-- Profile Photo File Input -->
-                            <input type="file" class="hidden"
-                                        wire:model="image"
-                                        x-ref="image"
-                                        x-on:change="
-                                                photoName = $refs.image.files[0].name;
-                                                const reader = new FileReader();
-                                                reader.onload = (e) => {
-                                                    photoPreview = e.target.result;
-                                                };
-                                                reader.readAsDataURL($refs.image.files[0]);
-                                        " />
-                            <div class="w-full xl:h-[450px] bg-gray-200 " x-show="! photoPreview">
-                                @if(!empty($image))
-                                <img src="storage/{{ $image }}" alt="{{ $image }}" class="h-full w-full object-cover">
-                                @elseif(!empty($image_path))
-                                <img src="{{ asset($image_path)  }}"
-                                     class="object-cover w-full xl:h-[450px] ">
-                                @endif
-                            </div>
-                            <div class="w-full xl:h-[450px] bg-gray-200 " x-show="photoPreview" style="display: none;">
-                                <span class="block w-full h-full bg-cover bg-no-repeat bg-center "
-                                      x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
-                                </span>
-                            </div>
-                            <button class="-mt-10 mr-2 p-3 rounded-full bg-indigo-500" type="button" x-on:click.prevent="$refs.image.click()">
-                                <svg wire:target="image" wire:loading.class="animate-bounce" class="w-4 h-4 text-white " xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/>
-                                    <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708l3-3z"/>
-                                </svg>
-                            </button>
-            
-                            <x-input-error for="image" class="mt-2" />
-                        </div>
-                    </div> 
-                    <div class="col-span-1 md:col-span-2 lg:col-span-3 lg:row-span-1">
-                        <x-label for="libelle" value="{{ __('Libelle') }}"/>
-                        <x-input wire:model.defer="libelle" type="text" class="mt-1 block w-full"/>
-                        <x-input-error for="libelle" class="mt-2"/>
-                    </div>
-                    <div class="col-span-1 md:col-span-2 lg:col-span-3 lg:row-span-1">
-                        <x-label for="price" value="{{ __('Prix') }}"/>
-                        <x-input wire:model.defer="price" type="text" class="mt-1 block w-full"/>
-                        <x-input-error for="price" class="mt-2"/>
-                    </div>
-                    <div class="col-span-1 md:col-span-2 lg:col-span-3 lg:row-span-1">
-                        <x-label for="description" value="{{ __('Description') }}"/>
-                        <textarea id="description"  wire:model.defer="description" class="input-field block p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300   w-full mt-1" ></textarea>
-                        <x-input-error for="description" class="mt-2"/>
-                    </div>
-                    <div class="col-span-1 md:col-span-2 lg:col-span-3 lg:row-span-1">
-                        <x-label for="options" value="{{ __('Options (retourne a la ligne pour une nouvelle option)') }}"/>
-                        <textarea id="options"  wire:model.defer="options" class="input-field block p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300   w-full mt-1" ></textarea>
-                        <x-input-error for="options" class="mt-2"/>
-                    </div>
-
-
-                    
-
-                </div>
-            </x-slot>
-            <x-slot name="footer">
-                <x-secondary-button wire:click="closeUpdateModel" wire:loading.attr="disabled">
-                    {{ __('Cancel') }}
-                </x-secondary-button>
-                <x-button type="submit" wire:click="edit" wire:loading.attr="disabled" class="ml-3 bg-gray-600 hover:bg-gray-800">
-                    {{ __('Save') }}
-                </x-button>
-            </x-slot>
-        </form>
-
-    </x-dialog-modal>
-</div> --}}
-
-
-
-
-
-
-
 <div class="flex bg-white">
     @include('admin.components.sidebar')
     <div class="w-full flex flex-col h-screen md:pl-64">
@@ -121,6 +27,46 @@
                                         </div>
                             </div>
                     </div>
+
+                    <div id="accordion-collapse-8" data-accordion="collapse" class="my-10">
+                        <h2 id="accordion-collapse-heading-8">
+                        <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-white  rounded-t-xl focus:ring-4   bg-main-color" data-accordion-target="#accordion-collapse-body-8" aria-expanded="true" aria-controls="accordion-collapse-body-8">
+                            <span>Stock</span>
+                            <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                            </svg>
+                        </button>
+                        </h2>
+                        <div id="accordion-collapse-body-8" class="hidden p-4 border rounded-b-lg" aria-labelledby="accordion-collapse-heading-8">
+
+
+                                    <div class="">
+                                        <x-label for="stock" value="{{ __('Stock du boxe') }}"/>
+                                        <x-input wire:model.defer="stock" type="number" class="mt-1 block w-full"/>
+                                        <x-input-error for="stock" class="mt-2"/>
+                                    </div>
+                        </div>
+                    </div>
+
+                    <div id="accordion-collapse-7" data-accordion="collapse" class="my-10">
+                        <h2 id="accordion-collapse-heading-7">
+                        <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-white  rounded-t-xl focus:ring-4   bg-main-color" data-accordion-target="#accordion-collapse-body-7" aria-expanded="true" aria-controls="accordion-collapse-body-7">
+                            <span>Le Description de la boxe</span>
+                            <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                            </svg>
+                        </button>
+                        </h2>
+                        <div id="accordion-collapse-body-7" class="hidden p-4 border rounded-b-lg" aria-labelledby="accordion-collapse-heading-7">
+
+
+                                    <div class="">
+                                        <x-label for="box_description" value="{{ __('Description du boxe') }}"/>
+                                        <x-input wire:model.defer="box_description" type="text" class="mt-1 block w-full"/>
+                                        <x-input-error for="box_description" class="mt-2"/>
+                                    </div>
+                        </div>
+                </div>
 
 
 

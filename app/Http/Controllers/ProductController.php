@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class ProductController extends Controller
 {
-    public function index(Request $request,$id) {
+    public function index(Request $request,$categorie,$slug,$id) {
         $product = Product::find($id);
 
         $showPopup = false;

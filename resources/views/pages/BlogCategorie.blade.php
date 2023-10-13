@@ -110,7 +110,7 @@
                     </div>
                     <div class="mt-3 flex flex-col">
                         @forelse ($categories as $categorie)
-                            <a href="?categorie={{ $categorie->name }}" class="font-Roboto text-[16px] py-1 text-gray-500 hover:text-gray-800 transition-colors">{{ $categorie->name }}</a>
+                            <a href="/blog/{{ $categorie->name }}" class="font-Roboto text-[16px] py-1 text-gray-500 hover:text-gray-800 transition-colors">{{ $categorie->name }}</a>
                         @empty
                         
                         @endforelse

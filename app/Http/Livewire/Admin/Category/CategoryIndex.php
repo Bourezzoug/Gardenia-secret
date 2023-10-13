@@ -25,6 +25,7 @@ class CategoryIndex extends Component
 
     public string $orderBy = 'id';
     public string $sortBy = 'asc';
+    public string $type = '';
 
     public $readyToLoad = false;
 
@@ -75,12 +76,9 @@ class CategoryIndex extends Component
         }
 
 
-        // $users = $users->with(['name,color']); //This is for relationships
-
-
-        // if (!empty($this->role)){
-        //     $users = $users->where('role_id',$this->role);
-        // }
+        if (!empty($this->type)&& $this->type != null){
+            $users = $users->where('type',$this->type);
+        }
 
         $categories = $users->orderBy($this->orderBy, $this->sortBy)->paginate($this->perPage);
 

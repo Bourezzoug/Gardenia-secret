@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Categorie;
 use App\Models\Product;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 
 class EshopController extends Controller
 {
@@ -70,15 +73,70 @@ class EshopController extends Controller
                 $totalPrice = $cartsTotalPrice + $boxCartsTotalPrice;
             }
 
+            $sortName = $request->input('search');
+
+            if($sortName) {
+                $query->where('nom', 'like', '%' . $sortName . '%'); 
+            }
+            
+
+            $sortType = $request->input('sort');
+
+            switch ($sortType) {
+                case 'popular':
+                    $query->orderBy('popularity', 'desc');
+                    break;
+                case 'rating':
+                    $query->orderBy('rating', 'desc');
+                    break;
+                case 'newest':
+                    $query->orderBy('created_at', 'desc');
+                    break;
+                case 'lowToHigh':
+                    $query->orderBy('prix', 'asc');
+                    break;
+                case 'highToLow':
+                    $query->orderBy('prix', 'desc');
+                    break;
+            }
+
+            // Check if prices were provided in the request
+            if ($request->has('prices')) {
+                $prices = explode(',', $request->get('prices'));
+
+                // Filter products based on price range
+                foreach ($prices as $priceRange) {
+                    list($min, $max) = explode('-', $priceRange);
+                    $query->orWhereBetween('prix', [$min, $max]);
+                }
+            }
+
+            $selectedCategories = $request->input('categories', []);
+            if($selectedCategories) {
+                $cat = explode(",",$selectedCategories);
+            }
+            if (!empty($selectedCategories)) {
+                foreach($cat as $cat) {
+                    $query->orWhere('category_id', $cat);
+                }
+            }
+            
+
+
 
     
             $products = $query->paginate(9);
 
+
             if ($request->ajax()) {
                 return response()->json(['products' => $products]);
             }
+
+
+
+            Log::info('Selected Categories:');
     
-            return view('pages.e-shop', [
+            return view('pages.testShop', [
                 'products'      => $products,
                 'cities'        => $cities,
                 'minprice'      => $minPrice,
@@ -88,7 +146,19 @@ class EshopController extends Controller
                 'boxCarts'      => $boxCarts,
                 'wishlists'     => $wishlists,
                 'totalPrice'    => $totalPrice,
+                'categorie'     => Categorie::where('type','Products')->get()
             ]);
+            // return view('pages.e-shop', [
+            //     'products'      => $products,
+            //     'cities'        => $cities,
+            //     'minprice'      => $minPrice,
+            //     'maxprice'      => $maxPrice,
+            //     'showPopup'     => $showPopup,
+            //     'carts'         => $carts,
+            //     'boxCarts'      => $boxCarts,
+            //     'wishlists'     => $wishlists,
+            //     'totalPrice'    => $totalPrice,
+            // ]);
         }
 }
     

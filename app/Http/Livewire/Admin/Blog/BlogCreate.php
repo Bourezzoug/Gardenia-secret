@@ -86,7 +86,7 @@ public function slugUpdated($slug)
 
     
         return view('livewire.admin.blog.blog-create',[
-            'categories'    =>  Categorie::all()->pluck('name','id'),
+            'categories'    =>  Categorie::where('type','Blog')->pluck('name','id'),
         ]);
     }
 }

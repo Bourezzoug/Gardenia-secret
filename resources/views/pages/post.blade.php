@@ -97,26 +97,36 @@
                     </div>
                 </div>
                 <div class="grid grid-cols-4">
+                    @if($prevPost)
+                    @php
+                    $category_prev = App\Models\Categorie::find($prevPost->categorie_id);
+                    @endphp
                     <div class="bg-[#f6f6f6] col-span-2 p-[20px] flex space-x-2">
                         <img src="{{ $prevPost->image }}" class="h-[90px] w-[90px] " alt="">
                         <div class="flex flex-col ">
-                            <div class="text-[#444c6c] text-[13px] font-Roboto mt-2">
+                            <a href="/blog/{{ $category_prev->name }}/{{ $prevPost->slug }}" class="text-[#444c6c] text-[13px] font-Roboto mt-2">
                                 <i class="fa-solid fa-angle-left"></i>
                                 Previous 
-                            </div>
-                            <h2 class="text-[16px] font-Roboto-condensed font-bold mt-2">{{ $prevPost->title }}</h2>
+                            </a>
+                            <h2 class="text-[16px] font-Roboto-condensed font-bold mt-2"><a href="/blog/{{ $category_prev->name }}/{{ $prevPost->slug }}">{{ $prevPost->title }}</a></h2>
                         </div>
                     </div>
+                    @endif
+                    @if ($nextPost)
+                    @php
+                    $category_next = App\Models\Categorie::find($nextPost->categorie_id);
+                    @endphp
                     <div class="bg-[#fff7f3] col-span-2 p-[20px] flex flex-row-reverse ">
                         <img src="{{ $nextPost->image }}" class="h-[90px] w-[90px] mx-2" alt="">
                         <div class="flex flex-col text-right">
-                            <div class="text-[#444c6c] text-[13px] font-Roboto mt-2">
+                            <a href="/blog/{{ $category_next->name }}/{{ $nextPost->slug }}" class="text-[#444c6c] text-[13px] font-Roboto mt-2">
                                 Next 
                                 <i class="fa-solid fa-angle-right"></i>
-                            </div>
-                            <h2 class="text-[16px] font-Roboto-condensed font-bold mt-2">{{ $nextPost->title }}</h2>
+                            </a>
+                            <h2 class="text-[16px] font-Roboto-condensed font-bold mt-2"><a href="/blog/{{ $category_next->name }}/{{ $nextPost->slug }}">{{ $nextPost->title }}</a></h2>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
             
@@ -137,7 +147,7 @@
                     </div>
                     <div class="mt-3 flex flex-col">
                         @forelse ($categories as $categorie)
-                            <a href="?categorie={{ $categorie->name }}" class="font-Roboto text-[16px] py-1 text-gray-500 hover:text-gray-800 transition-colors">{{ $categorie->name }}</a>
+                            <a href="/blog/{{ $categorie->name }}" class="font-Roboto text-[16px] py-1 text-gray-500 hover:text-gray-800 transition-colors">{{ $categorie->name }}</a>
                         @empty
                         
                         @endforelse
@@ -156,8 +166,11 @@
                             <i class="fa-solid fa-quote-right"></i>
                         </span>
                     </div>
+                    @php
+                        $categorie_fam = App\Models\Categorie::find($famousArticle->categorie_id);
+                    @endphp
                     <div class="article-body p-[15px]">
-                        <h3><a href="#" class="font-Roboto-condensed text-[18px] font-bold">{{ $famousArticle->title }}</a></h3>
+                        <h3><a href="/blog/{{ $categorie_fam->name }}/{{ $famousArticle->slug }}" class="font-Roboto-condensed text-[18px] font-bold">{{ $famousArticle->title }}</a></h3>
                         <span class="text-Roboto text-[#444C6C] my-2 text-[12px]">- {{ \Carbon\Carbon::parse($famousArticle->created_at)->format('F j, Y') }}</span>
                     </div>
                 </div>
@@ -201,49 +214,6 @@
                 </div>
             </div>
 
-            {{-- <div class="mt-5 ">
-                <div>
-                    <h4 class="pb-5 font-Lato text-[17px] uppercase" >Instagram</h4>
-                    <div class="grid grid-cols-3 gap-5">
-                        <div class="col-span-1 relative insta-card">
-
-                            <a href="https://www.instagram.com/gardenia.secret/" target="_blank">
-                                <div class="absolute left-0 bottom-0 w-full h-0 z-10 insta-overlay transition-all"
-                                style="background-image: linear-gradient(180deg,transparent,rgba(255,255,255,.7));"></div>
-                                <img src="{{ asset('images/gardenia_insta.jpeg') }}" class="w-full  h-32 object-cover" alt="">
-                            </a>
-                        </div>
-                        <div class="col-span-1 relative insta-card">
-                            <a href="https://www.instagram.com/gardenia.secret/" target="_blank">
-                                <div class="absolute left-0 bottom-0 w-full h-0 z-10 insta-overlay transition-all"
-                                style="background-image: linear-gradient(180deg,transparent,rgba(255,255,255,.7));"></div>
-                                <img src="{{ asset('images/gardenia_insta_2.jpeg') }}" class="w-full  h-32 object-cover" alt="">
-                            </a>
-                        </div>
-                        <div class="col-span-1 relative insta-card">
-                            <a href="https://www.instagram.com/gardenia.secret/" target="_blank">
-                                <div class="absolute left-0 bottom-0 w-full h-0 z-10 insta-overlay transition-all"
-                                style="background-image: linear-gradient(180deg,transparent,rgba(255,255,255,.7));"></div>
-                                <img src="{{ asset('images/gardenia_test_3.jpeg') }}" class="w-full  h-32 object-cover" alt="">
-                            </a>
-                        </div>
-                        <div class="col-span-1 relative insta-card">
-                            <a href="https://www.instagram.com/gardenia.secret/" target="_blank">
-                                <div class="absolute left-0 bottom-0 w-full h-0 z-10 insta-overlay transition-all"
-                                style="background-image: linear-gradient(180deg,transparent,rgba(255,255,255,.7));"></div>
-                                <img src="{{ asset('images/gardenia_instagram_4.png') }}" class="w-full  h-32 object-cover" alt="">
-                            </a>
-                        </div>
-                        <div class="col-span-1 relative insta-card">
-                            <a href="https://www.instagram.com/gardenia.secret/" target="_blank">
-                                <div class="absolute left-0 bottom-0 w-full h-0 z-10 insta-overlay transition-all"
-                                style="background-image: linear-gradient(180deg,transparent,rgba(255,255,255,.7));"></div>
-                                <img src="{{ asset('images/gardenia_instagram_5.png') }}" class="w-full  h-32 object-cover" alt="">
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
 
 
         </div>
@@ -262,15 +232,15 @@
                 @php
                 $categorie = App\Models\Categorie::find($relatedArticle->categorie_id);
                 @endphp
-                    <div class="col-span-3">
-                        <div class="article-top w-[268px] h-[268px] relative">
+                    <div class="col-span-12 md:col-span-6 lg:col-span-4 xl:col-span-3 ">
+                        <div class="article-top md:w-[250px] md:h-[250px] lg:w-[268px] lg:h-[268px] relative">
                             <div class="absolute left-0 bottom-0 w-full h-full z-10"
                             style="background-image: linear-gradient(180deg,transparent,rgba(0,0,0,.3));"></div>
                             <img src="{{ $relatedArticle->image }}" class="w-full h-full object-cover" alt="">
-                            <a href="#" class="absolute top-3 right-3 bg-red-500 rounded font-Roboto text-[11px] z-50 text-white" style="padding:4px 10px 3px;background-color: {{ $categorie->color }}">{{ $categorie->name }}</a>
+                            <a href="/blog/{{ $categorie->name }}" class="absolute top-3 right-3 bg-red-500 rounded font-Roboto text-[11px] z-50 text-white" style="padding:4px 10px 3px;background-color: {{ $categorie->color }}">{{ $categorie->name }}</a>
                         </div>
-                        <div class="article-body p-[15px] lg:w-[268px]">
-                            <h3><a href="#" class="font-Roboto-condensed text-[18px] font-bold">{{ $relatedArticle->title }}</a></h3>
+                        <div class="article-body p-[15px] lg:w-[268px] md:w-[200px] ">
+                            <h3><a href="/blog/{{ $categorie->name }}/{{ $relatedArticle->slug }}" class="font-Roboto-condensed text-[18px] font-bold">{{ $relatedArticle->title }}</a></h3>
                             <span class="text-Roboto text-[#444C6C] my-2 text-[12px]">- {{ \Carbon\Carbon::parse($relatedArticle->created_at)->format('F j, Y') }}</span>
                         </div>
                     </div>

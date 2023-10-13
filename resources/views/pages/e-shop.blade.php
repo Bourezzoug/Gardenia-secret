@@ -20,9 +20,9 @@
                     <h4 class="pb-5 font-Lato text-[17px] uppercase" >Filtre</h4>
                     <div x-data="range()" x-init="mintrigger(); maxtrigger()" class="relative max-w-xl w-full">
                       <div>
-                        <input id="minPrice" type="range" step="100" x-bind:min="min" x-bind:max="max" x-on:input="mintrigger" x-model="minprice" name="minPrice" class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
+                        <input id="minPrice" type="range" step="10" x-bind:min="min" x-bind:max="max" x-on:input="mintrigger" x-model="minprice" name="minPrice" class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
                   
-                        <input id="maxPrice" type="range" step="100" x-bind:min="min" x-bind:max="max" x-on:input="maxtrigger" x-model="maxprice" name="maxPrice" class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
+                        <input id="maxPrice" type="range" step="10" x-bind:min="min" x-bind:max="max" x-on:input="maxtrigger" x-model="maxprice" name="maxPrice" class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
                   
                         <div class="relative z-10 h-1">
                   
@@ -44,7 +44,7 @@
                                 <p maxlength="5" x-on:input.debounce.300="maxtrigger" wire:model.debounce="minprice" x-text="minprice"></p>
                                 <span>-</span>
                                 <p maxlength="5" x-on:input.debounce.300="maxtrigger" wire:model.debounce="maxPrice" x-text="maxprice"></p>
-                                <sup>dhs</sup>
+                                $
 
                             </div>
                         </div>

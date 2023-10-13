@@ -2,16 +2,18 @@
 
 namespace App\Http\Livewire\Admin\Product;
 
+use App\Models\Categorie;
 use App\Models\Product;
 use Illuminate\Support\Facades\Redirect;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Str;
 
 class ProductCreate extends Component
 {
     use WithFileUploads;
 
-    public $nom,$description,$prix,$quantite,$photo,$gallery;
+    public $nom,$description,$prix,$quantite,$photo,$gallery,$type;
 
     protected $listeners = ['descriptionUpdated'];
 
@@ -19,12 +21,12 @@ class ProductCreate extends Component
     {
         
     return  [
-        // 'nom'           =>  ['required', 'string'],
-        // 'description'   =>  ['required', 'string'],
-        // 'prix'          =>  ['required', 'number'],
-        // 'quantite'      =>  ['required','integer'],
-        // 'photo'         =>  ['nullable','string'],
-        // 'gallery'       =>  ['nullable','string'],
+        'nom'           =>  ['required', 'string'],
+        'description'   =>  ['required', 'string'],
+        'prix'          =>  ['required', 'number'],
+        'quantite'      =>  ['required','integer'],
+        'photo'         =>  ['nullable','string'],
+        'gallery'       =>  ['nullable','string'],
     ];
     }
 
@@ -35,15 +37,17 @@ class ProductCreate extends Component
 
     public function create()
     {
-        // $this->validate();
+        $this->validate();
     
         $data = [
-            'nom' => strtolower($this->nom),
-            'description' => $this->description,
-            'prix' => $this->prix,
-            'quantite' => $this->quantite ?? 0,
-            'photo' => $this->photo,
-            'gallery' => $this->gallery,
+            'nom'           => $this->nom,
+            'slug'          => Str::slug($this->nom, '-'),
+            'description'   => $this->description,
+            'prix'          => $this->prix,
+            'quantite'      => $this->quantite ?? 0,
+            'photo'         => $this->photo,
+            'gallery'       => $this->gallery,
+            'type'          => $this->type,
         ];
     
         if (!empty($this->photo)) {
@@ -68,6 +72,8 @@ class ProductCreate extends Component
     } 
     public function render()
     {
-        return view('livewire.admin.product.product-create');
+        return view('livewire.admin.product.product-create',[
+            'category_product'  =>  Categorie::where('type','Products')->pluck('name','id')
+        ]);
     }
 }

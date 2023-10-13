@@ -11,14 +11,15 @@ class Categorie extends Model
     public function post() {
         return $this->hasMany(Blog::class);
     }
-    protected $fillable = ['name','slug','color','parent_id'];
+    protected $fillable = ['name','slug','color','type','parent_id'];
     public function setSlugAttribute($value) {
         $this->attributes['slug'] = strtolower($value);
     }
     public function scopeSearch($query, $term){
         $query->where(function ($query) use ($term){
             $query->where('name','like', "%$term%")
-                ->orWhere('slug','like', "%$term%");
+                ->orWhere('slug','like', "%$term%")
+                ->orWhere('type','like', "%$term%");
         });
     }
 }

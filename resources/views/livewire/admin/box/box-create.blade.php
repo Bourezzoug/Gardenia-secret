@@ -28,6 +28,45 @@
                             </div>
                     </div>
 
+                    <div id="accordion-collapse-7" data-accordion="collapse" class="my-10">
+                            <h2 id="accordion-collapse-heading-7">
+                            <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-white  rounded-t-xl focus:ring-4   bg-main-color" data-accordion-target="#accordion-collapse-body-7" aria-expanded="true" aria-controls="accordion-collapse-body-7">
+                                <span>Le Description de la boxe</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                                </svg>
+                            </button>
+                            </h2>
+                            <div id="accordion-collapse-body-7" class="hidden p-4 border rounded-b-lg" aria-labelledby="accordion-collapse-heading-7">
+
+
+                                        <div class="">
+                                            <x-label for="box_description" value="{{ __('Description du boxe') }}"/>
+                                            <x-input wire:model.defer="box_description" type="text" class="mt-1 block w-full"/>
+                                            <x-input-error for="box_description" class="mt-2"/>
+                                        </div>
+                            </div>
+                    </div>
+                    <div id="accordion-collapse-8" data-accordion="collapse" class="my-10">
+                            <h2 id="accordion-collapse-heading-8">
+                            <button type="button" class="flex items-center justify-between w-full p-5 font-medium text-left text-white  rounded-t-xl focus:ring-4   bg-main-color" data-accordion-target="#accordion-collapse-body-8" aria-expanded="true" aria-controls="accordion-collapse-body-8">
+                                <span>Stock</span>
+                                <svg data-accordion-icon class="w-3 h-3 rotate-180 shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5 5 1 1 5"/>
+                                </svg>
+                            </button>
+                            </h2>
+                            <div id="accordion-collapse-body-8" class="hidden p-4 border rounded-b-lg" aria-labelledby="accordion-collapse-heading-8">
+
+
+                                        <div class="">
+                                            <x-label for="stock" value="{{ __('Stock du boxe') }}"/>
+                                            <x-input wire:model.defer="stock" type="number" class="mt-1 block w-full"/>
+                                            <x-input-error for="stock" class="mt-2"/>
+                                        </div>
+                            </div>
+                    </div>
+
 
 
                     <div id="accordion-collapse" data-accordion="collapse" class="my-10">

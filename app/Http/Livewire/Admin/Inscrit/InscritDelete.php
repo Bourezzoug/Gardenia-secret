@@ -37,7 +37,7 @@ class InscritDelete extends Component
         $post->forceDelete();
         $this->reset();
         $this->closeDeleteModel();
-        return Redirect::to('/admin/inscrit')->with('success', 'Post created successfully');
+        return Redirect::to('/admin/inscrit')->with('success', 'Deleted');
 
         // $this->toast(__('Article supprimée'));
 

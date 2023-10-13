@@ -40,7 +40,11 @@ export default {
           fontSize:{
             'header' : '40px',
             'large' : '150px'
+          },
+          gridColumn: {
+            'span-9': 'span 9 / span 9',
           }
+    
         },
       },
 

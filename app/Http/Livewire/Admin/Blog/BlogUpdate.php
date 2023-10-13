@@ -99,7 +99,7 @@ class BlogUpdate extends Component
     public function render()
     {
         return view('livewire.admin.blog.blog-update',[
-            'categories'    =>  Categorie::all()->pluck('name','id'),
+            'categories'    =>  Categorie::where('type','Blog')->pluck('name','id'),
         ]);
     }
 }

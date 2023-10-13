@@ -15,6 +15,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 	      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css" integrity="sha512-O03ntXoVqaGUTAeAmvQ2YSzkCvclZEcPQu1eqloPaHfJ5RuNGiS4l+3duaidD801P50J28EHyonCV06CUlTSag==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -366,7 +367,39 @@
             document.getElementById('wishlist-wrapper').classList.remove('translate-x-0')
           })
         </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        var banners = document.querySelectorAll("[data-banner-id]");
+        var bannerVisibleMap = {};
 
+        function isBannerVisible(entries) {
+          entries.forEach(function(entry) {
+            var bannerId = entry.target.dataset.bannerId;
+            if (entry.isIntersecting && !bannerVisibleMap[bannerId]) {
+
+              incrementViewCount(bannerId);
+              bannerVisibleMap[bannerId] = true;
+              observer.unobserve(entry.target); // Stop observing the banner
+            }
+          });
+        }
+
+        function incrementViewCount(bannerId) {
+
+          var xhttp = new XMLHttpRequest();
+          xhttp.open("POST", "/banner/" + bannerId + "/view", true);
+          xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          xhttp.setRequestHeader("X-CSRF-TOKEN", "{{ csrf_token() }}"); // Add this line
+          xhttp.send();
+        }
+
+        var observer = new IntersectionObserver(isBannerVisible, { threshold: 0.5 });
+
+        banners.forEach(function(banner) {
+          observer.observe(banner);
+        });
+      });
+    </script>
 
     </body>
 

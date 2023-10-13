@@ -44,6 +44,14 @@
         </x-select>
         </div>
 
+        <div class="col-span-3 md:col-span-2 lg:col-span-1 mr-5">
+        <x-label class="text-xs" for="select" value="{{ __('Type') }}"/>
+        <x-select wire:model="type" class="mt-1">
+            <option value="Blog">{{ __('Blog') }}</option>
+            <option value="Products">{{ __('Products') }}</option>
+        </x-select>
+        </div>
+
         <div class="col-span-3 md:col-span-2 lg:col-span-2">
           <x-label class="text-xs" for="search" value="{{ __('Chercher') }}"/>
           <x-input wire:model="term" id="search" type="text" class="block w-full mt-1"

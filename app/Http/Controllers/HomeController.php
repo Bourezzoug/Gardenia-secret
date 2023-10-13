@@ -11,6 +11,7 @@ use App\Models\Wishlist;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -86,6 +87,9 @@ class HomeController extends Controller
         $boxMonth = Box::latest()->first();
         $boxMonths = Box::orderBy('created_at','DESC')->take(3)->get();
         
+        // Bannieres
+
+
     
         return view('pages.homepage', [
             'posts'         =>  $posts,
@@ -97,7 +101,7 @@ class HomeController extends Controller
             'showPopup'     =>  $showPopup,
             'wishlists'     =>  $wishlists,
             'boxMonth'      =>  $boxMonth,
-            'boxMonths'     =>  $boxMonths
+            'boxMonths'     =>  $boxMonths,
         ]);
         
     }

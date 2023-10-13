@@ -14,7 +14,7 @@ class BoxCreate extends Component
     use InteractsWithBanner;
     use WithFileUploads;
 
-    public $cheap_lib,$cheap_price,$cheap_options,$cheap_description,$med_lib,$med_price,$med_options,$med_description,$exp_lib,$exp_price,$exp_options,$exp_description,$photo,$box_gallery,$nom_boxe;
+    public $box_description,$cheap_lib,$cheap_price,$cheap_options,$cheap_description,$med_lib,$med_price,$med_options,$med_description,$exp_lib,$exp_price,$exp_options,$exp_description,$photo,$box_gallery,$nom_boxe,$stock;
 
     protected $listeners = ['showCreateModel'];
 
@@ -31,6 +31,7 @@ class BoxCreate extends Component
             'photo'             =>  'required|image|mimes:jpeg,png,jpg,webp',
             'box_gallery'       =>  'nullable',
             'nom_boxe'          =>  ['required', 'string'],
+            'box_description'   =>  ['required', 'string'],
             'cheap_lib'         =>  ['nullable', 'string'],
             'cheap_price'       =>  ['nullable', 'numeric'],
             'cheap_description' =>  ['nullable', 'string'],
@@ -43,6 +44,7 @@ class BoxCreate extends Component
             'exp_price'         =>  ['nullable', 'numeric'],
             'exp_description'   =>  ['nullable', 'string'],
             'exp_options'       =>  ['nullable', 'string'],
+            'stock'             =>  ['nullable', 'numeric'],
         ];
 
         return $rules;
@@ -66,6 +68,7 @@ class BoxCreate extends Component
         
         $data = [
             'box_name'              =>  $this->nom_boxe,
+            'description'           =>  $this->box_description,
             'cheap_libelle'         =>  $this->cheap_lib,
             'cheap_price'           =>  $this->cheap_price,
             'cheap_description'     =>  $this->cheap_description,
@@ -78,6 +81,7 @@ class BoxCreate extends Component
             'exp_price'             =>  $this->exp_price,
             'exp_description'       =>  $this->exp_description,
             'exp_options'           =>  $exp_options,
+            'stock'                 =>  $this->stock,
         ];
         
         if (!empty($this->photo)) {

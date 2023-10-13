@@ -3,16 +3,26 @@
 @section('content')
 
 @include('pages.components.header')
+@if($bannerTop)
 <div class="xl:container mx-auto px-3 sm:px-4 xl:px-2 flex justify-center py-6" id="hero-section">
-    {{-- <div class="title" style="background-image: url('https://admanager.linformation.ma/storage/banniers/September2023/q62Ug4A7SUCsGieMG3My.jpg')">
-        <div class="h-56 relative">
-            <div class="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2">
-                <h2 class="text-3xl font-Lato tracking-wider">BLOG</h2>
-            </div>
-        </div>
-    </div> --}}
-    <img src="{{ asset('images/banner.jpeg') }}" alt="">
+    <form id="bannerClickForm-{{ $bannerTop->id }}" action="{{ route('banner.click', ['id' => $bannerTop->id]) }}" method="POST" target="_blank">
+        @csrf
+        <button type="submit" class=" bg-none border-none w-full">
+            <img id="banner-{{ $bannerTop->id }}" src="http://localhost:8000{{ $bannerTop->image }}" data-banner-id="{{ $bannerTop->id }}" class="w-full md:h-[290px] object-fill" alt="">
+        </button>
+    </form>
 </div>
+@endif
+{{-- @if($bannerTop)
+<div class="2xl:mx-auto 2xl:container lg:px-20 md:px-6 px-4 pt-2">
+  <form id="bannerClickForm-{{ $bannerTop->id }}" action="{{ route('banner.click', ['id' => $bannerTop->id]) }}" method="POST" target="_blank">
+      @csrf
+      <button type="submit" class=" bg-none border-none w-full">
+          <img id="banner-{{ $bannerTop->id }}" src="http://localhost:8000{{ $bannerTop->image }}" data-banner-id="{{ $bannerTop->id }}" class="w-full md:h-[290px] object-fill" alt="">
+      </button>
+  </form>
+</div>
+@endif --}}
 @php
   $categorie = App\Models\Categorie::find($first_article->categorie_id);
 @endphp
@@ -23,11 +33,11 @@
         <!--Start left cover-->
         <div class="flex-shrink max-w-full w-full lg:w-1/2 pb-1 lg:pb-0 lg:pr-1">
           <div class="relative hover-img max-h-98 xl:h-[508px] mt-1 overflow-hidden ">
-            <a href="#">
+            <a href="/blog/{{ $categorie->name }}/{{ $first_article->slug }}">
               <img class="max-w-full w-full mx-auto h-full object-cover" src="{{ $first_article->image }}" alt="Image description">
             </a>
             <div class="absolute px-5 pt-8 pb-5 bottom-0 w-full  h-full  bg-black bg-opacity-70 flex justify-end flex-col">
-              <a href="#">
+              <a href="/blog/{{ $categorie->name }}/{{ $first_article->slug }}">
                 <h2 class="text-3xl font-bold capitalize text-white mb-3 font-Roboto-condensed">{{ $first_article->title }}</h2>
               </a>
               <p class="text-gray-100 hidden sm:inline-block font-Roboto-condensed">{!! Illuminate\Support\Str::limit(strip_tags($first_article->body), 150, '[...]') !!}</p>
@@ -50,12 +60,12 @@
             @endphp
             @if($key == 0)
             <article class="col-span-6 p-1">
-              <div class="relative hover-img xl:h-[250px] overflow-hidden">
-                <a href="#">
+              <div class="relative hover-img  h-[250px] overflow-hidden">
+                <a href="/blog/{{ $categorie_article->name }}/{{ $article->slug }}">
                   <img class="max-w-full w-full mx-auto h-full object-cover" src="{{ $article->image }}" alt="Image description">
                 </a>
                 <div class="absolute px-4 pt-7 pb-4 bottom-0 h-full w-full bg-black bg-opacity-70 flex justify-end flex-col">
-                  <a href="#">
+                  <a href="/blog/{{ $categorie_article->name }}/{{ $article->slug }}">
                     <h2 class="text-lg font-bold capitalize leading-tight font-Roboto-condensed text-white mb-1">{{ $article->title }}</h2>
                   </a>
                   <div class="pt-1">
@@ -69,12 +79,12 @@
             </article>
             @else
             <article class="col-span-3 p-1">
-              <div class="relative hover-img xl:h-[250px] overflow-hidden">
-                <a href="#">
+              <div class="relative hover-img h-[250px] overflow-hidden">
+                <a href="/blog/{{ $categorie_article->name }}/{{ $article->slug }}">
                   <img class="max-w-full w-full mx-auto h-full object-cover" src="{{ $article->image }}" alt="Image description">
                 </a>
                 <div class="absolute px-4 pt-7 pb-4 bottom-0 h-full w-full bg-black bg-opacity-70 flex justify-end flex-col">
-                  <a href="#">
+                  <a href="/blog/{{ $categorie_article->name }}/{{ $article->slug }}">
                     <h2 class="text-lg font-bold capitalize leading-tight font-Roboto-condensed text-white mb-1">{{ $article->title }}</h2>
                   </a>
                   <div class="pt-1">
@@ -88,60 +98,7 @@
             </article>
             @endif
             @endforeach
-            {{-- <article class="col-span-6 p-1">
-              <div class="relative hover-img xl:h-[250px] overflow-hidden">
-                <a href="#">
-                  <img class="max-w-full w-full mx-auto h-full object-cover" src="http://127.0.0.1:8000/storage/images/DANRzgBCtzwqQBMU6LXjhz2rrDOUAaiVDpmF3r7R.jpg" alt="Image description">
-                </a>
-                <div class="absolute px-4 pt-7 pb-4 bottom-0 h-full w-full bg-black bg-opacity-70 flex justify-end flex-col">
-                  <a href="#">
-                    <h2 class="text-lg font-bold capitalize leading-tight text-white mb-1">News magazines are becoming obsolete, replaced by gadgets</h2>
-                  </a>
-                  <div class="pt-1">
-                    <div class="text-gray-100">
-                        <span class="bg-orange-600 text-sm px-2 py-1 rounded mr-2">Interior</span>
-                        <span class="text-xs">- October 2, 2023</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
-            <article class="col-span-3 p-1">
-              <div class="relative hover-img xl:h-[250px] overflow-hidden">
-                <a href="#">
-                  <img class="max-w-full w-full mx-auto h-full object-cover" src="http://127.0.0.1:8000/storage/images/DANRzgBCtzwqQBMU6LXjhz2rrDOUAaiVDpmF3r7R.jpg" alt="">
-                </a>
-                <div class="absolute px-4 pt-7 pb-4 bottom-0 h-full w-full bg-black bg-opacity-70 flex justify-end flex-col">
-                  <a href="#">
-                    <h2 class="text-lg font-bold capitalize leading-tight text-white mb-1">Tips for decorating the interior of the living room</h2>
-                  </a>
-                  <div class="pt-1">
-                    <div class="text-gray-100">
-                        <span class="bg-red-600 text-sm px-2 py-1 rounded mr-2">Interior</span>
-                        <span class="text-xs">- October 2, 2023</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article>
-            <article class="col-span-3 p-1">
-              <div class="relative hover-img xl:h-[250px] overflow-hidden">
-                <a href="#">
-                  <img class="max-w-full w-full mx-auto h-full object-cover" src="http://127.0.0.1:8000/storage/images/DANRzgBCtzwqQBMU6LXjhz2rrDOUAaiVDpmF3r7R.jpg" alt="Image description">
-                </a>
-                <div class="absolute px-4 pt-7 pb-4 bottom-0 h-full w-full bg-black bg-opacity-70 flex justify-end flex-col">
-                  <a href="#">
-                    <h2 class="text-lg font-bold capitalize leading-tight text-white mb-1">Online taxi users are increasing drastically ahead of the new year</h2>
-                  </a>
-                  <div class="pt-1">
-                    <div class="text-gray-100">
-                        <span class="bg-purple-600 text-sm px-2 py-1 rounded mr-2">Interior</span>
-                        <span class="text-xs">- October 2, 2023</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </article> --}}
+
           </div>
         </div>
       </div>
@@ -179,7 +136,7 @@
                 </div>
                 
                     <div class="flex flex-col items-start">
-                            <a href="/blog/{{ $post->slug }}" class="text-[22px] leading-tight font-Roboto-condensed font-bold py-2">
+                            <a href="/blog/{{ $category->name }}/{{ $post->slug }}" class="text-[22px] leading-tight font-Roboto-condensed font-bold py-2">
                                 {{ $post->title }}
                             </a>
                             <span class=" text-gray-500 inline-flex items-center justify-center font-Roboto-condensed text-[17px] my-2">
@@ -243,17 +200,22 @@
                   </div>
                   <div class="mt-3 flex flex-col">
                       @forelse ($categories as $categorie)
-                          <a href="?categorie={{ $categorie->name }}" class="font-Roboto text-[16px] py-1 text-gray-500 hover:text-gray-800 transition-colors">{{ $categorie->name }}</a>
+                          <a href="/blog/{{ $categorie->name }}" class="font-Roboto text-[16px] py-1 text-gray-500 hover:text-gray-800 transition-colors">{{ $categorie->name }}</a>
                       @empty
                       
                       @endforelse
                   </div>
               </div> 
-                <div class="mt-5">
-                    <a href="#">
-                        <img src="{{ asset('images/mcdo.jpeg') }}" style="height:600px;width:300px" alt="">
-                    </a>
-                </div>
+                @if($bannerBigRight)
+                    <div class="mt-5" id="hero-section">
+                        <form id="bannerClickForm-{{ $bannerBigRight->id }}" action="{{ route('banner.click', ['id' => $bannerBigRight->id]) }}" method="POST" target="_blank">
+                            @csrf
+                            <button type="submit" class=" bg-none border-none w-full">
+                                <img id="banner-{{ $bannerBigRight->id }}" src="http://localhost:8000{{ $bannerBigRight->image }}" data-banner-id="{{ $bannerBigRight->id }}" style="height:600px;width:300px"  alt="">
+                            </button>
+                        </form>
+                    </div>
+                @endif
                 <div class="mt-5 flex flex-col space-y-5">
                     <h4 class="font-Lato text-[17px] uppercase">Social Media</h4>
                     <a href="#" class="w-full bg-[#506fbf] rounded-full flex justify-between items-center">
@@ -282,11 +244,16 @@
                         </div>
                     </a>
                 </div>
-                <div class="mt-5">
-                    <a href="#">
-                        <img src="{{ asset('images/coffe.jpeg') }}" style="height:250px;width:300px" alt="">
-                    </a>
-                </div>
+                @if($bannerSmallRight)
+                    <div class="mt-5" id="hero-section">
+                        <form id="bannerClickForm-{{ $bannerSmallRight->id }}" action="{{ route('banner.click', ['id' => $bannerSmallRight->id]) }}" method="POST" target="_blank">
+                            @csrf
+                            <button type="submit" class=" bg-none border-none w-full">
+                                <img id="banner-{{ $bannerSmallRight->id }}" src="http://localhost:8000{{ $bannerSmallRight->image }}" data-banner-id="{{ $bannerSmallRight->id }}" style="height:250px;width:300px" alt="">
+                            </button>
+                        </form>
+                    </div>
+                @endif
             </div>
 
             {{-- <div class="mt-5 ">

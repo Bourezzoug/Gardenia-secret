@@ -11,7 +11,7 @@ class BoxUpdate extends Component
 {
     use WithFileUploads;
 
-    public $itemId,$nom_boxe,$cheap_lib,$cheap_price,$cheap_options,$cheap_description,$med_lib,$med_price,$med_options,$med_description,$exp_lib,$exp_price,$exp_options,$exp_description,$image,$image_path,$box_gallery,$box_gallery_path;
+    public $itemId,$box_description,$nom_boxe,$cheap_lib,$cheap_price,$cheap_options,$cheap_description,$med_lib,$med_price,$med_options,$med_description,$exp_lib,$exp_price,$exp_options,$exp_description,$image,$image_path,$box_gallery,$box_gallery_path,$stock;
 
     protected $listeners = ['showUpdateModel'];
 
@@ -23,6 +23,7 @@ class BoxUpdate extends Component
             // 'photo'             =>  'required|image|mimes:jpeg,png,jpg,webp',
             'box_gallery'       =>  'nullable',
             'nom_boxe'          =>  ['required', 'string'],
+            'box_description'   =>  ['required', 'string'],
             'cheap_lib'         =>  ['nullable', 'string'],
             'cheap_price'       =>  ['nullable', 'numeric'],
             'cheap_description' =>  ['nullable', 'string'],
@@ -35,6 +36,7 @@ class BoxUpdate extends Component
             'exp_price'         =>  ['nullable', 'numeric'],
             'exp_description'   =>  ['nullable', 'string'],
             'exp_options'       =>  ['nullable', 'string'],
+            'stock'             =>  ['nullable', 'numeric'],
         ];
 
         return $rules;
@@ -48,6 +50,7 @@ class BoxUpdate extends Component
             $item = Box::find($this->itemId);
             $this->image_path = $item->image;
             $this->nom_boxe = $item->box_name;
+            $this->box_description = $item->description;
             $this->cheap_lib = $item->cheap_libelle;
             $this->cheap_price = $item->cheap_price;
             $this->cheap_description = $item->cheap_description;
@@ -61,6 +64,7 @@ class BoxUpdate extends Component
             $this->exp_description = $item->exp_description;
             $this->exp_options = $item->exp_options;
             $this->box_gallery_path = $item->gallery;
+            $this->stock = $item->stock;
         }
         // dd(explode(',',$this->box_gallery_path));
     }
@@ -90,18 +94,20 @@ class BoxUpdate extends Component
 
         $data = [
             'box_name'          =>  $this->nom_boxe,
-            'cheap_libelle'     => $this->cheap_lib,
-            'cheap_price'       => $this->cheap_price,
-            'cheap_description' => $this->cheap_description,
-            'cheap_options'     => $this->cheap_options,
-            'med_libelle'       => $this->med_lib,
-            'med_price'         => $this->med_price,
-            'med_description'   => $this->med_description,
-            'med_options'       => $this->med_options,
-            'exp_libelle'       => $this->exp_lib,
-            'exp_price'         => $this->exp_price,
-            'exp_description'   => $this->exp_description,
-            'exp_options'       => $this->exp_options,
+            'description'       =>  $this->box_description,
+            'cheap_libelle'     =>  $this->cheap_lib,
+            'cheap_price'       =>  $this->cheap_price,
+            'cheap_description' =>  $this->cheap_description,
+            'cheap_options'     =>  $this->cheap_options,
+            'med_libelle'       =>  $this->med_lib,
+            'med_price'         =>  $this->med_price,
+            'med_description'   =>  $this->med_description,
+            'med_options'       =>  $this->med_options,
+            'exp_libelle'       =>  $this->exp_lib,
+            'exp_price'         =>  $this->exp_price,
+            'exp_description'   =>  $this->exp_description,
+            'exp_options'       =>  $this->exp_options,
+            'stock'             =>  $this->stock,
         ];
 
         if (!empty($this->image)) {

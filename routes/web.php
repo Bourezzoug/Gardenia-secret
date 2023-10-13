@@ -15,8 +15,9 @@ use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\StripeController;
 use App\Models\BoxMoisSubscriber;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-
+use Jenssegers\Agent\Agent;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -39,8 +40,8 @@ Route::get('/', function () {
 // });
 Route::get('/test',[HomeController::class,'index'])->name('home.test');
 Route::post('/test',[HomeController::class,'store'])->name('email.store');
-Route::get('/e-shop',[EshopController::class,'index'])->name('e-shop.index');
-Route::get('/produit/{id}',[ProductController::class,'index'])->name('product.index');
+Route::get('/products',[EshopController::class,'index'])->name('e-shop.index');
+Route::get('/product/{categorie}/{slug}/{id}',[ProductController::class,'index'])->name('product.customer.index');
 
 
 Route::get('/quiz',function() {
@@ -94,7 +95,12 @@ Route::middleware(['auth:sanctum', 'verified','authadmin'])->group(function () {
     Route::get('/admin/box/create',\App\Http\Livewire\Admin\Box\BoxCreate::class)->name('box.create');
     Route::get('/admin/box/update/{id}',\App\Http\Livewire\Admin\Box\BoxUpdate::class)->name('box.update');
     Route::get('/admin/category',\App\Http\Livewire\Admin\Category\CategoryIndex::class)->name('category.index');
-});;
+    Route::get('/admin/clients',\App\Http\Livewire\Admin\Client\ClientIndex::class)->name('client.index');
+    Route::get('/admin/campagnes',\App\Http\Livewire\Admin\Campagne\CapmagneIndex::class)->name('campagne.index');
+    Route::get('/admin/bannieres',\App\Http\Livewire\Admin\Banniere\BanniereIndex::class)->name('banniere.index');
+    Route::get('/admin/printPDF/{itemId}', [printPdf::class, 'printPdf'])->name('admin.printPDF');
+    Route::get('/admin/orders',\App\Http\Livewire\Admin\Order\OrderIndex::class)->name('order.index');
+});
 // Route::get('/symlink', function () {
 //   $target =$_SERVER['DOCUMENT_ROOT'].'/storage/app/public';
 //   $link = $_SERVER['DOCUMENT_ROOT'].'/public/storage';
@@ -116,5 +122,84 @@ Route::post('/contact',[ContactController::class,'contact'])->name('contact.send
 
 Route::get('/blog',[MagController::class,'index'])->name('mag.index');
 Route::get('/blog/{categorie}',[MagController::class,'categorie'])->name('blog.categorie');
-Route::get('/blog/{slug}',[MagController::class,'show'])->name('mag.show');
+Route::get('/blog/{categorie}/{slug}',[MagController::class,'show'])->name('mag.show');
+// Route::get('/testShop',function() {
+//     return view('pages.testShop');
+// });
 
+Route::post('/banner/{id}/click', function ($id) {
+    $banner = DB::table('bannieres')->where('id', $id)->first();
+
+    DB::table('bannieres')->where('id', $id)->increment('nb_total_click');
+
+    $ip_address = request()->ip();
+    $agent = new Agent();
+
+    // Determine the device type
+    $deviceType = $agent->deviceType();
+
+    $unique_click = DB::table('banner_unique_clicks')
+        ->where('banner_id', $id)
+        ->where('ip_address', $ip_address)
+        ->where('user_agent', $deviceType)
+        ->first();
+
+    if (!$unique_click) {
+        DB::table('banner_unique_clicks')
+            ->insert([
+                'banner_id' => $id,
+                'ip_address' => $ip_address,
+                'user_agent' => $deviceType,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+        DB::table('bannieres')
+            ->where('id', $id)
+            ->increment('nb_unique_click');
+    }
+
+    return redirect()->away($banner->lien);
+})->name('banner.click');
+Route::post('/banner/{id}/view', function ($id) {
+    $banner = DB::table('bannieres')->where('id', $id)->first();
+
+    $ip_address = request()->ip();
+    $agent = new Agent();
+
+    // Determine the device type
+    $deviceType = $agent->deviceType();
+
+    $unique_view = DB::table('banner_unique_views')
+        ->where('banner_id', $id)
+        ->where('ip_address', $ip_address)
+        ->where('user_agent', $deviceType)
+        ->first();
+
+    if (!$unique_view) {
+        DB::table('banner_unique_views')
+            ->insert([
+                'banner_id' => $id,
+                'ip_address' => $ip_address,
+                'user_agent' => $deviceType,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+        DB::table('bannieres')
+            ->where('id', $id)
+            ->increment('nb_unique_vues');
+    }
+
+    DB::connection('second_mysql')
+        ->table('bannieres')
+        ->where('id', $id)
+        ->increment('nb_total_vues');
+
+    return response()->json(['success' => true]);
+})->name('banner.view');
+
+
+Route::get('/php-version', function () {
+    return phpversion();
+});

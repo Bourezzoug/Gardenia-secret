@@ -2,11 +2,13 @@
 
 namespace App\Http\Livewire\Admin\Product;
 
+use App\Models\Categorie;
 use App\Models\Product;
 use Illuminate\Support\Facades\Redirect;
 use Laravel\Jetstream\InteractsWithBanner;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Illuminate\Support\Str;
 
 class ProductUpdate extends Component
 {
@@ -15,7 +17,7 @@ class ProductUpdate extends Component
 
     public $itemId;
 
-    public $nom,$prix,$description,$quantite,$gallery,$source_link,$ordre,$publication_date,$categorieID,$video_youtube,$lien_video,$slug,$seo_title,$meta_description,$tags,$image,$author_id,$status,$image_path;
+    public $nom,$prix,$description,$quantite,$gallery,$source_link,$ordre,$publication_date,$categorieID,$video_youtube,$lien_video,$slug,$tags,$image,$author_id,$status,$image_path,$type;
 
 
     protected $listeners = ['showUpdateModel'];
@@ -47,16 +49,19 @@ class ProductUpdate extends Component
             $this->quantite =   $item->quantite ;
             $this->image_path = $item->photo;
             $this->gallery = $item->gallery;
+            $this->type = $item->category_id;
         }
     }
     public function edit(){
-        $this->validate();
+        // $this->validate();
 
         $data = [
-            'nom' => $this->nom,
-            'prix' => $this->prix,
-            'description' => $this->description,
-            'quantite' => $this->quantite,
+            'nom'           => $this->nom,
+            'slug'          => Str::slug($this->nom, '-'),
+            'prix'          => $this->prix,
+            'description'   => $this->description,
+            'quantite'      => $this->quantite,
+            'category_id'   => $this->type,
         ];
 
         if (!empty($this->image)) {
@@ -83,6 +88,8 @@ class ProductUpdate extends Component
 
     public function render()
     {
-        return view('livewire.admin.product.product-update');
+        return view('livewire.admin.product.product-update',[
+            'category_product'  =>  Categorie::where('type','Products')->pluck('name','id')
+        ]);
     }
 }

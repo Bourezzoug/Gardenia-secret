@@ -181,6 +181,17 @@
                                         <x-input wire:model.defer="quantite" id="quantite" type="number" class="input-field mt-1 block w-full"/>
                                         <x-input-error for="quantite" class="mt-2 input-error"/>
                                       </div>
+                                      <div class="mr-5 pl-3 mb-5" >
+                                              <x-label class="text-xs" for="type" value="{{ __('Catégorie') }}"/>
+                                              <x-select wire:model="type" id="type"  class="mt-1" >
+                                                  <option value="" readonly="true" hidden="true" selected>{{ __('Selectionner une Catégorie') }}</option>
+                                                  @forelse($category_product as $key => $value)
+                                                      <option value="{{ $key }}">{{ $value }}</option>
+                                                  @empty
+                                                  @endforelse
+                                              </x-select>
+                                              <x-input-error for="type" class="mt-2"/>
+                                      </div>
     
                                       </div>
                                     </li>
