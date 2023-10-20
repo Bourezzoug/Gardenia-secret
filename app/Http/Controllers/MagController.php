@@ -226,7 +226,7 @@ class MagController extends Controller
             ->take(4)
             ->get();
 
-        $category = Categorie::where('name', $category)->firstOrFail();
+        $category = Categorie::where('slug', $category)->firstOrFail();
         
         $posts = $category->post()->where('status', 'publié')->paginate(8);
 

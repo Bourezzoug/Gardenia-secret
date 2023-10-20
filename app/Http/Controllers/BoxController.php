@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Box;
 use App\Models\Cart;
+use App\Models\Categorie;
 use App\Models\Wishlist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -63,6 +64,7 @@ class BoxController extends Controller
             'boxCarts'      =>  $boxCarts,
             'wishlists'     =>  $wishlists,
             'totalPrice'    =>  $totalPrice,
+            'blogCategorie' =>  Categorie::where('type','Blog')->get()
         ]);
     }
     public function store_box_to_cart($id,Request $request) {

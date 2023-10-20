@@ -2,7 +2,7 @@
 @section('content')
 <div class="fixed inset-0 bg-black opacity-80 z-[9999] header-overlay  hidden" id="header-overlay"></div>
 
-@include('pages.components.header')
+@include('pages.components.headerTest')
 <section class="bg-white mt-10">
     <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
         <div class="mx-auto max-w-screen-md text-center mb-8 lg:mb-12">

@@ -24,9 +24,11 @@
         <div class="w-full lg:w-[70%]">
             <div class="lg:grid grid-cols-2 gap-5">
                 @forelse ($posts as $post)
-
+                @php
+                    $category = App\Models\Categorie::find($post->categorie_id);
+                @endphp
                 <div class="col-span-1">
-                    <a class="mb-4 md:mb-0 w-full relative rounded inline-block" style="height: 280px;" href="/blog/{{ $post->slug }}">
+                    <a class="mb-4 md:mb-0 w-full relative rounded inline-block" style="height: 280px;" href="/blog/{{ $category->slug }}/{{ $post->slug }}">
                         <div class="absolute left-0 bottom-0 w-full h-full z-10"
                         style="background-image: linear-gradient(180deg,transparent,rgba(0,0,0,.7));"></div>
                         <img src="{{ $post->image }}" class="absolute left-0 top-0 w-full h-full rounded z-0 object-cover" />
@@ -44,9 +46,10 @@
                         <span class="bg-red-600 text-sm px-2 py-1 rounded mr-2">No Category</span>
                     @endif
                 </div> --}}
+
                 
                     <div class="flex flex-col items-start">
-                            <a href="/blog/{{ $post->slug }}" class="text-[22px] leading-tight font-Roboto-condensed font-bold py-2">
+                            <a href="/blog/{{ $category->slug }}/{{ $post->slug }}" class="text-[22px] leading-tight font-Roboto-condensed font-bold py-2">
                                 {{ $post->title }}
                             </a>
                             <span class=" text-gray-500 inline-flex items-center justify-center font-Roboto-condensed text-[17px] my-2">
@@ -110,7 +113,7 @@
                     </div>
                     <div class="mt-3 flex flex-col">
                         @forelse ($categories as $categorie)
-                            <a href="/blog/{{ $categorie->name }}" class="font-Roboto text-[16px] py-1 text-gray-500 hover:text-gray-800 transition-colors">{{ $categorie->name }}</a>
+                            <a href="/blog/{{ $categorie->slug }}" class="font-Roboto text-[16px] py-1 text-gray-500 hover:text-gray-800 transition-colors">{{ $categorie->name }}</a>
                         @empty
                         
                         @endforelse

@@ -33,17 +33,17 @@
         <!--Start left cover-->
         <div class="flex-shrink max-w-full w-full lg:w-1/2 pb-1 lg:pb-0 lg:pr-1">
           <div class="relative hover-img max-h-98 xl:h-[508px] mt-1 overflow-hidden ">
-            <a href="/blog/{{ $categorie->name }}/{{ $first_article->slug }}">
+            <a href="/blog/{{ $categorie->slug }}/{{ $first_article->slug }}">
               <img class="max-w-full w-full mx-auto h-full object-cover" src="{{ $first_article->image }}" alt="Image description">
             </a>
             <div class="absolute px-5 pt-8 pb-5 bottom-0 w-full  h-full  bg-black bg-opacity-70 flex justify-end flex-col">
-              <a href="/blog/{{ $categorie->name }}/{{ $first_article->slug }}">
+              <a href="/blog/{{ $categorie->slug }}/{{ $first_article->slug }}">
                 <h2 class="text-3xl font-bold capitalize text-white mb-3 font-Roboto-condensed">{{ $first_article->title }}</h2>
               </a>
               <p class="text-gray-100 hidden sm:inline-block font-Roboto-condensed">{!! Illuminate\Support\Str::limit(strip_tags($first_article->body), 150, '[...]') !!}</p>
               <div class="pt-1">
                 <div class="text-gray-100">
-                    <a href="{{ $categorie->name }}"  class="text-sm px-2 py-1 rounded mr-2 font-Roboto-condensed" style="background-color:{{ $categorie->color }}">{{ $categorie->name }}</a>
+                    <a href="/blog/{{ $categorie->slug }}"  class="text-sm px-2 py-1 rounded mr-2 font-Roboto-condensed" style="background-color:{{ $categorie->color }}">{{ $categorie->name }}</a>
                     <span class="text-xs">- {{ \Carbon\Carbon::parse($first_article->created_at)->format('F j, Y') }}</span>
                 </div>
               </div>
@@ -61,16 +61,16 @@
             @if($key == 0)
             <article class="col-span-6 p-1">
               <div class="relative hover-img  h-[250px] overflow-hidden">
-                <a href="/blog/{{ $categorie_article->name }}/{{ $article->slug }}">
+                <a href="/blog/{{ $categorie_article->slug }}/{{ $article->slug }}">
                   <img class="max-w-full w-full mx-auto h-full object-cover" src="{{ $article->image }}" alt="Image description">
                 </a>
                 <div class="absolute px-4 pt-7 pb-4 bottom-0 h-full w-full bg-black bg-opacity-70 flex justify-end flex-col">
-                  <a href="/blog/{{ $categorie_article->name }}/{{ $article->slug }}">
+                  <a href="/blog/{{ $categorie_article->slug }}/{{ $article->slug }}">
                     <h2 class="text-lg font-bold capitalize leading-tight font-Roboto-condensed text-white mb-1">{{ $article->title }}</h2>
                   </a>
                   <div class="pt-1">
                     <div class="text-gray-100">
-                        <a href="{{ $categorie_article->name }}"  class="text-sm px-2 py-1 rounded mr-2 font-Roboto-condensed" style="background-color: {{ $categorie_article->color }}">{{ $categorie_article->name }}</a>
+                        <a href="/blog/{{ $categorie_article->slug }}"  class="text-sm px-2 py-1 rounded mr-2 font-Roboto-condensed" style="background-color: {{ $categorie_article->color }}">{{ $categorie_article->name }}</a>
                         <span class="text-xs">- {{ \Carbon\Carbon::parse($article->created_at)->format('F j, Y') }}</span>
                     </div>
                   </div>
@@ -80,16 +80,16 @@
             @else
             <article class="col-span-3 p-1">
               <div class="relative hover-img h-[250px] overflow-hidden">
-                <a href="/blog/{{ $categorie_article->name }}/{{ $article->slug }}">
+                <a href="/blog/{{ $categorie_article->slug }}/{{ $article->slug }}">
                   <img class="max-w-full w-full mx-auto h-full object-cover" src="{{ $article->image }}" alt="Image description">
                 </a>
                 <div class="absolute px-4 pt-7 pb-4 bottom-0 h-full w-full bg-black bg-opacity-70 flex justify-end flex-col">
-                  <a href="/blog/{{ $categorie_article->name }}/{{ $article->slug }}">
+                  <a href="/blog/{{ $categorie_article->slug }}/{{ $article->slug }}">
                     <h2 class="text-lg font-bold capitalize leading-tight font-Roboto-condensed text-white mb-1">{{ $article->title }}</h2>
                   </a>
                   <div class="pt-1">
                     <div class="text-gray-100">
-                        <a href="{{ $categorie_article->name }}" class="text-sm px-2 py-1 rounded mr-2 font-Roboto-condensed" style="background-color:{{ $categorie_article->color }}">{{ $categorie_article->name }}</a>
+                        <a href="/blog/{{ $categorie_article->slug }}" class="text-sm px-2 py-1 rounded mr-2 font-Roboto-condensed" style="background-color:{{ $categorie_article->color }}">{{ $categorie_article->name }}</a>
                         <span class="text-xs">- {{ \Carbon\Carbon::parse($article->created_at)->format('F j, Y') }}</span>
                     </div>
                   </div>
@@ -129,14 +129,14 @@
                     @endphp
                 
                     @if($category)
-                        <a href="/blog/{{ $category->name }}" class="text-sm px-2 py-1 rounded mr-2 font-Roboto-condensed" style="background-color:{{ $category->color }}">{{ $category->name }}</a>
+                        <a href="/blog/{{ $category->slug }}" class="text-sm px-2 py-1 rounded mr-2 font-Roboto-condensed" style="background-color:{{ $category->color }}">{{ $category->name }}</a>
                     @else
                         <span class="bg-red-600 text-sm px-2 py-1 rounded mr-2">No Category</span>
                     @endif
                 </div>
                 
                     <div class="flex flex-col items-start">
-                            <a href="/blog/{{ $category->name }}/{{ $post->slug }}" class="text-[22px] leading-tight font-Roboto-condensed font-bold py-2">
+                            <a href="/blog/{{ $category->slug }}/{{ $post->slug }}" class="text-[22px] leading-tight font-Roboto-condensed font-bold py-2">
                                 {{ $post->title }}
                             </a>
                             <span class=" text-gray-500 inline-flex items-center justify-center font-Roboto-condensed text-[17px] my-2">
@@ -200,7 +200,7 @@
                   </div>
                   <div class="mt-3 flex flex-col">
                       @forelse ($categories as $categorie)
-                          <a href="/blog/{{ $categorie->name }}" class="font-Roboto text-[16px] py-1 text-gray-500 hover:text-gray-800 transition-colors">{{ $categorie->name }}</a>
+                          <a href="/blog/{{ $categorie->slug }}" class="font-Roboto text-[16px] py-1 text-gray-500 hover:text-gray-800 transition-colors">{{ $categorie->name }}</a>
                       @empty
                       
                       @endforelse

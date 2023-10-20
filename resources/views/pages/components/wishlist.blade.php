@@ -207,7 +207,7 @@
                             <h3>
                                 <a href="#">${cart.product.nom}</a>
                             </h3>
-                            <p class="ml-4">${cart.product.prix * cart.quantity} <sup>dhs</sup></p>
+                            <p class="ml-4">$${cart.product.prix * cart.quantity}</p>
                         </div>
                         <p class="mt-1 text-sm text-gray-500">Salmon</p>
                     </div>
