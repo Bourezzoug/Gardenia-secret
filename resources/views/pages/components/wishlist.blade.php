@@ -28,7 +28,7 @@
                   <div class="flow-root">
                     <ul id='wishlistList' role="list" class="-my-6 divide-y divide-gray-200">
                         @forelse ($wishlists as $wishlist)
-                        <li class="flex py-6">
+                        <li id="wishlist-id-{{ $wishlist->id }}" class="flex py-6" id="wishlist-id-{{$wishlist->id}}">
                             <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                               <img src="{{ $wishlist->product->photo }}" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="h-full w-full object-cover object-center">
                             </div>
@@ -39,7 +39,7 @@
                                   <h3>
                                     <a href="#">{{ $wishlist->product->nom }}</a>
                                   </h3>
-                                  <form id="wishlist-id-{{ $wishlist->id }}" data-wishlist-id="{{ $wishlist->id }}" action="/wishlist/{{ $wishlist->id }}" method="POST" class="flex wishlist-remove-form">
+                                  <form  data-wishlist-id="{{ $wishlist->id }}" action="/wishlist/{{ $wishlist->id }}" method="POST" class="flex wishlist-remove-form">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="font-medium text-second-color text-[14px] remove-wishlist">Remove</button>
@@ -47,7 +47,7 @@
                                 </div>
                                 
                               </div>
-                              <form id="wishlistForm" action="{{ route('wishlist.store_cart', ['id' => $wishlist->product->id,'wishlist_id' => $wishlist->id]) }}" method="POST" class="cartForm flex flex-1  justify-between text-sm items-center">
+                              <form id="wishlistForm-{{ $wishlist->id }}" action="{{ route('wishlist.store_cart', ['id' => $wishlist->product->id,'wishlist_id' => $wishlist->id]) }}" method="POST" class="cartForm flex flex-1  justify-between text-sm items-center">
                                 @csrf
                                 <input type="hidden" name="wishlist_id" value="{{ $wishlist->id }}">
                                 <div class="my-10 flex items-center " x-data="{ productQuantity: 1,Quantity: {{ $wishlist->product->quantite }}}">
@@ -84,8 +84,8 @@
                                 </div>
                                   <div>
                                     <input type="hidden" name="form_type" value="form1">
-                                    @csrf
-                                    <button type="submit" class="font-medium text-second-color text-[14px]">Ajouter à la carte</button>
+                                    {{-- @csrf --}}
+                                    <button type="submit" class="font-medium text-second-color text-[14px] add-wishlist-to-cart">Ajouter à la carte</button>
                                   </div>
                                 </form>
       
@@ -118,145 +118,8 @@
         </div>
       </div>
     </div>
-    @if(!$wishlists->isEmpty())
-    {{-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var cartForm = document.getElementById('cartForm');
-            if (cartForm) {
-                cartForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
 
-                    var formAction = this.getAttribute('action');
-                    var formData = new FormData(this);
 
-                    fetch(formAction, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: formData
-                    })
-                    .then(function(response) {
-                        if (response.ok) {
-                            return response.json();
-                        } else {
-                            throw new Error('Error adding product to cart');
-                        }
-                    })
-                    .then(function(data) {
-                        if (data.success) {
-                            // Display a success message or perform any desired action
-                            console.log('Product added to cart successfully');
-
-                            // Update the cart view with the new data
-                            updateCartView(data.carts, data.totalPrice);
-                        } else {
-                            throw new Error('Error adding product to cart');
-                        }
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    });
-                });
-            }
-
-            
-
-            // Function to update the cart view with the new data
-        // ...
-
-        function updateCartView(carts, totalPrice) {
-            var cartList = document.querySelector('ul[role="list"]');
-            if (cartList) {
-                // Clear the current cart items
-                cartList.innerHTML = '';
-
-                // Append the updated cart items
-                carts.forEach(function(cart) {
-                    var listItem = document.createElement('li');
-                    listItem.classList.add('flex', 'py-6');
-
-                    // Customize the cart item structure based on your requirement
-                    var totalPrices = cart.product.prix * cart.quantity;
-                    var cartItemHtml = `
-                        <!-- Customize the cart item HTML structure here -->
-                        <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                            <img src="${cart.product.photo}" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="h-full w-full object-cover object-center">
-                        </div>
-                        <div class="ml-4 flex flex-1 flex-col">
-                            <div>
-                                <div class="flex justify-between text-base font-medium text-gray-900">
-                                    <h3>
-                                        <a href="#">${cart.product.nom}</a>
-                                    </h3>
-                                    <p class="ml-4">${totalPrices} <sup>dhs</sup></p>
-                                </div>
-                                <p class="mt-1 text-sm text-gray-500">Salmon</p>
-                            </div>
-                            <div class="flex flex-1 items-end justify-between text-sm">
-                                <p class="text-gray-500">Quantité ${cart.quantity}</p>
-                                <form id="cart-id" action="{{ route('cart.delete', ['id' => $wishlist->id]) }}" method="POST" class="flex cart-remove-form">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="font-medium text-second-color">Remove</button>
-                                </form>
-                            </div>
-                        </div>
-                    `;
-
-                    listItem.innerHTML = cartItemHtml;
-
-                    // Append the cart item to the cart list
-                    cartList.appendChild(listItem);
-                });
-
-                // Update the total price element
-                var totalPriceElement = document.querySelector('.total-price');
-                if (totalPriceElement) {
-                    totalPriceElement.textContent = totalPrice + totalPrices ;
-                }
-            }
-        }
-
-        // ...
-
-        });
-    </script> --}}
-
-    
-    @endif
-
-    {{-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var cartForms = document.querySelectorAll('.cart-remove-form');
-            cartForms.forEach(function(form) {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-
-                    var cartItem = this.closest('.flex.py-6'); // Adjust the selector according to your cart item structure
-                    var formAction = this.getAttribute('action');
-
-                    fetch(formAction, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        }
-                    })
-                    .then(function(response) {
-                        if (response.ok) {
-                            cartItem.remove(); // Remove the cart item element from the cart display on the page
-                        } else {
-                            console.log('Error deleting cart item');
-                        }
-                    })
-                    .catch(function(error) {
-                        console.log(error);
-                    });
-                });
-            });
-        });
-    </script> --}}
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(event) {
@@ -287,7 +150,20 @@
                 if (totalElement) {
                     totalElement.textContent = data.totalPrice;
                 }
+                const deletedProductId = data.deletedProductId; // Replace with the actual product ID
+                // console.log(data.wishlistItem.product.id)
+                
 
+                      // Find the corresponding product in your list
+                      const productToDelete = document.querySelector(`[data-product-id="${deletedProductId}"]`);
+
+                      if (productToDelete) {
+                          // Remove the animation class
+                          const heartAnimation = productToDelete.querySelector('.HeartAnimation');
+                          if (heartAnimation) {
+                              heartAnimation.classList.remove('animate');
+                          }
+                      }
                     }
 
                 } else {
@@ -301,49 +177,16 @@
     });
   });
 </script>
+
+
 <script>
-      document.getElementById('wishlistForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent the default form submission
-
-        
-        const formData = new FormData(event.target); // Get form data
-        const url = event.target.getAttribute('action'); // Get the form action URL
-        
-        // Perform Ajax request
-        fetch(url, {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}', // Add CSRF token
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                console.log('Product added to cart successfully');
-                
-                // Update the cart content using the received data
-                updateCartUIFromWishlist(data.carts);
-                // Handle the successful removal of the wishlist item
-                // const wishlistItem = wishlistForm.closest('.flex.py-6');
-                //   if (wishlistItem) {
-                //       wishlistItem.remove();
-                //   }
-
-                // const subtotalPrice = document.getElementById('subtotalPrice');
-          subtotalPrice.textContent = data.totalPrice ; // Assuming data.totalPrice is the updated total price
-            } else {
-                console.error('Failed to add product to cart');
-                // Display an error message or take appropriate action
-            }
-        })
-        .catch(error => {
-            console.error('An error occurred:', error);
-            // Handle errors, display error message, etc.
-        });
-    });
-
-    // Update the cart UI with the new cart data
+            // Function to remove item from wishlist UI
+            function removeItemFromWishlist(wishlistItemId) {
+        const wishlistItem = document.getElementById(`wishlist-id-${wishlistItemId}`);
+        if (wishlistItem) {
+            wishlistItem.remove();
+        }
+    }
     function updateCartUIFromWishlist(carts) {
         const cartList = document.getElementById('cartList');
         cartList.innerHTML = ''; // Clear the existing content
@@ -382,6 +225,174 @@
             cartList.appendChild(newItem);
         });
     }
+  document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(event) {
+        const add_wishlist_to_cart = event.target.closest('.add-wishlist-to-cart')
+        if (add_wishlist_to_cart) {
+          event.preventDefault()
+          const form = add_wishlist_to_cart.closest('form');
+          const formData = new FormData(form); // Get form data
+          const url = form.getAttribute('action'); // Get the form action URL
+        
+        // Perform Ajax request
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}', // Add CSRF token
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Product added to cart successfully');
+                
+                // Update the cart content using the received data
+                updateCartUIFromWishlist(data.carts);
+                // Handle the successful removal of the wishlist item
+                const wishlistItemId = formData.get('wishlist_id');
+                removeItemFromWishlist(wishlistItemId);
+          subtotalPrice.textContent = data.totalPrice ; // Assuming data.totalPrice is the updated total price
+            } else {
+                console.error('Failed to add product to cart');
+                // Display an error message or take appropriate action
+            }
+        })
+        .catch(error => {
+            console.error('An error occurred:', error);
+            // Handle errors, display error message, etc.
+        });
+        }
+
+      })
+
+      })
+</script>
+
+
+
+
+{{-- Script to add products to wishlist and handle the heart animation --}}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const wishlistButtons = document.querySelectorAll('.add-products-to-wishlist');
+
+    function updateWishlistUI(wishlists) {
+        const wishList = document.getElementById('wishlistList');
+        wishList.innerHTML = ''; // Clear the existing content
+        wishlists.forEach(item => {
+            const newItem = document.createElement('li');
+            newItem.className = 'flex py-6';
+            const id = `${item.id}`;
+            newItem.id = `wishlist-id-${id}`
+            const csrf = document.head.querySelector("[name=csrf-token]").content;
+            newItem.innerHTML = `
+                <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                    <img src="${item.product.photo}" alt="Product Image" class="h-full w-full object-cover object-center">
+                </div>
+                <div class="ml-4 flex flex-1 flex-col">
+                    <div>
+                        <div class="flex justify-between text-base font-medium text-gray-900">
+                            <h3>
+                                <a href="#">${item.product.nom}</a>
+                            </h3>
+                            <form  data-wishlist-id="${item.id}" action="/wishlist/${item.id}" method="POST" class="flex wishlist-remove-form">
+                                @csrf
+                                <button type="submit" class="font-medium text-second-color remove-wishlist">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                    <form id="wishlistForm" action="/product_wishlist_to_cart/${item.product.id}/${item.id}" method="POST" class="cartForm flex flex-1 justify-between text-sm items-center">
+                        @csrf
+                        <input type="hidden" name="wishlist_id" value="${item.id}">
+                        <div class="my-10 flex items-center" x-data="{ productQuantity: 1, Quantity: ${item.product.quantite} }">
+                            <input type="hidden" name="product_id" value="${item.product.id}">
+                            <label for="Quantity" class="text-gray-500"> Qty </label>
+                            <div class="flex items-center gap-1">
+                                <button
+                                    type="button"
+                                    x-on:click="productQuantity--"
+                                    :disabled="productQuantity === 0"
+                                    class="w-6 h-6 text-gray-600 transition hover:opacity-75"
+                                >
+                                    &minus;
+                                </button>
+                                <input
+                                    type="number"
+                                    id="Quantity"
+                                    name="quantity"
+                                    x-model="productQuantity"
+                                    class="h-8 w-8 p-0 rounded border border-gray-200 text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
+                                    max="${item.quantity}"
+                                />
+                                <button
+                                    type="button"
+                                    x-on:click="productQuantity < Quantity ? productQuantity++ : null"
+                                    class="w-6 h-6 text-gray-600 transition hover:opacity-75"
+                                >
+                                    &plus;
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="submit" class="font-medium text-second-color text-[14px] add-wishlist-to-cart">Ajouter à la carte</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+
+            wishList.appendChild(newItem);
+        });
+    }
+
+    wishlistButtons.forEach(button => {
+        const productId = button.getAttribute('data-product-id');
+        const isInWishlist = button.getAttribute('data-in-wishlist') === 'true';
+
+        if (isInWishlist) {
+            const heartAnimation = button.querySelector('.HeartAnimation');
+            heartAnimation.classList.add('animate');
+            button.classList.add('active');
+        }
+
+        button.addEventListener('click', async function(event) {
+            event.preventDefault();
+            const form = this.closest('form');
+            const formData = new FormData(form);
+            const url = form.getAttribute('action');
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.head.querySelector("[name=csrf-token]").content,
+                    },
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    console.log('Product added to wishlist successfully');
+                    this.classList.add('active');
+                    if (data.isInWishlist) {
+                        const heartAnimation = this.querySelector('.HeartAnimation');
+                        heartAnimation.classList.add('animate');
+                    }
+
+                    updateWishlistUI(data.wishlists); // Update wishlist UI
+                } else {
+                    console.error('Failed to add product to wishlist');
+                    // Display an error message or take appropriate action
+                }
+            } catch (error) {
+                console.error('An error occurred:', error);
+                // Handle errors, display error message, etc.
+            }
+        });
+    });
+});
+
 </script>
 </div>
 @endif

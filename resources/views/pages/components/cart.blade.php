@@ -71,9 +71,26 @@
                               <div>
                                 <div class="flex justify-between text-base font-medium text-gray-900">
                                   <h3>
-                                    <a href="#">{{ $cart->box->libelle }}</a>
+                                    <a href="#">
+                                      {{ $cart->box->libelle }}
+                                      @if($cart->box_option == 'cheap')
+                                        {{ $cart->box->cheap_libelle }}
+                                      @elseif ($cart->box_option == 'mid')
+                                        {{ $cart->box->med_libelle }}
+                                      @elseif ($cart->box_option == 'expensive')
+                                        {{ $cart->box->exp_libelle }}
+                                      @endif
+                                    </a>
                                   </h3>
-                                  <p class="ml-4">${{ $cart->box->price  }}</p>
+                                  <p class="ml-4">
+                                    @if($cart->box_option == 'cheap')
+                                      ${{ $cart->box->cheap_price }}
+                                    @elseif ($cart->box_option == 'mid')
+                                      ${{ $cart->box->med_price }}
+                                    @elseif ($cart->box_option == 'expensive')
+                                      ${{ $cart->box->exp_price }}
+                                    @endif
+                                  </p>
                                 </div>
                                 <p class="mt-1 text-sm text-gray-500">Box du mois</p>
                               </div>

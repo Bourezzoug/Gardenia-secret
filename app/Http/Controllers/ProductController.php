@@ -59,6 +59,9 @@ class ProductController extends Controller
                 $totalPrice = $cartsTotalPrice + $boxCartsTotalPrice;
             }
         $gallery = explode(',',$product->gallery);
+
+
+        
         return view('pages.product',[
             'cities'            =>  $cities,
             'product'           =>  $product,
@@ -120,31 +123,43 @@ class ProductController extends Controller
 
     public function wishlist_store($id, Request $request) {
         $user = Auth::user();
+    
+        // Check if the product is already in the cart
+        $existingCartItem = Cart::where('user_id', $user->id)
+            ->where('product_id', $id)
+            ->first();
+    
+        if ($existingCartItem) {
+            // Product is already in the cart
+            return response()->json(['success' => false, 'already_in' => 'Product is already in the cart']);
+        }
+    
+        // If not in the cart, check if it's in the wishlist
         $existingWishlistItem = Wishlist::where('user_id', $user->id)
             ->where('product_id', $id)
             ->first();
-            if ($existingWishlistItem) {
-                // Product is already in the cart
-                // Log a message to the console
-                Log::info('Product is already in the cart.');
-        
-                // You can also return a response indicating the product is already in the cart
-                return response()->json(['success' => false, 'message' => 'Product is already in the cart']);
-            }
+    
+        if ($existingWishlistItem) {
+            // Product is already in the wishlist
+            return response()->json(['success' => false, 'message' => 'Product is already in the wishlist']);
+        }
+    
+        // If not in cart or wishlist, add it to the wishlist
         $wishlistItem = Wishlist::create([
             'user_id' => $user->id,
             'product_id' => $id,
         ]);
+    
         if ($wishlistItem) {    
             $wishlist = Wishlist::with('product')
-            ->where('user_id', $user->id)
-            ->get(); 
+                ->where('user_id', $user->id)
+                ->get(); 
             return response()->json(['success' => true, 'wishlists' => $wishlist]);
         } else {
             return response()->json(['success' => false]);
         }
     }
-
+    
 
     public function wishlist_store_to_cart($id, Request $request) {
         $user = Auth::user();
@@ -191,6 +206,7 @@ class ProductController extends Controller
         $wishlistItem = Wishlist::find($id);
     
         if ($wishlistItem) {
+            $deletedProductId = $wishlistItem->product_id; // Get the deleted product ID
             $wishlistItem->delete();
     
             // Return the updated cart data
@@ -204,7 +220,8 @@ class ProductController extends Controller
             return response()->json([
                 'success'     => true,
                 'wishlists'       => $wishlists,
-                'totalPrice'  => $totalPrice
+                'totalPrice'  => $totalPrice,
+                'deletedProductId' => $deletedProductId // Include the deleted product ID
             ]);
         }
     

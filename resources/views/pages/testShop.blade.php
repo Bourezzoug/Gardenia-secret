@@ -425,9 +425,12 @@
             <p class="text-lg font-semibold text-black cursor-auto my-3 font-Roboto">${{ $product->prix }}</p>
             <form action="{{ route('wishlist.store', ['id' => $product->id]) }}" method="POST" class="wishlist-form-product w-full flex" data-product-id="{{ $product->id }}">
                 @csrf
-                <button type="submit" class="ml-auto">
-                    <div class="HeartAnimation"></div>
-                </button>
+<button type="submit" class="ml-auto add-products-to-wishlist" 
+    data-product-id="{{ $product->id }}" 
+    data-in-wishlist="{{ $isInWishlist[$product->id] ? 'true' : 'false' }}">
+    <div class="HeartAnimation"></div>
+</button>
+
             </form>
           </div>
         </div>
@@ -453,10 +456,10 @@
   
 </div>
 
-
-
+{{-- Script to filter and sort products--}}
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(event) {
     const sortOptions = document.querySelectorAll('.sort-option');
     const priceFilters = document.querySelectorAll('[name="price"');
     const categoryFilters = document.querySelectorAll('[name="categories[]"]');
@@ -495,7 +498,7 @@
                         <p class="text-lg font-semibold text-black cursor-auto my-3 font-Roboto">$${productData.prix}</p>
                         <form action="{{ route('wishlist.store', ['id' => $product->id]) }}" method="POST" class="wishlist-form-product w-full flex" data-product-id="{{ $product->id }}">
                             @csrf
-                            <button type="submit" class="ml-auto">
+                            <button type="submit" class="ml-auto add-products-to-wishlist">
                                 <div class="HeartAnimation"></div>
                             </button>
                         </form>
@@ -569,9 +572,251 @@
 
         updateProducts(sortType, selectedPrices, selectedCategories, searchTerm);
     });
-  });
+  });})
 
 </script>
+
+{{-- <script>
+  document.addEventListener('DOMContentLoaded', function() {
+
+  function updateWishlistUI(wishlists) {
+    const wishList = document.getElementById('wishlistList');
+    wishList.innerHTML = ''; // Clear the existing content
+
+    wishlists.forEach(item => {
+            const newItem = document.createElement('li');
+            newItem.className = 'flex py-6';
+            const id = `${item.id}`;
+            const csrf = document.head.querySelector("[name=csrf-token]").content;
+            newItem.innerHTML = `
+                <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
+                    <img src="${item.product.photo}" alt="Product Image" class="h-full w-full object-cover object-center">
+                </div>
+                <div class="ml-4 flex flex-1 flex-col">
+                    <div>
+                        <div class="flex justify-between text-base font-medium text-gray-900">
+                            <h3>
+                                <a href="#">${item.product.nom}</a>
+                            </h3>
+                            <form id="wishlist-id-${item.id}" data-wishlist-id="${item.id}" action="/wishlist/${item.id}" method="POST" class="flex wishlist-remove-form">
+                                @csrf
+                                <button type="submit" class="font-medium text-second-color remove-wishlist">Remove</button>
+                            </form>
+                        </div>
+                        
+                    </div>
+                    <form id="wishlistForm" action="/product_wishlist_to_cart/${item.product.id}/${item.id}" method="POST" class="cartForm flex flex-1 justify-between text-sm items-center">
+                    <input type="hidden" name="_token"  value="${csrf}" >
+                        <input type="hidden" name="wishlist_id" value="${item.id}">
+                        <div class="my-10 flex items-center" x-data="{ productQuantity: 1, Quantity: ${item.product.quantite} }">
+                            <input type="hidden" name="product_id" value="${item.product.id}">
+                            <label for="Quantity" class="text-gray-500"> Qty </label>
+                            <div class="flex items-center gap-1">
+                                <button
+                                    type="button"
+                                    x-on:click="productQuantity--"
+                                    :disabled="productQuantity === 0"
+                                    class="w-6 h-6 text-gray-600 transition hover:opacity-75"
+                                >
+                                    &minus;
+                                </button>
+                                <input
+                                    type="number"
+                                    id="Quantity"
+                                    name="quantity"
+                                    x-model="productQuantity"
+                                    class="h-8 w-8 p-0 rounded border border-gray-200 text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none"
+                                    max="${item.quantity}"
+                                />
+                                <button
+                                    type="button"
+                                    x-on:click="productQuantity < Quantity ? productQuantity++ : null"
+                                    class="w-6 h-6 text-gray-600 transition hover:opacity-75"
+                                >
+                                    &plus;
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+  
+                            <button type="submit" class="font-medium text-second-color text-[14px] add-wishlist-to-cart">Ajouter à la carte</button>
+                        </div>
+                    </form>
+                </div>
+            `;
+  
+            wishList.appendChild(newItem);
+        });
+  }
+
+  function handleWishlistButtonClick(event) {
+    event.preventDefault();
+    const add_products_to_wishlist = event.target.closest('.add-products-to-wishlist');
+
+    if (add_products_to_wishlist) {
+        const form = add_products_to_wishlist.closest('form');
+        const formData = new FormData(form);
+        const url = form.getAttribute('action');
+
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRF-TOKEN': document.head.querySelector("[name=csrf-token]").content,
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Product added to wishlist successfully');
+                updateWishlistUI(data.wishlists);
+            } else {
+                console.error('Failed to add product to wishlist');
+            }
+        })
+        .catch(error => {
+            console.error('An error occurred:', error);
+        });
+    }
+  }
+
+  function updateProducts(sortType, selectedPrices, selectedCategories, searchTerm) {
+          const pricesQueryParam = selectedPrices.length > 0 ? `&prices=${selectedPrices.join(',')}` : '';
+          const categoriesQueryParam = selectedCategories.length > 0 ? `&categories=${selectedCategories.join(',')}` : '';
+          const searchQueryParam = searchTerm ? `&search=${searchTerm}` : '';
+  
+          fetch(`/products?sort=${sortType}${pricesQueryParam}${categoriesQueryParam}${searchQueryParam}`, {
+              method: 'GET',
+              headers: {
+                  'Content-Type': 'application/json',
+                  'X-Requested-With': 'XMLHttpRequest'
+              }
+          })
+          .then(response => response.json())
+          .then(data => {
+              const productsContainer = document.getElementById('products-container');
+              productsContainer.innerHTML = ''; // Clear existing products
+  
+              data.products.data.forEach(productData => {
+                  // Create product container
+                  const productHTML = `
+                  <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
+                      <a href="#">
+                          <img src="${productData.photo}" alt="Product" class="h-80 w-72 object-cover rounded-t-xl" />
+                      </a>
+                      <div class="px-4 py-3 w-72">
+                      <span class="text-gray-400 mr-3 uppercase text-xs font-Roboto-condensed">Brand</span>
+                      <h2 class="text-lg font-bold text-black  block capitalize font-Roboto-condensed">
+                          <a href="">${productData.nom}</a>
+                      </h2>
+                      <div class="flex items-center">
+                          <p class="text-lg font-semibold text-black cursor-auto my-3 font-Roboto">$${productData.prix}</p>
+                          <form action="{{ route('wishlist.store', ['id' => $product->id]) }}" method="POST" class="wishlist-form-product w-full flex" data-product-id="{{ $product->id }}">
+                              @csrf
+                              <button type="submit" class="ml-auto add-products-to-wishlist">
+                                  <div class="HeartAnimation"></div>
+                              </button>
+                          </form>
+                      </div>
+                      </div>
+                  </div>
+                  `;
+  
+                  // Append the product HTML to the products container
+                  productsContainer.innerHTML += productHTML;
+              });
+          })
+          .catch(error => console.error('Error:', error));
+      }
+
+  function handleSortOptionClick(event) {
+    event.preventDefault();
+    const sortType = event.target.dataset.sort;
+    const selectedPrices = Array.from(document.querySelectorAll('[name="price"]:checked'))
+        .map(filter => filter.value);
+    const selectedCategories = Array.from(document.querySelectorAll('[name="categories[]"]:checked'))
+        .map(filter => filter.value);
+    const searchTerm = document.getElementById('search-input').value.trim();
+
+    updateProducts(sortType, selectedPrices, selectedCategories, searchTerm);
+  }
+
+  function handlePriceFilterChange() {
+    const selectedPrice = document.querySelector('input[name="price"]:checked').value;
+    const selectedCategories = Array.from(document.querySelectorAll('[name="categories[]"]:checked'))
+        .map(filter => filter.value);
+    const sortOption = document.querySelector('.sort-option:checked');
+    const sortType = sortOption ? sortOption.dataset.sort : '';
+    const searchTerm = document.getElementById('search-input').value.trim();
+
+    updateProducts(sortType, [selectedPrice], selectedCategories, searchTerm);
+  }
+
+  function handleCategoryFilterChange() {
+    const selectedPrices = Array.from(document.querySelectorAll('[name="price"]:checked'))
+        .map(filter => filter.value);
+    const selectedCategories = Array.from(document.querySelectorAll('[name="categories[]"]:checked'))
+        .map(filter => filter.value);
+    const sortOption = document.querySelector('.sort-option:checked');
+    const sortType = sortOption ? sortOption.dataset.sort : '';
+    const searchTerm = document.getElementById('search-input').value.trim();
+
+    updateProducts(sortType, selectedPrices, selectedCategories, searchTerm);
+  }
+
+  function handleSearchInputChange() {
+    const selectedPrices = Array.from(document.querySelectorAll('[name="price"]:checked'))
+        .map(filter => filter.value);
+    const selectedCategories = Array.from(document.querySelectorAll('[name="categories[]"]:checked'))
+        .map(filter => filter.value);
+    const sortOption = document.querySelector('.sort-option:checked');
+    const sortType = sortOption ? sortOption.dataset.sort : '';
+    const searchTerm = this.value.trim();
+
+    updateProducts(sortType, selectedPrices, selectedCategories, searchTerm);
+  }
+
+  document.addEventListener('click', function(event) {
+        handleWishlistButtonClick(event);
+
+        const sortOption = event.target.closest('.sort-option');
+        if (sortOption) {
+            handleSortOptionClick(event);
+        }
+
+        // Handle other events if needed
+        const priceFilter = event.target.closest('[name="price"]');
+        if (priceFilter) {
+            handlePriceFilterChange();
+        }
+
+        const categoryFilter = event.target.closest('[name="categories[]"]');
+        if (categoryFilter) {
+            handleCategoryFilterChange();
+        }
+    });
+
+
+  const priceFilters = document.querySelectorAll('[name="price"]');
+  priceFilters.forEach(filter => {
+    filter.addEventListener('change', handlePriceFilterChange);
+  });
+
+  const categoryFilters = document.querySelectorAll('[name="categories[]"]');
+  categoryFilters.forEach(filter => {
+    filter.addEventListener('change', handleCategoryFilterChange);
+  });
+
+  const searchInput = document.getElementById('search-input');
+  searchInput.addEventListener('input', handleSearchInputChange);
+
+  const sortOptions = document.querySelectorAll('.sort-option');
+  sortOptions.forEach(option => {
+    option.addEventListener('click', handleSortOptionClick);
+  });
+  });
+
+</script> --}}
 
 
 <script>
@@ -719,7 +964,7 @@
 </script>
     
 
-<script>
+{{-- <script>
     document.querySelectorAll('.wishlist-form-product').forEach(function(form) {
     form.addEventListener('submit', function(event) {
     event.preventDefault(); // Prevent the default form submission
@@ -754,7 +999,8 @@
         console.error('An error occurred:', error);
         // Handle errors, display error message, etc.
         });
-    });})
+    })
+    ;})
 
     function updateWishlistUI(wishlists) {
     const wishList = document.getElementById('wishlistList');
@@ -824,7 +1070,66 @@
         wishList.appendChild(newItem);
     });
     }
-</script>
+</script> --}}
+
+
+{{-- <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const wishlistButtons = document.querySelectorAll('.add-products-to-wishlist');
+
+    wishlistButtons.forEach(button => {
+        const productId = button.getAttribute('data-product-id');
+        const isInWishlist = button.getAttribute('data-in-wishlist') === 'true';
+
+        if (isInWishlist) {
+            button.classList.add('active');
+        }
+
+        button.addEventListener('click', async function(event) {
+            event.preventDefault();
+            const form = this.closest('form');
+            const formData = new FormData(form);
+            const url = form.getAttribute('action');
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': document.head.querySelector("[name=csrf-token]").content,
+                    },
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    console.log('Product added to wishlist successfully');
+                    this.classList.add('active');
+                } else {
+                    console.error('Failed to add product to wishlist');
+                    // Display an error message or take appropriate action
+                }
+            } catch (error) {
+                console.error('An error occurred:', error);
+                // Handle errors, display error message, etc.
+            }
+        });
+    });
+});
+
+</script> --}}
+
+@if (Session::has('already_in'))
+    <script>
+        console.log('already-in-cart session variable is set');
+    </script>
+@endif
+
+
+
+
+
+
 
 
 @include('pages.components.footer')

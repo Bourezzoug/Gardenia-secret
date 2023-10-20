@@ -93,11 +93,12 @@ class StripeController extends Controller
                 'cancel_url' => route('stripe_cancel'),
             ]);
 
-            $order = Order::where('user_id',Auth::user()->id)->first();
+            $order = Order::where('user_id', Auth::user()->id)->latest('created_at')->first();
+
             if ($order) {
             
                 $order->session_id = $response->id;
-                $order->total_price = $totalPrice / 100;
+                // $order->total_price = $totalPrice / 100;
                 $order->save();
             }
     
@@ -188,6 +189,6 @@ class StripeController extends Controller
     
 
     public function cancel() {
-        return back()->with('cancel','The payment has been canceled');
+        return back()->with(['cancel' => 'The payment has been canceled']);
     }
 }

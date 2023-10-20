@@ -66,6 +66,12 @@ class BoxController extends Controller
         ]);
     }
     public function store_box_to_cart($id,Request $request) {
+        $request->validate([
+            'box_option'    =>  'required|in:cheap,mid,expensive', // Adjust the values as per your options
+        ]);
+
+        $selectedOption = $request->input('box_option');
+        
         $user_id = Auth::user()->id;
 
         $existingCartItem = Cart::where('user_id', $user_id)
@@ -81,18 +87,28 @@ class BoxController extends Controller
         }
 
         $cartBox = Cart::create([
-            'user_id'   =>  $user_id,
-            'quantity'  =>  1,
-            'box_id'    =>  $id
+            'user_id'       =>  $user_id,
+            'quantity'      =>  1,
+            'box_id'        =>  $id,
+            'box_option'    =>  $selectedOption
         ]);
 
         if ($cartBox) {
-            $cartsBox = Cart::where('user_id', $user_id)
+            $cartBox = Cart::where('user_id', $user_id)
                         ->where('box_id','<>',null)
+                        ->with('box') // Eager load the 'box' relationship
                         ->get();
 
+    // Calculate the total price based on the box price
+    $totalPrice = $cartBox->sum(fn($cart) => 
+    $cart->box_option == 'cheap' 
+        ? $cart->box->cheap_price 
+        : ($cart->box_option == 'mid' 
+            ? $cart->box->med_price 
+            : $cart->box->exp_price)
+);
 
-            return response()->json(['success' => true, 'cartBox' => $cartBox]);
+            return response()->json(['success' => true, 'cartBox' => $cartBox, 'totalPrice' => $totalPrice]);
         } else {
             return response()->json(['success' => false]);
         }

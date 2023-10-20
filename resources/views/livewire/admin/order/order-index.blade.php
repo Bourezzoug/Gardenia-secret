@@ -16,11 +16,11 @@
                         </x-button>
 
 
-                    <x-button wire:click.prevent="deleteSelected" onclick="confirm('Vous êtes sure?') || event.stopImmediatePropagation()"
+                    {{-- <x-button wire:click.prevent="deleteSelected" onclick="confirm('Vous êtes sure?') || event.stopImmediatePropagation()"
                     class="text-white rounded-lg " id="deleteButton">
                     <x-svg.svg-delete class="w-5 h-5"/>
                         {{ __('Supprimer') }}
-                    </x-button>
+                    </x-button> --}}
 
                     </div>
                     <div class="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
@@ -56,9 +56,9 @@
                     <table class="w-full border-collapse bg-white text-left text-sm text-gray-500">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+                            {{-- <th scope="col" class="px-6 py-4 font-medium text-gray-900">
                                 <input type="checkbox" class="bg-neutral-50 border-neutral-200 mr-3" wire:model="selecteAll">
-                            </th>
+                            </th> --}}
                             <th scope="col" class="px-6 py-4 font-medium text-gray-900">
                                 Nom Complet
                             </th>
@@ -77,9 +77,9 @@
 
                 
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4">
+                            {{-- <td class="px-6 py-4">
                                 <input type="checkbox" wire:model="selectedPosts" value="{{ $order->id }}" class="bg-neutral-50 border-neutral-200 childCheckbox">
-                            </td>
+                            </td> --}}
                             <td class="px-6 py-4">
                                 <span
                                 class="inline-flex items-center gap-1 rounded-full  w-fit px-2 py-1 text-md font-semibold text-gray-600"
@@ -133,10 +133,10 @@
                 
                                 <div class="flex gap-4">
 
-                                    <a class="cursor-pointer" wire:click="selectedItem('update',{{ $order->id }})"
+                                    {{-- <a class="cursor-pointer" wire:click="selectedItem('update',{{ $order->id }})"
                                             class="px-2">
                                         <x-svg.svg-update class="w-5 h-5 mr-2 transform hover:text-purple-500 hover:scale-110"/>
-                                    </a>
+                                    </a> --}}
 
                 
                 
@@ -149,10 +149,10 @@
 
                 
 
-                                    <div class="cursor-pointer" wire:click="selectedItem('delete',{{ $order->id }})"
+                                    {{-- <div class="cursor-pointer" wire:click="selectedItem('delete',{{ $order->id }})"
                                             class="px-2">
                                         <x-svg.svg-delete class="w-5 h-5 mr-2 transform hover:text-purple-500 hover:scale-110"/>
-                                    </div>
+                                    </div> --}}
 
                             
                                 </div>
@@ -173,8 +173,8 @@
                     </div>
             </div>
 
-            {{-- <livewire:admin.product.product-show />
-            <livewire:admin.product.product-update /> --}}
+            <livewire:admin.order.order-show />
+            {{-- <livewire:admin.product.product-update /> --}}
             <livewire:admin.order.order-delete />
     </div>
 </div>

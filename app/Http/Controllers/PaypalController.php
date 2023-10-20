@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
@@ -31,7 +32,15 @@ class PaypalController extends Controller
             });
         
             $boxCartsTotalPrice = $boxCarts->sum(function ($boxCart) {
-                return $boxCart->box->price ; // Assuming you have a 'price' property in the 'box' model
+                if($boxCart->box_option == 'mid') {
+                    return $boxCart->box->med_price;
+                }
+                elseif($boxCart->box_option == 'cheap') {
+                    return $boxCart->box->cheap_price;
+                }
+                elseif($boxCart->box_option == 'expensive') {
+                    return $boxCart->box->exp_price;
+                }
             });
         
             // Calculate the combined total price
@@ -78,16 +87,27 @@ class PaypalController extends Controller
         $provider->setApiCredentials(config('paypal'));
         $paypalToken = $provider->getAccessToken();
         $response = $provider->capturePaymentOrder($request->token);
-
+    
         if(isset($response['status']) && $response['status'] === 'COMPLETED') {
-            return back()->with('success','The payment has been successfull');
-        }
-        else{
+            $order = Order::where('user_id', Auth::user()->id)->latest('created_at')->first();
+    
+            if ($order) {
+                $order->session_id = $response['id']; // Note the change here
+                $order->status = 'paid';
+                $order->save();
+            }
+            Cart::where('user_id', Auth::user()->id)->delete();
+            return redirect('client/orders')->with('success','The payment has been successful');
+        } else {
+            $order = Order::where('user_id', Auth::user()->id)->latest('created_at')->first();
+
+            if ($order) {
+                $order->delete();
+            }
             return redirect()->route('paypal_cancel');
         }
-
-        // dd($response);
     }
+    
     public function cancel() {
         return back()->with('cancel','The payment has been canceled');
     }

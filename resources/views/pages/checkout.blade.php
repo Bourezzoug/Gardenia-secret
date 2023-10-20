@@ -144,11 +144,26 @@
                     </div>
                     <div class="flex flex-col justify-between">
                         <div>
-                            <h4 class="text-md text-gray-700 font-Lato">{{ $cart->box->libelle }}</h4>
+                            <h4 class="text-md text-gray-700 font-Lato">
+                                {{ $cart->box->libelle }}
+                                @if($cart->box_option == 'cheap')
+                                  {{ $cart->box->cheap_libelle }}
+                                @elseif ($cart->box_option == 'mid')
+                                  {{ $cart->box->med_libelle }}
+                                @elseif ($cart->box_option == 'expensive')
+                                  {{ $cart->box->exp_libelle }}
+                                @endif
+                            </h4>
                             <p class="my-1 text-gray-400">Accessoires</p>
                         </div>
                         <div>
-                            <span>{{ $cart->box->price }} $</span>
+                            @if($cart->box_option == 'cheap')
+                            ${{ $cart->box->cheap_price }}
+                            @elseif ($cart->box_option == 'mid')
+                                ${{ $cart->box->med_price }}
+                            @elseif ($cart->box_option == 'expensive')
+                                ${{ $cart->box->exp_price }}
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -297,32 +312,7 @@
 @include('pages.components.cart')
 @include('pages.components.top')
 @include('pages.components.wishlist')
-@if (Session::has('success'))
-@section('script')
-<script>
-    iziToast.success({
-        title: '',
-        position:'topRight',
-        message: '{{ session()->get('success') }}'
-    });
-</script>
-@endsection
-@endif
 
-@if (Session::has('cancel'))
-@section('script')
-<script>
-    iziToast.error({
-        title: '',
-        position:'topRight',
-        message: '{{ session()->get('cancel') }}'
-    });
-</script>
-@endsection
-@endif
-@if (Session::has('customer'))
-<p>{{ $customer->name }}</p>
-@endif
 
 
 @endsection

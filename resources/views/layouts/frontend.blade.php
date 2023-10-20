@@ -15,6 +15,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 	      <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css" integrity="sha512-O03ntXoVqaGUTAeAmvQ2YSzkCvclZEcPQu1eqloPaHfJ5RuNGiS4l+3duaidD801P50J28EHyonCV06CUlTSag==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.css" rel="stylesheet" />
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -26,6 +27,8 @@
         <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js" integrity="sha512-pumBsjNRGGqkPzKHndZMaAG+bir374sORyzM3uulLV14lN5LyykqNk8eEeUlUkB3U0M4FApyaHraT65ihJhDpQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.8.1/flowbite.min.js"></script>
+
         <script>
 
           $(document).ready(function() {
@@ -400,6 +403,44 @@
         });
       });
     </script>
+@if (Session::has('success'))
+{{-- @section('script') --}}
+<script>
+    iziToast.success({
+        title: '',
+        position:'topRight',
+        message: '{{ session()->get('success') }}'
+    });
+    // alert('Success')
+</script>
+{{-- @endsection --}}
+@endif
+
+@if (Session::has('cancel'))
+{{-- @section('script') --}}
+<script>
+    iziToast.error({
+        title: '',
+        position:'topRight',
+        message: '{{ session()->get('cancel') }}'
+    });
+    // alert('Error')
+</script>
+{{-- @endsection --}}
+@endif
+@if (Session::has('already-in-cart'))
+{{-- @section('script') --}}
+<script>
+    iziToast.error({
+        title: '',
+        position:'topRight',
+        message: 'HHH'
+    });
+    // alert('Error')
+</script>
+{{-- @endsection --}}
+@endif
+
 
     </body>
 

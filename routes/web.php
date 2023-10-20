@@ -9,6 +9,7 @@ use App\Http\Controllers\MagController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\BoxController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\ClientOrders;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaypalController;
@@ -59,7 +60,7 @@ Route::post('/', [FormulaireController::class,'store'])->name('sondage.store');
 // Route for customers
 Route::middleware(['auth:sanctum', 'verified','authcustomer'])->group(function () {
     Route::get('/client/dashboard', function () {
-        return view('client.dashboard');
+        return view('client.testDashboard');
     })->name('client.dashboard');
     Route::post('/produit_cart/{id}',[ProductController::class,'cart_store'])->name('cart.store');
     Route::post('/produit_wishlist/{id}',[ProductController::class,'wishlist_store'])->name('wishlist.store');
@@ -76,6 +77,10 @@ Route::middleware(['auth:sanctum', 'verified','authcustomer'])->group(function (
     Route::get('stripe/success',[StripeController::class,'success'])->name('stripe_success');
     Route::get('stripe/cancel',[StripeController::class,'cancel'])->name('stripe_cancel');
     Route::post('confirm_order',[OrderController::class,'confirm_order'])->name('confirm_order');
+    // Route::get('/client/orders',\App\Http\Livewire\Client\Order\OrderIndex::class)->name('order.client.index');
+    Route::get('/client/orders',[ClientOrders::class,'index'])->name('order.client.index');
+    Route::get('/search-orders', [ClientOrders::class,'searchOrders']);
+
     // routes/web.php
 
 Route::post('/stripe/webhook', 'StripeController@handleWebhook');

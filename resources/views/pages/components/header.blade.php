@@ -40,8 +40,8 @@
         </div>
     </div>
 </div>
-<header class="overflow-x-hidden shadow-md">
-    <div class="absolute -right-96 top-0 h-screen w-96 bg-black z-[999] social-media transition-all">
+<header class="overflow-x-hidden shadow-md relative z-[1000]">
+    <div class="fixed -right-96 top-0 h-screen w-96 bg-black z-[999] social-media transition-all">
         <div class="logo p-10 flex flex-col items-center h-full justify-center space-y-10 relative">
             {{-- <div> --}}
                 <img src="{{ asset('images/logo.png') }}" class="h-16" alt="">

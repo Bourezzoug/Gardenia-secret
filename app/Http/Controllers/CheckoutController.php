@@ -36,7 +36,15 @@ class CheckoutController extends Controller
             });
         
             $boxCartsTotalPrice = $boxCarts->sum(function ($boxCart) {
-                return $boxCart->box->price ; // Assuming you have a 'price' property in the 'box' model
+                if($boxCart->box_option == 'mid') {
+                    return $boxCart->box->med_price;
+                }
+                elseif($boxCart->box_option == 'cheap') {
+                    return $boxCart->box->cheap_price;
+                }
+                elseif($boxCart->box_option == 'expensive') {
+                    return $boxCart->box->exp_price;
+                }
             });
         
             // Calculate the combined total price

@@ -437,6 +437,7 @@
 
     {{-- Wishlist Request --}}
     <script>
+      document.addEventListener('DOMContentLoaded', function() {
           document.querySelectorAll('.wishlist-form-product').forEach(function(form) {
         form.addEventListener('submit', function(event) {
         event.preventDefault(); // Prevent the default form submission
@@ -479,6 +480,7 @@
         wishlists.forEach(item => {
             const newItem = document.createElement('li');
             newItem.className = 'flex py-6';
+            newItem.id = `wishlist-id-${item.id}`;
             const id = `${item.id}`;
             const csrf = document.head.querySelector("[name=csrf-token]").content;
             newItem.innerHTML = `
@@ -499,7 +501,7 @@
                         </div>
                         
                     </div>
-                    <form id="wishlistForm" action="/product_wishlist_to_cart/${item.product.id}/${item.id}" method="POST" class="cartForm flex flex-1 justify-between text-sm items-center">
+                    <form id="wishlistForm-${item.id}" action="/product_wishlist_to_cart/${item.product.id}/${item.id}" method="POST" class="cartForm flex flex-1 justify-between text-sm items-center">
                     @csrf
                         <input type="hidden" name="wishlist_id" value="${item.id}">
                         <div class="my-10 flex items-center" x-data="{ productQuantity: 1, Quantity: ${item.product.quantite} }">
@@ -541,7 +543,7 @@
 
             wishList.appendChild(newItem);
         });
-      }
+      }})
     </script>
     {{-- Wishlist Request --}}
 

@@ -17,7 +17,7 @@ class EshopController extends Controller
         public function index(Request $request) {
             $url = 'https://raw.githubusercontent.com/alaouy/sql-moroccan-cities/master/json/ville.json';
             $cities = json_decode(file_get_contents($url), true);
-
+            $isInWishlist = false;
             $showPopup = false;
         
             // Check if the user's IP address has seen the popup before
@@ -71,7 +71,16 @@ class EshopController extends Controller
             
                 // Calculate the combined total price
                 $totalPrice = $cartsTotalPrice + $boxCartsTotalPrice;
+                $productsModel = Product::all();
+                foreach ($productsModel as $product) {
+
+    // Check if the product is in the wishlist
+    $productIdToCheck = $product->id;
+    $isInWishlist[$productIdToCheck] = $wishlists->contains('product_id', $productIdToCheck);
+                }
+                
             }
+
 
             $sortName = $request->input('search');
 
@@ -146,7 +155,8 @@ class EshopController extends Controller
                 'boxCarts'      => $boxCarts,
                 'wishlists'     => $wishlists,
                 'totalPrice'    => $totalPrice,
-                'categorie'     => Categorie::where('type','Products')->get()
+                'categorie'     => Categorie::where('type','Products')->get(),
+                'isInWishlist'  => $isInWishlist
             ]);
             // return view('pages.e-shop', [
             //     'products'      => $products,
