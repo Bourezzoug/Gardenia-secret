@@ -28,7 +28,7 @@
                   <div class="flow-root">
                     <ul role="list" id="cartList" class="-my-6 divide-y divide-gray-200">
                         @forelse ($carts as $cart)
-                        <li class="flex py-6">
+                        <li class="flex py-6 product">
                             <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                               <img src="{{ $cart->product->photo }}" alt="Salmon orange fabric pouch with match zipper, gray zipper pull, and adjustable hip belt." class="h-full w-full object-cover object-center">
                             </div>
@@ -46,7 +46,7 @@
                               <div class="flex flex-1 items-end justify-between text-sm">
                                 <p class="text-gray-500">Quantité {{ $cart->quantity }}</p>
       
-                                <form id="cart-id-{{ $cart->id }}" data-cart-id="{{ $cart->id }}" action="/cart/{{ $cart->id }}" method="POST" class="flex cart-remove-form">
+                                <form id="cart-id-{{ $cart->id }}" data-cart-id="{{ $cart->id }}" data-item-type="product" action="/cart/{{ $cart->id }}" method="POST" class="flex cart-remove-form">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="font-medium text-second-color remove-button">Remove</button>
@@ -62,7 +62,7 @@
                     </ul>
                     <ul role="list" id="boxCartList" class="-my-6 divide-y divide-gray-200">
                         @forelse ($boxCarts as $cart)
-                        <li class="flex py-6">
+                        <li class="flex py-6 box">
                             <div class="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
                               <img src="http://127.0.0.1:8000{{ $cart->box->image }}" alt="" class="h-full w-full object-cover object-center">
                             </div>
@@ -97,7 +97,7 @@
                               <div class="flex flex-1 items-end justify-end text-sm">
                                 {{-- <p class="text-gray-500">Quantité {{ $cart->quantity }}</p> --}}
       
-                                <form id="cart-id-{{ $cart->id }}" data-cart-id="{{ $cart->id }}" action="/cart/{{ $cart->id }}" method="POST" class="flex cart-remove-form just">
+                                <form id="cart-id-{{ $cart->id }}" data-cart-id="{{ $cart->id }}" data-item-type="box" action="/cart/{{ $cart->id }}" method="POST" class="flex cart-remove-form just">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="font-medium text-second-color remove-button">Remove</button>
@@ -124,11 +124,11 @@
                 <div class="mt-6">
                   {{-- <a href="#" id="checkout-cart" class="flex items-center justify-center rounded-md border border-transparent bg-second-color px-6 py-3 text-base font-medium text-white shadow-sm hover:scale-110 transition-transform">Checkout</a> --}}
 
-                  @if(!$carts->isEmpty())
+                  {{-- @if(!$carts->isEmpty()) --}}
                   <a href="/checkout" id="" class="flex items-center justify-center rounded-md border border-transparent bg-second-color px-6 py-3 text-base font-medium text-white shadow-sm hover:scale-110 transition-transform">Checkout</a>
-                  @elseif($carts->isEmpty())
+                  {{-- @elseif($carts->isEmpty())
                   <a href="#" class="flex items-center justify-center rounded-md border border-transparent bg-second-color px-6 py-3 text-base font-medium text-white shadow-sm cursor-not-allowed">Checkout</a>
-                  @endif
+                  @endif --}}
                 </div>
 
               </div>
@@ -208,49 +208,56 @@
         });
       });
     </script> --}}
-    <script>document.addEventListener('DOMContentLoaded', function() {
-      document.addEventListener('click', function(event) {
-          const removeButton = event.target.closest('.remove-button');
-          if (removeButton) {
-              event.preventDefault(); // Prevent default behavior of the button
-  
-              const cartForm = removeButton.closest('.cart-remove-form');
-              const cartId = cartForm.getAttribute('data-cart-id');
-              const csrfToken = document.head.querySelector("[name=csrf-token]").content;
-  
-              // Send an AJAX request to remove the cart item
-              fetch(`/cart/${cartId}`, {
-                  method: 'DELETE',
-                  headers: {
-                      'X-CSRF-TOKEN': csrfToken,
-                  },
-              })
-              .then(response => response.json())
-              .then(data => {
-                  if (data.success) {
-                      // Handle the successful removal (e.g., remove the item from the UI)
-                      const cartItem = cartForm.closest('.flex.py-6');
-                      if (cartItem) {
-                          cartItem.remove();
-                                                  // Update the total price
-                  const totalElement = document.querySelector('.total-price');
-                  if (totalElement) {
-                      totalElement.textContent = data.totalPrice;
-                  }
-  
-                      }
-  
-                  } else {
-                      console.error('Failed to remove cart item');
-                  }
-              })
-              .catch(error => {
-                  console.error('An error occurred:', error);
-              });
-          }
-      });
-  });</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(event) {
+        const removeButton = event.target.closest('.remove-button');
+        if (removeButton) {
+            event.preventDefault(); // Prevent default behavior of the button
+
+            const cartForm = removeButton.closest('.cart-remove-form');
+            const cartId = cartForm.getAttribute('data-cart-id');
+            const csrfToken = document.head.querySelector("[name=csrf-token]").content;
+            const itemType = cartForm.getAttribute('data-item-type');
+
+            // Send an AJAX request to remove the cart item
+            fetch(`/cart/${cartId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Handle the successful removal
+                    // const targetClass = itemType === 'box' ? '.flex.py-6.box' : '.flex.py-6.product';
+                    const cartItem = cartForm.closest('.flex.py-6');
+                    if (cartItem) {
+                        cartItem.remove();
+                        // Update the total price
+                        const totalElement = document.querySelector('.total-price');
+                        if (totalElement) {
+                            totalElement.textContent = data.totalPrice;
+                        }
+                    }
+                } else {
+                    console.error('Failed to remove cart item');
+                }
+            })
+            .catch(error => {
+                console.error('An error occurred:', error);
+            });
+        }
+    });
+});
+
+</script>
+
+
+
 </div>
+
 @endif
 @endif
 

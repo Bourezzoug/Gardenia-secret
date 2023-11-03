@@ -217,11 +217,16 @@
         <div class="lg:col-span-3 lg:row-end-1 lg:ml-20">
           <div class="lg:flex lg:items-start">
             <div class="lg:order-2">
-              <div class="max-w-lg overflow-hidden rounded-lg">
+              <div class="max-w-lg overflow-hidden rounded-lg relative">
                 <img id="mainBoxImage" class="w-[350px] h-[350px] md:h-[400px] md:w-[500px] object-cover main-box-img" src="{{ $boxMonth->image }}" alt="" />
+                @if($boxMonth->stock == 0)
+                    <span class="absolute top-1/2 left-0  w-full bg-black bg-opacity-80 text-white p-1  rounded-br text-center text-2xl uppercase font-Roboto-condensed">
+                        out of stock
+                    </span>
+                @endif
               </div>
             </div>
-  
+
             <div class="mt-2 w-full lg:order-1 lg:w-32 lg:flex-shrink-0">
               <div class="flex flex-row items-start lg:flex-col">
                 <button  type="button" class="btn-gallery flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg border-2 border-gray-900 text-center" onclick="changeMainImage(this, '{{ $boxMonth->image }}')">
@@ -230,7 +235,7 @@
                 @forelse (explode(',',$boxMonth->gallery) as $image)
                 <button  type="button" class="btn-gallery flex-0 aspect-square mb-3 h-20 overflow-hidden rounded-lg text-center" onclick="changeMainImage(this, '{{ $image }}')">
                     <img class="h-full w-full object-cover" src="{{ $image }}"  alt="" />
-                  </button>
+                </button>
                 @empty
                     
                 @endforelse
@@ -551,26 +556,28 @@
 
         @forelse ($posts as $post)
         <div class="col-span-1">
-
+            @php
+                $categorie = App\Models\Categorie::find($post->categorie_id);
+            @endphp
             <div class="max-w-sm bg-transparent  rounded-lg relative blog-content">
                 <div class="date absolute top-0 left-5 text-center font-tuesday bg-third-color p-3 text-2xl z-50">
                     <span>{{ $post->created_at->format('d') }}</span> <br>
                     <span>{{ $post->created_at->format('M') }}</span>
                 </div>                
                 <div class="h-96 overflow-hidden">
-                    <a href="/blog/{{ $post->slug }}">
+                    <a href="/blog/{{ $categorie->slug }}/{{ $post->slug }}">
                         <img class="rounded-t-lg hover:scale-105 h-full transition-transform object-cover" src="{{ $post->image }}" alt="" />
                     </a>
                 </div>
                 <div class="py-3">
                     {{-- <span class="font-cormorant text-gray-400 py-3">LipstickBy Janny Joe</span> --}}
-                    <a href="/blog/{{ $post->slug }}">
+                    <a href="/blog/{{ $categorie->slug }}/{{ $post->slug }}">
                         <h5 class="mb-2 py-2 tracking-tight font-Lato text-lg font-medium uppercase">{{ $post->title }}</h5>
                     </a>
                     <p class="mb-3 font-normal text-gray-500 font-cormorant">
                         {!! Illuminate\Support\Str::limit(strip_tags($post->body), 150, '...') !!}
                     </p>
-                    <a href="/blog/{{ $post->slug }}" class="text-xs relative more pl-3">LIRE LA SUITE</a>
+                    <a href="/blog/{{ $categorie->slug }}/{{ $post->slug }}" class="text-xs relative more pl-3">LIRE LA SUITE</a>
                 </div>
             </div>
             

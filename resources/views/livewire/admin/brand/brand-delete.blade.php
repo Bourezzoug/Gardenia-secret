@@ -1,7 +1,7 @@
 <div>
     <x-confirmation-modal wire:model="showDeleteModel">
         <x-slot name="title">
-            {{ __('Supprimer une catégorie') }} 
+            {{ __('Supprimer une Brand') }} 
         </x-slot>
 
         <x-slot name="content">
@@ -18,4 +18,8 @@
             </x-danger-button>
         </x-slot>
     </x-confirmation-modal>
+
+
+
+
 </div>

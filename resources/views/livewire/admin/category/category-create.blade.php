@@ -45,17 +45,7 @@
                     </div>
 
 
-                    {{-- <div class="col-span-1 md:col-span-2 lg:col-span-3">
-                        <x-label for="slug" value="{{ __('Slug') }}"/>
-                        <x-input wire:model.defer="slug" type="text" class="mt-1 block w-full"/>
-                        <x-input-error for="slug" class="mt-2"/>
-                    </div>
 
-                    <div class="col-span-1 md:col-span-2 lg:col-span-3">
-                        <x-label for="order" value="{{ __('Order') }}"/>
-                        <x-input wire:model.defer="order" type="text" class="mt-1 block w-full"/>
-                        <x-input-error for="order" class="mt-2"/>
-                    </div> --}}
 
 
                     <div class="col-span-1 md:col-span-2 lg:col-span-3">

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Box;
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -180,7 +182,19 @@ class StripeController extends Controller
                 $order->status = 'paid';
                 $order->save();
             }
-            return back()->with(['success' => 'The payment has been successful']);
+                            // Process cart info
+                            $cartInfo = json_decode($order->cartInfo, true);
+    
+                            foreach ($cartInfo as $item) {
+                                if (!is_null($item['product_id'])) {
+                                    // Update products table
+                                    Product::where('id', $item['product_id'])->decrement('quantite', $item['quantity']);
+                                } elseif (!is_null($item['box_id'])) {
+                                    // Update boxes table
+                                    Box::where('id', $item['box_id'])->decrement('stock', $item['quantity']);
+                                }
+                            }
+                            return redirect('client/orders')->with('success','The payment has been successful');
 
         } catch (\Exception $e) {
             throw new NotFoundHttpException();

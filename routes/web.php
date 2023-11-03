@@ -79,6 +79,8 @@ Route::middleware(['auth:sanctum', 'verified','authcustomer'])->group(function (
     Route::post('confirm_order',[OrderController::class,'confirm_order'])->name('confirm_order');
     // Route::get('/client/orders',\App\Http\Livewire\Client\Order\OrderIndex::class)->name('order.client.index');
     Route::get('/client/orders',[ClientOrders::class,'index'])->name('order.client.index');
+    Route::get('/client/invoice/{id}',[ClientOrders::class,'invoice'])->name('order.invoice');
+    Route::get('/client/invoicePDF/{id}',[ClientOrders::class,'printInvoicePdf'])->name('order.invoice.print');
     Route::get('/search-orders', [ClientOrders::class,'searchOrders']);
 
     // routes/web.php
@@ -105,6 +107,7 @@ Route::middleware(['auth:sanctum', 'verified','authadmin'])->group(function () {
     Route::get('/admin/bannieres',\App\Http\Livewire\Admin\Banniere\BanniereIndex::class)->name('banniere.index');
     Route::get('/admin/printPDF/{itemId}', [printPdf::class, 'printPdf'])->name('admin.printPDF');
     Route::get('/admin/orders',\App\Http\Livewire\Admin\Order\OrderIndex::class)->name('order.index');
+    Route::get('/admin/brands',\App\Http\Livewire\Admin\Brand\BrandIndex::class)->name('brand.index');
 });
 // Route::get('/symlink', function () {
 //   $target =$_SERVER['DOCUMENT_ROOT'].'/storage/app/public';
@@ -208,3 +211,4 @@ Route::post('/banner/{id}/view', function ($id) {
 Route::get('/php-version', function () {
     return phpversion();
 });
+

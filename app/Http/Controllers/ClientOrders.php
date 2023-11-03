@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class ClientOrders extends Controller
 {
@@ -149,4 +150,33 @@ class ClientOrders extends Controller
         ]);
         // dd($order);
     }
+
+
+
+    public function invoice($id) {
+        $invoice = Order::findOrFail($id);
+        if ($invoice->user_id !== auth()->id()) {
+            abort(404);
+        }
+        return view('pages.invoice',[
+            'invoice'   =>  $invoice
+        ]);
+    }
+
+    public function printInvoicePdf($id) {
+        $invoice = Order::where('id', $id)->firstOrFail();
+        if ($invoice->user_id !== auth()->id()) {
+            abort(404);
+        }
+        $data = [
+            'invoice' => $invoice,
+        ];
+    
+        $pdf = Pdf::loadView('pages.invoicePDF', $data);
+        return $pdf->download('pdf_file.pdf');
+    }
+
+
+
+
 }

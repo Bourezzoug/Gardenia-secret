@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Box;
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
@@ -95,18 +97,33 @@ class PaypalController extends Controller
                 $order->session_id = $response['id']; // Note the change here
                 $order->status = 'paid';
                 $order->save();
+    
+                // Process cart info
+                $cartInfo = json_decode($order->cartInfo, true);
+    
+                foreach ($cartInfo as $item) {
+                    if (!is_null($item['product_id'])) {
+                        // Update products table
+                        Product::where('id', $item['product_id'])->decrement('quantite', $item['quantity']);
+                    } elseif (!is_null($item['box_id'])) {
+                        // Update boxes table
+                        Box::where('id', $item['box_id'])->decrement('stock', $item['quantity']);
+                    }
+                }
             }
+    
             Cart::where('user_id', Auth::user()->id)->delete();
             return redirect('client/orders')->with('success','The payment has been successful');
         } else {
             $order = Order::where('user_id', Auth::user()->id)->latest('created_at')->first();
-
+    
             if ($order) {
                 $order->delete();
             }
             return redirect()->route('paypal_cancel');
         }
     }
+    
     
     public function cancel() {
         return back()->with('cancel','The payment has been canceled');

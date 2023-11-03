@@ -11,6 +11,7 @@ class CartController extends Controller
 {
     public function delete($id)
     {
+        
         $cartItem = Cart::find($id);
     
         if ($cartItem) {

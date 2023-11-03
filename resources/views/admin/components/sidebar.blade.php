@@ -16,6 +16,10 @@
                 <i class="fa-solid fa-tags mr-3"></i>
                 Categories
             </a>
+            <a href="{{ Route('brand.index') }}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fa-solid fa-copyright mr-3"></i>
+                Brands
+            </a>
             <a href="{{ Route('blog.index') }}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fa-regular fa-newspaper mr-3"></i>
                 Articles

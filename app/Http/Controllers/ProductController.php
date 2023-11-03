@@ -23,7 +23,7 @@ class ProductController extends Controller
             $request->session()->put("popup_$ipAddress", true);
         }
 
-        $url = 'https://raw.githubusercontent.com/alaouy/sql-moroccan-cities/master/json/ville.json';
+        $url = 'https://raw.githubusercontent.com/linssen/country-flag-icons/master/countries.json';
         $cities = json_decode(file_get_contents($url), true);
 
         $relatedProducts = Product::orderBy('created_at','desc')
@@ -161,7 +161,7 @@ class ProductController extends Controller
     }
     
 
-    public function wishlist_store_to_cart($id, Request $request) {
+    public function wishlist_store_to_cart($id, $wishlist_id, Request $request) {
         $user = Auth::user();
 
         // Check if the product is already in the cart for the same user
@@ -184,7 +184,7 @@ class ProductController extends Controller
             'product_id' => $id,
             'quantity' => $request->input('quantity')
         ]);
-        $wishlist_id = $request->input('wishlist_id');
+
         $wishlist = Wishlist::findOrFail($wishlist_id);
         $wishlist->delete();
 
@@ -196,7 +196,7 @@ class ProductController extends Controller
                 return $cart->product->prix * $cart->quantity;
             });
 
-            return response()->json(['success' => true, 'carts' => $carts, 'totalPrice' => $totalPrice]);
+            return response()->json(['success' => true, 'carts' => $carts, 'totalPrice' => $totalPrice, 'wishlist_id' => $wishlist_id,'product_id' => $id]);
         } else {
             return response()->json(['success' => false]);
         }

@@ -49,7 +49,6 @@
                               </div>
                               <form id="wishlistForm-{{ $wishlist->id }}" action="{{ route('wishlist.store_cart', ['id' => $wishlist->product->id,'wishlist_id' => $wishlist->id]) }}" method="POST" class="cartForm flex flex-1  justify-between text-sm items-center">
                                 @csrf
-                                <input type="hidden" name="wishlist_id" value="{{ $wishlist->id }}">
                                 <div class="my-10 flex items-center " x-data="{ productQuantity: 1,Quantity: {{ $wishlist->product->quantite }}}">
                                   <input type="hidden" name="product_id" value="{{ $wishlist->product->id }}">
                                   <label for="Quantity" class="text-gray-500"> Qty </label>
@@ -84,10 +83,9 @@
                                 </div>
                                   <div>
                                     <input type="hidden" name="form_type" value="form1">
-                                    {{-- @csrf --}}
                                     <button type="submit" class="font-medium text-second-color text-[14px] add-wishlist-to-cart">Ajouter à la carte</button>
                                   </div>
-                                </form>
+                              </form>
       
 
                                 
@@ -250,8 +248,18 @@
                 // Update the cart content using the received data
                 updateCartUIFromWishlist(data.carts);
                 // Handle the successful removal of the wishlist item
-                const wishlistItemId = formData.get('wishlist_id');
+                const wishlistItemId = data.wishlist_id;
                 removeItemFromWishlist(wishlistItemId);
+                                      // Find the corresponding product in your list
+                                      const productToDelete = document.querySelector(`[data-product-id="${data.product_id}"]`);
+
+if (productToDelete) {
+    // Remove the animation class
+    const heartAnimation = productToDelete.querySelector('.HeartAnimation');
+    if (heartAnimation) {
+        heartAnimation.classList.remove('animate');
+    }
+}
           subtotalPrice.textContent = data.totalPrice ; // Assuming data.totalPrice is the updated total price
             } else {
                 console.error('Failed to add product to cart');
@@ -304,7 +312,7 @@
                     </div>
                     <form id="wishlistForm" action="/product_wishlist_to_cart/${item.product.id}/${item.id}" method="POST" class="cartForm flex flex-1 justify-between text-sm items-center">
                         @csrf
-                        <input type="hidden" name="wishlist_id" value="${item.id}">
+
                         <div class="my-10 flex items-center" x-data="{ productQuantity: 1, Quantity: ${item.product.quantite} }">
                             <input type="hidden" name="product_id" value="${item.product.id}">
                             <label for="Quantity" class="text-gray-500"> Qty </label>

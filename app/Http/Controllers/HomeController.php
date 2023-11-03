@@ -38,7 +38,7 @@ class HomeController extends Controller
             $showPopup = true;
             $request->session()->put("popup_$ipAddress", true);
         }
-        $url = 'https://raw.githubusercontent.com/alaouy/sql-moroccan-cities/master/json/ville.json';
+        $url = 'https://raw.githubusercontent.com/linssen/country-flag-icons/master/countries.json';
         $cities = json_decode(file_get_contents($url), true);
         $posts = Blog::orderBy('created_at', 'desc')->where('status', 'publié')->take(4)->get();
         $carts = [];
@@ -94,7 +94,7 @@ class HomeController extends Controller
         return view('pages.homepage', [
             'posts'         =>  $posts,
             'cities'        =>  $cities,
-            'products'      =>  Product::paginate(5),
+            'products'      =>  Product::where('quantite','>',0)->paginate(5),
             'carts'         =>  $carts,
             'boxCarts'      =>  $boxCarts,
             'totalPrice'    =>  $totalPrice,

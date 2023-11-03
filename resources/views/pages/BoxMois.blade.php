@@ -95,8 +95,6 @@
                     </li>
                     @endforeach
                 </ul>
-                
-                    @csrf
                     <button type="submit" class="add_box_to_cart text-white bg-main-color  font-medium rounded-lg text-sm px-5 py-2.5 text-center w-full">Ajouter à la carte</button>
                 </form>
             </div>
@@ -106,13 +104,15 @@
         </div>
     </div>
 </section>
-{{-- <script>
+
+{{-- Script to add box to cart --}}
+<script>
     function updateCartBoxUI(data) {
         const cartItem = data[0][0]; // Accessing the first element of the array
 
         if (cartItem) {
             const cartList = document.getElementById('cartList');
-            cartList.innerHTML = ''; // Clear the existing content
+            cartList.innerHTML += ''; // Clear the existing content
 
             const newItem = document.createElement('li');
             const csrf = document.head.querySelector("[name=csrf-token]").content;
@@ -196,7 +196,7 @@
             }
         })
     })
-</script> --}}
+</script>
 @include('pages.components.popup')
 @include('pages.components.top')
 @include('pages.components.footer')

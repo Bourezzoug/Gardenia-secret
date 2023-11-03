@@ -15,7 +15,7 @@ class MagController extends Controller
 {
     public function index(Request $request) {
         setlocale(LC_TIME, 'fr_FR');
-        $url = 'https://raw.githubusercontent.com/alaouy/sql-moroccan-cities/master/json/ville.json';
+        $url = 'https://raw.githubusercontent.com/linssen/country-flag-icons/master/countries.json';
         $cities = json_decode(file_get_contents($url), true);
     
         // $query = Blog::orderBy('created_at', 'desc');
@@ -166,7 +166,7 @@ class MagController extends Controller
 
 
 
-        $url = 'https://raw.githubusercontent.com/alaouy/sql-moroccan-cities/master/json/ville.json';
+        $url = 'https://raw.githubusercontent.com/linssen/country-flag-icons/master/countries.json';
         $cities = json_decode(file_get_contents($url), true);
 
         $categories = Categorie::where('type','blog')->get();
@@ -209,7 +209,7 @@ class MagController extends Controller
     public function categorie(Request $request, $category)
     {
         setlocale(LC_TIME, 'fr_FR');
-        $url = 'https://raw.githubusercontent.com/alaouy/sql-moroccan-cities/master/json/ville.json';
+        $url = 'https://raw.githubusercontent.com/linssen/country-flag-icons/master/countries.json';
         $cities = json_decode(file_get_contents($url), true);
 
         $showPopup = false;

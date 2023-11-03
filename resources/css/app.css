@@ -548,3 +548,19 @@ width: 27px;
           background-position: right
       }
   }
+
+  .animation-logo-filter {
+    animation: animationFilter 1s infinite ease-in ;
+    -webkit-animation: animationFilter 1s infinite ease-in ;
+}
+  @keyframes animationFilter {
+    0%{
+      width: 14rem;
+    }
+    50%{
+      width: 16rem;
+    }
+    100%{
+      width: 14rem;
+    }
+  }

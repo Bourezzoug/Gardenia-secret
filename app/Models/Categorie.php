@@ -11,6 +11,9 @@ class Categorie extends Model
     public function post() {
         return $this->hasMany(Blog::class);
     }
+    public function product() {
+        return $this->hasMany(Product::class);
+    }
     protected $fillable = ['name','slug','color','type','parent_id'];
     public function setSlugAttribute($value) {
         $this->attributes['slug'] = strtolower($value);

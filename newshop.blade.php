@@ -4,11 +4,9 @@
 
 @include('pages.components.header')
 
-<div id="" class="container mx-auto p-6 ">
-<div id="logo-filter" class="hidden fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 z-[10000]">
-  <img src="{{ asset('images/logo.png') }}" class=" w-56 animation-logo-filter" alt="">
-</div>
-<div id="filtering" >
+<div class="container mx-auto p-6">
+
+<div class="bg-white">
     <div>
 
       <div class="relative lg:hidden z-[10000]" role="dialog" aria-modal="true">
@@ -390,11 +388,11 @@
       $categorie = App\Models\Categorie::find($product->category_id);
       $brand = App\Models\Brand::find($product->brand_id);
     @endphp
-    <div id="loading-overlay" class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl relative">
+    <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl relative">
       @if($product->quantite == 0)
-      <span class="absolute top-0 left-0 bg-black text-white p-1 font-Roboto-condensed uppercase">
+      <button class="absolute top-0 left-0 bg-black text-white p-1 font-Roboto-condensed uppercase">
         out of stock
-      </span>
+      </button>
     @endif
         <a href="{{ route('product.customer.index', ['categorie' => $categorie->slug, 'slug' => $product->slug, 'id' => $product->id]) }}">
             <img src="{{ $product->photo }}" alt="{{ $product->title }}" class="h-80 w-72 object-cover rounded-t-xl" />
@@ -450,187 +448,183 @@
 </div>
 
 {{-- Script to filter and sort products--}}
+{{-- <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', function(event) {
+    const sortOptions = document.querySelectorAll('.sort-option');
+    const priceFilters = document.querySelectorAll('[name="price"');
+    const categoryFilters = document.querySelectorAll('[name="categories[]"]');
+    const searchInput = document.getElementById('search-input');
+
+    function updateProducts(sortType, selectedPrices, selectedCategories, searchTerm) {
+        const pricesQueryParam = selectedPrices.length > 0 ? `&prices=${selectedPrices.join(',')}` : '';
+        const categoriesQueryParam = selectedCategories.length > 0 ? `&categories=${selectedCategories.join(',')}` : '';
+        const searchQueryParam = searchTerm ? `&search=${searchTerm}` : '';
+
+        fetch(`/products?sort=${sortType}${pricesQueryParam}${categoriesQueryParam}${searchQueryParam}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            const productsContainer = document.getElementById('products-container');
+            productsContainer.innerHTML = ''; // Clear existing products
+
+            data.products.data.forEach(productData => {
+                // Create product container
+                const productHTML = `
+                <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
+                    <a href="#">
+                        <img src="${productData.photo}" alt="Product" class="h-80 w-72 object-cover rounded-t-xl" />
+                    </a>
+                    <div class="px-4 py-3 w-72">
+                    <span class="text-gray-400 mr-3 uppercase text-xs font-Roboto-condensed">Brand</span>
+                    <h2 class="text-lg font-bold text-black  block capitalize font-Roboto-condensed">
+                        <a href="">${productData.nom}</a>
+                    </h2>
+                    <div class="flex items-center">
+                        <p class="text-lg font-semibold text-black cursor-auto my-3 font-Roboto">$${productData.prix}</p>
+                        <form action="{{ route('wishlist.store', ['id' => $product->id]) }}" method="POST" class="wishlist-form-product w-full flex" data-product-id="{{ $product->id }}">
+                            @csrf
+                            <button type="submit" class="ml-auto add-products-to-wishlist">
+                                <div class="HeartAnimation"></div>
+                            </button>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+                `;
+
+                // Append the product HTML to the products container
+                productsContainer.innerHTML += productHTML;
+            });
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    sortOptions.forEach(option => {
+        option.addEventListener('click', function(event) {
+            event.preventDefault();
+            const sortType = this.dataset.sort;
+            const selectedPrices = Array.from(priceFilters)
+                .filter(filter => filter.checked)
+                .map(filter => filter.value);
+            const selectedCategories = Array.from(categoryFilters)
+                .filter(filter => filter.checked)
+                .map(filter => filter.value);
+            const searchTerm = searchInput.value.trim();
+
+            updateProducts(sortType, selectedPrices, selectedCategories, searchTerm);
+        });
+    });
+
+    priceFilters.forEach(filter => {
+    filter.addEventListener('change', function() {
+        const selectedPrice = document.querySelector('input[name="price"]:checked').value;
+        const selectedCategories = Array.from(categoryFilters)
+            .filter(filter => filter.checked)
+            .map(filter => filter.value);
+        const sortOption = document.querySelector('.sort-option:checked');
+        const sortType = sortOption ? sortOption.dataset.sort : '';
+        const searchTerm = searchInput.value.trim();
+        updateProducts(sortType, [selectedPrice], selectedCategories, searchTerm);
+    });
+  });
+
+
+    categoryFilters.forEach(filter => {
+    filter.addEventListener('change', function() {
+        const selectedPrices = Array.from(priceFilters)
+            .filter(filter => filter.checked)
+            .map(filter => filter.value);
+        const selectedCategories = Array.from(categoryFilters)
+            .filter(filter => filter.checked)
+            .map(filter => filter.value);
+        const sortOption = document.querySelector('.sort-option:checked');
+        const sortType = sortOption ? sortOption.dataset.sort : '';
+        const searchTerm = searchInput.value.trim();
+        updateProducts(sortType, selectedPrices, selectedCategories, searchTerm);
+    });
+  });
+
+    searchInput.addEventListener('input', function() {
+        const selectedPrices = Array.from(priceFilters)
+            .filter(filter => filter.checked)
+            .map(filter => filter.value);
+        const selectedCategories = Array.from(categoryFilters)
+            .filter(filter => filter.checked)
+            .map(filter => filter.value);
+        const sortOption = document.querySelector('.sort-option:checked');
+        const sortType = sortOption ? sortOption.dataset.sort : '';
+        const searchTerm = this.value.trim();
+
+        updateProducts(sortType, selectedPrices, selectedCategories, searchTerm);
+    });
+  });})
+
+</script> --}}
+
+
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('click', function(event) {
-      const loadingOverlay = document.getElementById('loading-overlay'); // Add an element with id 'loading-overlay' to your HTML
-
-      const showLoadingOverlay = () => {
-        loadingOverlay.style.opacity = '1';
-      }
-
-      const hideLoadingOverlay = () => {
-        loadingOverlay.style.opacity = '0';
-      }
-
-      let requestInProgress = false;
-
       const sortOptions = document.querySelectorAll('.sort-option');
       const priceFilters = document.querySelectorAll('[name="price"]');
       const categoryFilters = document.querySelectorAll('[name="categories[]"]');
       const brandFilters = document.querySelectorAll('[name="brands[]"]');
       const searchInput = document.getElementById('search-input');
 
-      // function updateProducts(sortType, selectedPrices, selectedCategories, searchTerm, selectedBrands) {
-      //   if (requestInProgress) {
-      //     return;
-      //   }
-
-      //   showLoadingOverlay(); // Show loading overlay
-      //   requestInProgress = true;
-      //   const pricesQueryParam = selectedPrices.length > 0 ? `&prices=${selectedPrices.join(',')}` : '';
-      //   const categoriesQueryParam = selectedCategories.length > 0 ? `&categories=${selectedCategories.join(',')}` : '';
-      //   const brandsQueryParam = selectedBrands.length > 0 ? `&brands=${selectedBrands.join(',')}` : '';
-      //   const searchQueryParam = searchTerm ? `&search=${searchTerm}` : '';
-
-      //   fetch(`/products?sort=${sortType}${pricesQueryParam}${categoriesQueryParam}${brandsQueryParam}${searchQueryParam}`, {
-      //     method: 'GET',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       'X-Requested-With': 'XMLHttpRequest'
-      //     }
-      //   })
-      //   .then(response => response.json())
-      //   .then(data => {
-      //     const productsContainer = document.getElementById('products-container');
-      //     productsContainer.innerHTML = ''; // Clear existing products
-
-      //     data.products.data.forEach(productData => {
-      //       const productHTML = `
-      //           <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
-      //               <a href="#">
-      //                   <img src="${productData.photo}" alt="Product" class="h-80 w-72 object-cover rounded-t-xl" />
-      //               </a>
-      //               <div class="px-4 py-3 w-72">
-      //               <span class="text-gray-400 mr-3 uppercase text-xs font-Roboto-condensed">Brand</span>
-      //               <h2 class="text-lg font-bold text-black  block capitalize font-Roboto-condensed">
-      //                   <a href="">${productData.nom}</a>
-      //               </h2>
-      //               <div class="flex items-center">
-      //                   <p class="text-lg font-semibold text-black cursor-auto my-3 font-Roboto">$${productData.prix}</p>
-      //                   <form action="{{ route('wishlist.store', ['id' => $product->id]) }}" method="POST" class="wishlist-form-product w-full flex" data-product-id="{{ $product->id }}">
-      //                       @csrf
-      //                       <button type="submit" class="ml-auto add-products-to-wishlist">
-      //                           <div class="HeartAnimation"></div>
-      //                       </button>
-      //                   </form>
-      //               </div>
-      //               </div>
-      //           </div>
-      //           `;
-
-      //       productsContainer.innerHTML += productHTML;
-      //     });
-
-      //     hideLoadingOverlay(); // Hide loading overlay
-      //     requestInProgress = false;
-      //     var filtering = document.getElementById('filtering');
-      //     var logoFilter = document.getElementById('logo-filter');
-      //       // Add animation class to body
-      //       filtering.classList.add('opacity-10');
-      //       logoFilter.classList.remove('hidden');
-      //       document.body.classList.add('pointer-events-none')
-      //       // Remove animation class after 1 second
-      //       setTimeout(() => {
-      //       filtering.classList.remove('opacity-10');
-      //       logoFilter.classList.add('hidden');
-      //       document.body.classList.remove('pointer-events-none')
-      //       }, 1000);
-      //   })
-      //   .catch(error => {
-      //     console.error('Error:', error);
-      //     hideLoadingOverlay(); // Make sure to hide loading overlay in case of an error
-      //     requestInProgress = false;
-      //   });
-      // }
-
-
       function updateProducts(sortType, selectedPrices, selectedCategories, searchTerm, selectedBrands) {
-  if (requestInProgress) {
-    return;
-  }
+        const pricesQueryParam = selectedPrices.length > 0 ? `&prices=${selectedPrices.join(',')}` : '';
+        const categoriesQueryParam = selectedCategories.length > 0 ? `&categories=${selectedCategories.join(',')}` : '';
+        const brandsQueryParam = selectedBrands.length > 0 ? `&brands=${selectedBrands.join(',')}` : '';
+        const searchQueryParam = searchTerm ? `&search=${searchTerm}` : '';
 
-  // Trigger your animation class
-  var filtering = document.getElementById('filtering');
-  var logoFilter = document.getElementById('logo-filter');
-  filtering.classList.add('opacity-10');
-  logoFilter.classList.remove('hidden');
-  document.body.classList.add('pointer-events-none');
+        fetch(`/products?sort=${sortType}${pricesQueryParam}${categoriesQueryParam}${brandsQueryParam}${searchQueryParam}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          const productsContainer = document.getElementById('products-container');
+          productsContainer.innerHTML = ''; // Clear existing products
 
-  setTimeout(() => {
-    showLoadingOverlay(); // Show loading overlay
-    requestInProgress = true;
-
-    const pricesQueryParam = selectedPrices.length > 0 ? `&prices=${selectedPrices.join(',')}` : '';
-    const categoriesQueryParam = selectedCategories.length > 0 ? `&categories=${selectedCategories.join(',')}` : '';
-    const brandsQueryParam = selectedBrands.length > 0 ? `&brands=${selectedBrands.join(',')}` : '';
-    const searchQueryParam = searchTerm ? `&search=${searchTerm}` : '';
-
-    fetch(`/products?sort=${sortType}${pricesQueryParam}${categoriesQueryParam}${brandsQueryParam}${searchQueryParam}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest'
-      }
-    })
-    .then(response => response.json())
-    .then(data => {
-      hideLoadingOverlay(); // Hide loading overlay
-      requestInProgress = false;
-
-      // Remove animation class after products are loaded
-      filtering.classList.remove('opacity-10');
-      logoFilter.classList.add('hidden');
-      document.body.classList.remove('pointer-events-none');
-
-      // Display the products
-      const productsContainer = document.getElementById('products-container');
-      productsContainer.innerHTML = ''; // Clear existing products
-
-      data.products.data.forEach(productData => {
+          data.products.data.forEach(productData => {
             const productHTML = `
-                <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl relative">
-                  ${productData.quantite == 0 ? `
-                  <span class="absolute top-0 left-0 bg-black text-white p-1 font-Roboto-condensed uppercase">
-                    out of stock
-                  </span>
-                  ` : ''}
-
-                    <a href="/product/${productData.category.slug}/${productData.slug}/${productData.id}">
+                <div class="w-72 bg-white shadow-md rounded-xl duration-500 hover:scale-105 hover:shadow-xl">
+                    <a href="#">
                         <img src="${productData.photo}" alt="Product" class="h-80 w-72 object-cover rounded-t-xl" />
                     </a>
                     <div class="px-4 py-3 w-72">
-                    <span class="text-gray-400 mr-3 uppercase text-xs font-Roboto-condensed">${productData.brand.name}</span>
+                    <span class="text-gray-400 mr-3 uppercase text-xs font-Roboto-condensed">Brand</span>
                     <h2 class="text-lg font-bold text-black  block capitalize font-Roboto-condensed">
-                        <a href="/product/${productData.category.slug}/${productData.slug}/${productData.id}">${productData.nom}</a>
+                        <a href="">${productData.nom}</a>
                     </h2>
                     <div class="flex items-center">
                         <p class="text-lg font-semibold text-black cursor-auto my-3 font-Roboto">$${productData.prix}</p>
-                        ${productData.quantite > 0 ? `
-                    <form action="{{ route('wishlist.store', ['id' => $product->id]) }}" method="POST" class="wishlist-form-product w-full flex" data-product-id="{{ $product->id }}">
-                        @csrf
-                        <button type="submit" class="ml-auto add-products-to-wishlist">
-                            <div class="HeartAnimation"></div>
-                        </button>
-                    </form>
-                ` : ''}
+                        <form action="{{ route('wishlist.store', ['id' => $product->id]) }}" method="POST" class="wishlist-form-product w-full flex" data-product-id="{{ $product->id }}">
+                            @csrf
+                            <button type="submit" class="ml-auto add-products-to-wishlist">
+                                <div class="HeartAnimation"></div>
+                            </button>
+                        </form>
                     </div>
                     </div>
                 </div>
                 `;
-                console.log(productData)
-        productsContainer.innerHTML += productHTML;
-      });
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      hideLoadingOverlay(); // Make sure to hide loading overlay in case of an error
-      requestInProgress = false;
-    });
-  }, 1000); // Adjust the delay as needed
-  }
 
+            productsContainer.innerHTML += productHTML;
+          });
+        })
+        .catch(error => console.error('Error:', error));
+      }
 
       sortOptions.forEach(option => {
         option.addEventListener('click', function(event) {

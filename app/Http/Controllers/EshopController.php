@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Brand;
 use App\Models\Cart;
 use App\Models\Categorie;
 use App\Models\Product;
@@ -15,7 +16,24 @@ class EshopController extends Controller
 {
 
         public function index(Request $request) {
-            $url = 'https://raw.githubusercontent.com/alaouy/sql-moroccan-cities/master/json/ville.json';
+
+                $request->validate([
+                    'categories'    => 'array', // Ensure 'categories' is an array
+                    'categories.*'  => 'numeric|exists:categories,id', // Ensure each category id exists in the 'categories' table
+                    'brands'        => 'array', // Ensure 'brands' is an array
+                    'brands.*'      => 'numeric|exists:brands,id', // Ensure each brand id exists in the 'brands' table
+                    'minPrice'      =>  'numeric',
+                    'maxPrice'      =>  'numeric',
+                    'search'        =>  'string',
+                    'sort'          => 'string|in:popular,rating,newest,lowToHigh,highToLow',
+                    'prices'        => 'numeric',
+                ]);
+
+
+
+
+
+            $url = 'https://raw.githubusercontent.com/linssen/country-flag-icons/master/countries.json';
             $cities = json_decode(file_get_contents($url), true);
             $isInWishlist = false;
             $showPopup = false;
@@ -131,19 +149,34 @@ class EshopController extends Controller
             }
             
 
+            $selectedBrands = $request->input('brands', []);
+            if (!empty($selectedBrands)) {
+                $brands = explode(",", $selectedBrands);
+            
+                foreach ($brands as $brand) {
+                    $query->orWhere('brand_id', $brand);
+                }
+            }
+            
 
 
     
+            // Get the paginated products
             $products = $query->paginate(9);
 
+            // Iterate over the products and load brand information for each
+            foreach ($products as $product) {
+                $product->load('brand');
+            }
+            foreach ($products as $product) {
+                $product->load('category');
+            }
 
             if ($request->ajax()) {
                 return response()->json(['products' => $products]);
             }
 
 
-
-            Log::info('Selected Categories:');
     
             return view('pages.testShop', [
                 'products'      => $products,
@@ -156,22 +189,11 @@ class EshopController extends Controller
                 'wishlists'     => $wishlists,
                 'totalPrice'    => $totalPrice,
                 'categorie'     => Categorie::where('type','Products')->get(),
-                'isInWishlist'  => $isInWishlist
+                'isInWishlist'  => $isInWishlist,
+                'brands'        => Brand::all()
             ]);
-            // return view('pages.e-shop', [
-            //     'products'      => $products,
-            //     'cities'        => $cities,
-            //     'minprice'      => $minPrice,
-            //     'maxprice'      => $maxPrice,
-            //     'showPopup'     => $showPopup,
-            //     'carts'         => $carts,
-            //     'boxCarts'      => $boxCarts,
-            //     'wishlists'     => $wishlists,
-            //     'totalPrice'    => $totalPrice,
-            // ]);
+
         }
 }
-    
-    
-    
+
 

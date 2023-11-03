@@ -42,7 +42,15 @@ class BoxController extends Controller
             });
         
             $boxCartsTotalPrice = $boxCarts->sum(function ($boxCart) {
-                return $boxCart->box->price ; // Assuming you have a 'price' property in the 'box' model
+                if($boxCart->box_option == 'mid') {
+                    return $boxCart->box->med_price;
+                }
+                elseif($boxCart->box_option == 'cheap') {
+                    return $boxCart->box->cheap_price;
+                }
+                elseif($boxCart->box_option == 'expensive') {
+                    return $boxCart->box->exp_price;
+                }
             });
         
             // Calculate the combined total price
@@ -50,7 +58,7 @@ class BoxController extends Controller
         }
         
 
-        $url = 'https://raw.githubusercontent.com/alaouy/sql-moroccan-cities/master/json/ville.json';
+        $url = 'https://raw.githubusercontent.com/linssen/country-flag-icons/master/countries.json';
         $cities = json_decode(file_get_contents($url), true);
         // $cheapestBox = Box::orderBy('price')->first(); // Retrieve the cheapest box
         // $expensiveBox = Box::orderByDesc('price')->first(); // Retrieve the most expensive box
@@ -95,23 +103,44 @@ class BoxController extends Controller
             'box_option'    =>  $selectedOption
         ]);
 
-        if ($cartBox) {
+        if (Auth::check()) {
             $cartBox = Cart::where('user_id', $user_id)
                         ->where('box_id','<>',null)
                         ->with('box') // Eager load the 'box' relationship
                         ->get();
 
-    // Calculate the total price based on the box price
-    $totalPrice = $cartBox->sum(fn($cart) => 
-    $cart->box_option == 'cheap' 
-        ? $cart->box->cheap_price 
-        : ($cart->box_option == 'mid' 
-            ? $cart->box->med_price 
-            : $cart->box->exp_price)
-);
+                        $user = Auth::user();
+                        $carts = Cart::where('user_id', $user->id)
+                            ->where('product_id', '<>', 'id')
+                            ->get();
+                        $boxCarts = Cart::where('user_id', $user->id)
+                            ->where('box_id', '<>', 'id')
+                            ->get();
+                        $wishlists = Wishlist::where('user_id', $user->id)->get();
+                    
+                        // Calculate the total price for both $carts and $boxCarts
+                        $cartsTotalPrice = $carts->sum(function ($cart) {
+                            return $cart->product->prix * $cart->quantity;
+                        });
+                    
+                        $boxCartsTotalPrice = $boxCarts->sum(function ($boxCart) {
+                            if($boxCart->box_option == 'mid') {
+                                return $boxCart->box->med_price;
+                            }
+                            elseif($boxCart->box_option == 'cheap') {
+                                return $boxCart->box->cheap_price;
+                            }
+                            elseif($boxCart->box_option == 'expensive') {
+                                return $boxCart->box->exp_price;
+                            }
+                        });
+                    
+                        // Calculate the combined total price
+                        $totalPrice = $cartsTotalPrice + $boxCartsTotalPrice;
 
             return response()->json(['success' => true, 'cartBox' => $cartBox, 'totalPrice' => $totalPrice]);
-        } else {
+        }
+        else {
             return response()->json(['success' => false]);
         }
 

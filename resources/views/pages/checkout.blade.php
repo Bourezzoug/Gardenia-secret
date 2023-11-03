@@ -7,7 +7,7 @@
 <div class="container mx-auto p-6 grid grid-cols-12 gap-5 bg-[#f9fafb] my-10 border  rounded-lg">
 
     <div class="col-span-12 lg:col-span-6">
-        @if (!$carts->isEmpty())
+        @if (!$carts->isEmpty() || !$boxCarts->isEmpty())
             <form id="orderForm" action="{{ route('confirm_order') }}" method="POST">
             @csrf
         <div >
@@ -57,6 +57,9 @@
                         <option value="United state">United states</option>
                         <option value="Morocco">Morocco</option>
                         <option value="Spain">Spain</option>
+                        <option value="France">France</option>
+                        <option value="Germany">Germany</option>
+                        <option value="United kingdom">United kingdom</option>
                     </x-select>
                     <span for="family_name" id="country_error" class="mt-2 text-red-600 text-xs"></span>
                 </div> 
@@ -244,13 +247,14 @@
                                 var inputForm2 = document.createElement('input');
                                 var buttonForm = document.createElement('button');
                                 var iconFormPaypal = document.createElement('i');
-                                paypalForm.classList.add('w-100')
+                                // paypalForm.classList.add('w-100')
+                                paypalForm.classList.add('w-full')
 
                                 inputForm.setAttribute('type','hidden') 
                                 inputForm.setAttribute('name','_token') 
                                 inputForm.setAttribute('value',csrf) 
                                 buttonForm.setAttribute('type','submit') 
-                                buttonForm.setAttribute('class','px-4 py-2 w-full rounded-lg bg-main-color text-white') 
+                                buttonForm.setAttribute('class','px-4 py-2 w-full rounded-lg bg-[#3b7bbf] text-white') 
                                 iconFormPaypal.setAttribute('class','fa-brands fa-cc-paypal text-3xl')
                                 paypalForm.action = '{{ route('paypal') }}';
                                 paypalForm.method = 'POST';
@@ -260,27 +264,30 @@
                                 paymentButtons.appendChild(paypalForm);
 
                                 // Stripe Integration Form:
-                                var StripeForm = document.createElement('form');
-                                StripeForm.classList.add('w-100')
-                                StripeForm.action = '{{ route('stripe') }}';
-                                StripeForm.method = 'POST';
-                                // var inputForm = document.createElement('input');
-                                var buttonFormStripe = document.createElement('button');
-                                var iconFormStripe1 = document.createElement('i');
-                                var iconFormStripe2 = document.createElement('i');
 
-                                buttonFormStripe.setAttribute('type','submit') 
-                                buttonFormStripe.setAttribute('class','px-4 py-2 w-full rounded-lg  bg-[#e9b5a8] text-white') 
-                                iconFormStripe1.setAttribute('class','fa-brands fa-cc-visa text-3xl mr-2')
-                                iconFormStripe2.setAttribute('class','fa-brands fa-cc-mastercard text-3xl')
-                                inputForm2.setAttribute('type','hidden') 
-                                inputForm2.setAttribute('name','_token') 
-                                inputForm2.setAttribute('value',csrf) 
-                                buttonFormStripe.appendChild(iconFormStripe1)
-                                buttonFormStripe.appendChild(iconFormStripe2)
-                                StripeForm.appendChild(inputForm2)
-                                StripeForm.appendChild(buttonFormStripe)
-                                paymentButtons.appendChild(StripeForm);
+
+
+                                // var StripeForm = document.createElement('form');
+                                // StripeForm.classList.add('w-100')
+                                // StripeForm.action = '{{ route('stripe') }}';
+                                // StripeForm.method = 'POST';
+                                // // var inputForm = document.createElement('input');
+                                // var buttonFormStripe = document.createElement('button');
+                                // var iconFormStripe1 = document.createElement('i');
+                                // var iconFormStripe2 = document.createElement('i');
+
+                                // buttonFormStripe.setAttribute('type','submit') 
+                                // buttonFormStripe.setAttribute('class','px-4 py-2 w-full rounded-lg  bg-[#e9b5a8] text-white') 
+                                // iconFormStripe1.setAttribute('class','fa-brands fa-cc-visa text-3xl mr-2')
+                                // iconFormStripe2.setAttribute('class','fa-brands fa-cc-mastercard text-3xl')
+                                // inputForm2.setAttribute('type','hidden') 
+                                // inputForm2.setAttribute('name','_token') 
+                                // inputForm2.setAttribute('value',csrf) 
+                                // buttonFormStripe.appendChild(iconFormStripe1)
+                                // buttonFormStripe.appendChild(iconFormStripe2)
+                                // StripeForm.appendChild(inputForm2)
+                                // StripeForm.appendChild(buttonFormStripe)
+                                // paymentButtons.appendChild(StripeForm);
                             }, 2000);
 
                         }

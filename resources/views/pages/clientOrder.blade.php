@@ -217,7 +217,7 @@
                         </div>
                     </td>
                     <td class="px-6 py-4">
-                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</a>
+                        <a href="{{ Route('order.invoice',['id' =>  $order->id]) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Facture</a>
                     </td>
                     <!-- Add other columns as needed -->
                 </tr>

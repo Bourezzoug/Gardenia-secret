@@ -23,4 +23,10 @@ class Product extends Model
     {
         return $this->belongsToMany(Cart::class); // Product model was working if u face any problem
     }
+    public function brand() {
+        return $this->belongsTo(Brand::class);
+    }
+    public function category() {
+        return $this->belongsTo(Categorie::class);
+    }
 }

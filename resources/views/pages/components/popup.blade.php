@@ -22,9 +22,9 @@
                 <div class="relative w-full">
                     <select name="ville" id="" class="rounded block p-3 pl-2 w-full text-base text-gray-900 bg-gray-50  border border-gray-300  font-cormorant  outline-none">
                         <option value="" readonly="true" hidden="true"
-                        selected>Choisir votre ville</option>
+                        selected>Choisir votre pays</option>
                         @foreach ($cities as $ville)
-                        <option value="{{ $ville['ville'] }}">{{ $ville['ville'] }}</option>
+                        <option value="{{ $ville['name'] }}">{{ $ville['name'] }}</option>
                         @endforeach
                     </select>
                 </div>
