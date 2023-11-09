@@ -46,7 +46,7 @@
                               <div class="flex flex-1 items-end justify-between text-sm">
                                 <p class="text-gray-500">Quantité {{ $cart->quantity }}</p>
       
-                                <form id="cart-id-{{ $cart->id }}" data-cart-id="{{ $cart->id }}" data-item-type="product" action="/cart/{{ $cart->id }}" method="POST" class="flex cart-remove-form">
+                                <form id="product-cart-id-{{ $cart->id }}" data-cart-id="{{ $cart->id }}" data-item-type="product" action="/cart/{{ $cart->id }}" method="POST" class="flex cart-remove-form">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="font-medium text-second-color remove-button">Remove</button>
@@ -97,7 +97,7 @@
                               <div class="flex flex-1 items-end justify-end text-sm">
                                 {{-- <p class="text-gray-500">Quantité {{ $cart->quantity }}</p> --}}
       
-                                <form id="cart-id-{{ $cart->id }}" data-cart-id="{{ $cart->id }}" data-item-type="box" action="/cart/{{ $cart->id }}" method="POST" class="flex cart-remove-form just">
+                                <form id="box-cart-id-{{ $cart->id }}" data-cart-id="{{ $cart->id }}" data-item-type="box" action="/cart/{{ $cart->id }}" method="POST" class="flex cart-remove-form just">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="font-medium text-second-color remove-button">Remove</button>

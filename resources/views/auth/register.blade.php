@@ -1,8 +1,10 @@
 <x-guest-layout>
-    <div class="grid grid-cols-2">
-        <div class="col-span-1" style="background-image: url('{{ asset('images/background-login.jpeg') }}');background-position:center;background-size:cover;">
-        </div>
-        <div class="col-span-1">
+    {{-- <div class="grid grid-cols-2"> --}}
+        {{-- <div class="col-span-1" style="background-image: url('{{ asset('images/background-login.jpeg') }}');background-position:center;background-size:cover;">
+        </div> --}}
+        {{-- <div class="col-span-1" >
+        </div> --}}
+        {{-- <div class="col-span-1"> --}}
             <x-authentication-card>
                 <x-slot name="logo">
                     <x-authentication-card-logo />
@@ -10,18 +12,33 @@
         
                 <x-validation-errors class="mb-4" />
         
-                <form method="POST" action="{{ route('register') }}">
+                <form method="POST" action="{{ route('register') }}" class="mb-10">
                     @csrf
-        
-                    <div>
-                        <x-label for="name" value="{{ __('Name') }}" />
-                        <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-                    </div>
-        
+
                     <div class="mt-4">
                         <x-label for="email" value="{{ __('Email') }}" />
-                        <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+                        <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
                     </div>
+
+                    
+                    <div class="my-4">
+                        <x-label for="name" value="{{ __('Gender') }}" />
+                        <x-select>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </x-select>
+                    </div>
+
+                    <div>
+                        <x-label for="name" value="{{ __('Name') }}" />
+                        <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autocomplete="name" />
+                    </div>
+                    <div class="my-4">
+                        <x-label for="tel" value="{{ __('Téléphone') }}" />
+                        <x-input id="tel" class="block mt-1 w-full" type="text" name="telephone" :value="old('tel')" required autocomplete="tel" />
+                    </div>
+        
+
         
                     <div class="mt-4">
                         <x-label for="password" value="{{ __('Password') }}" />
@@ -61,6 +78,6 @@
                     </div>
                 </form>
             </x-authentication-card>
-        </div>
-    </div>
+        {{-- </div> --}}
+    {{-- </div> --}}
 </x-guest-layout>

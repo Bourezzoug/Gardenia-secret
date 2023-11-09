@@ -11,6 +11,7 @@ use App\Http\Controllers\BoxController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ClientOrders;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\GoogleAuthController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaypalController;
 use App\Http\Controllers\StripeController;
@@ -208,7 +209,10 @@ Route::post('/banner/{id}/view', function ($id) {
 })->name('banner.view');
 
 
-Route::get('/php-version', function () {
-    return phpversion();
-});
 
+
+Route::get('auth/google',[GoogleAuthController::class,'redirect'])->name('google-auth');
+Route::get('auth/google/call-back',[GoogleAuthController::class,'callbackGoogle'])->name('callbackGoogle');
+
+Route::get('auth/facebook',[GoogleAuthController::class,'redirectToFacebook'])->name('facebook-auth');
+Route::get('auth/facebook/call-back',[GoogleAuthController::class,'callbackFacebook'])->name('callbackFacebook');
