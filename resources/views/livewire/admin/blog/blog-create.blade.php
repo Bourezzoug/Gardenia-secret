@@ -196,6 +196,19 @@
                                             </x-select>
                                             <x-input-error for="categorieID" class="mt-2 input-error"/>
                                           </div>
+                                          @if(!empty($sous_categories))
+                                            <div class="pb-5 mr-5 pl-3">
+                                                <x-label class="text-xs" for="sous-catégorie" value="{{ __('Sous catégories') }}"/>
+                                                <x-select wire:model="sous_categorieID" class="input-field mt-1">
+                                                    <option value="" readonly="true" hidden="true" selected>{{ __('Selectionner une catégorie') }}</option>
+                                                    @forelse($sous_categories as $key => $value)
+                                                        <option value="{{ $key }}">{{ $value }}</option>
+                                                    @empty
+                                                    @endforelse
+                                                </x-select>
+                                                <x-input-error for="sous_categorieID" class="mt-2 input-error"/>
+                                            </div>
+                                          @endif
 
                                             <div class="pb-5 mr-5 pl-3">
                                               <x-select wire:model="status"  class="input-field mt-1">
@@ -205,6 +218,10 @@
                                                 {{-- <option value="En_attente">En attente</option> --}}
                                             </x-select>
                                             <x-input-error for="status" class="mt-2 input-error"/>
+                                            </div>
+                                            <div class="pb-5 mr-5 pl-3">
+                                              <x-input wire:model.defer="subCategory" id="subCategory" type="text" class="input-field mt-1 block w-full" placeholder="Ajouter une sous catégorie"/>
+                                              <x-input-error for="subCategory" class="mt-2 input-error"/>
                                             </div>
 
 

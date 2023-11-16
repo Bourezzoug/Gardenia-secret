@@ -86,7 +86,7 @@
                     
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4">
-                                    <input type="checkbox" wire:model="selectedPosts" value="{{ $post->id }}" class="bg-neutral-50 border-neutral-200 childCheckbox">
+                                    <input type="checkbox" wire:model="selectedBlogs" value="{{ $post->id }}" class="bg-neutral-50 border-neutral-200 childCheckbox">
                                 </td>
                             <td class="px-6 py-4">
                                 <span

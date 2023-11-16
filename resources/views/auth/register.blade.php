@@ -23,7 +23,8 @@
                     
                     <div class="my-4">
                         <x-label for="name" value="{{ __('Gender') }}" />
-                        <x-select>
+                        <x-select name="gender">
+                            <option value="" readonly="true" hidden="true" selected>{{ __('Select your gender') }}</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
                         </x-select>
@@ -66,6 +67,11 @@
                             </x-label>
                         </div>
                     @endif
+
+                    <div class="my-6 ">
+                        {!! NoCaptcha::renderJs() !!}
+                        {!! NoCaptcha::display() !!}
+                    </div>
         
                     <div class="flex items-center justify-end mt-4">
                         <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">

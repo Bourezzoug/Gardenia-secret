@@ -11,6 +11,10 @@ class BlogIndex extends Component
 
     public int $perPage = 10;
 
+    public $selectedBlogs = [];
+
+    public $selecteAll = false;
+
     public string $orderBy = 'id';
     public string $sortBy = 'asc';
 
@@ -19,6 +23,25 @@ class BlogIndex extends Component
     public function loadItems()
     {
         $this->readyToLoad = true;
+    }
+
+    public function mount() {
+        $this->selectedBlogs = collect();
+    }
+
+    public function deleteSelected() {
+        Blog::query()->whereIn('id',$this->selectedBlogs)->forceDelete();
+        $this->selectedBlogs = [];
+        $this->selecteAll = false;
+    }
+
+    public function updatedSelecteAll($value) {
+        if($value) {
+            $this->selectedBlogs = $this->getItem()->pluck('id');
+        }
+        else{
+            $this->selectedBlogs = [];
+        }
     }
 
     public function selectedItem($action ,$itemId = null){

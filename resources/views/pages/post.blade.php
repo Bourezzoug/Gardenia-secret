@@ -3,17 +3,10 @@
 @section('meta_description', $post->meta_description )
 @section('content')
 
-@include('pages.components.header')
-<div class="xl:container mx-auto px-3 sm:px-4 xl:px-2 flex justify-center pt-6" id="hero-section">
-    {{-- <div class="title" style="background-image: url('https://admanager.linformation.ma/storage/banniers/September2023/q62Ug4A7SUCsGieMG3My.jpg')">
-        <div class="h-56 relative">
-            <div class="absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2">
-                <h2 class="text-3xl font-Lato tracking-wider">BLOG</h2>
-            </div>
-        </div>
-    </div> --}}
-    <img src="{{ asset('images/banner.jpeg') }}" alt="">
-</div>
+@include('pages.components.BlogHeader')
+<div class="container mx-auto p-6">
+    <img src="{{ asset('images/banner-top.jpeg') }}" class="mx-auto" alt="">
+  </div>
 <div class="max-w-screen-xl container p-6 mx-auto">
 
     <main class="mt-10">
@@ -34,7 +27,7 @@
                   <span class="ml-1 text-sm font-medium text-gray-800 md:ml-2 "><a href="/{{ $category->name  }}">{{ $category->name }}</a></span>
                 </div>
               </li>
-              <li aria-current="page">
+              <li aria-current="page" class="hidden md:block">
                 <div class="flex items-center">
                   <svg aria-hidden="true" class="w-6 h-6 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
                   <span class="ml-1 text-sm font-medium text-gray-500 md:ml-2 ">{{ $post->title }}</span>
@@ -42,7 +35,7 @@
               </li>
             </ol>
         </nav>
-        <h1 href="/blog/{{ $post->slug }}" class="text-[48px] leading-tight font-Roboto-condensed font-bold py-2 max-w-4xl">
+        <h1 href="/blog/{{ $post->slug }}" class="text-3xl md:text-[48px] leading-tight font-Roboto-condensed font-bold py-6 md:py-2 max-w-4xl">
                 {{ $post->title }}
         </h1>
         <div class="my-4 flex items-center justify-between space-x-1">
@@ -59,7 +52,7 @@
         <!-- post cards -->
         <div class="w-full lg:w-[70%]">
             <div class=" gap-5">
-                <div class="h-[550px] relative">
+                <div class="md:h-[550px] relative">
                     <div class="absolute left-0 bottom-0 w-full h-full z-10"
                     style="background-image: linear-gradient(180deg,transparent,rgba(0,0,0,.2));"></div>
                     <img src="{{ $post->image }}" class="w-full h-full object-cover" alt="">
@@ -68,14 +61,14 @@
                     {!! $post->body !!}
                 </div>
                 <div class="flex-1 border-t-[1.5px] border-gray-200"></div>
-                <div class="flex justify-between items-center">
+                <div class="flex justify-between md:items-center flex-col-reverse md:flex-row">
                     <div class="my-8">
                             <span class="text-[13px] font-Roboto">Tags : </span>
                             <span class="font-bold uppercase rounded bg-[#f6f6f6] text-[10px] font-Roboto" style="padding:4px 10px 3px"># Style</span>
                             <span class="font-bold uppercase rounded bg-[#fff7f3] text-[10px] font-Roboto" style="padding:4px 10px 3px"># Féminovation</span>
                             <span class="font-bold uppercase rounded bg-[#f6f6f6] text-[10px] font-Roboto" style="padding:4px 10px 3px"># Élegance</span>
                     </div>
-                    <div class="flex space-x-1">
+                    <div class="flex space-x-1 mt-5 md:mt-0">
                         <a href="#" class="w-[38px] h-[38px] rounded-full bg-[#516eab] flex items-center justify-center">
                             <i class="fa-brands fa-facebook-f  text-lg text-white"></i>
                         </a>
@@ -96,7 +89,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="grid grid-cols-4">
+                <div class="md:grid grid-cols-4">
                     @if($prevPost)
                     @php
                     $category_prev = App\Models\Categorie::find($prevPost->categorie_id);
@@ -139,8 +132,11 @@
         <!-- right sidebar -->
         <div class="w-full lg:w-[30%] px-3">
 
-            <div class="pt-2 xl:col-span-3 lg:col-span-4 ml-10">
+            <div class="pt-2 xl:col-span-3 lg:col-span-4 md:ml-10">
                 <div>
+                    <img src="{{ asset('images/banner-right-s.jpeg') }}" alt="">
+                </div>
+                <div class="mt-5">
                     <div class="my-2 flex items-center justify-between space-x-1">
                         <h4 class="capitalize rounded mb-2 font-Roboto-condensed text-[18px] bg-second-color font-bold" style="padding:0 10px 1px">Categories</h4>
                         <div class="flex-1 border-t-[1.5px] border-gray-200"></div>
@@ -175,32 +171,25 @@
                     </div>
                 </div>
                 <div class="my-7 flex flex-col space-y-5">
-                    {{-- <h4 class="font-Roboto text-[17px] uppercase">Social Media</h4> --}}
-                    <a href="#" class="w-full bg-[#506fbf] rounded-full flex justify-between items-center">
-                        <span class="text-sm text-white ml-5">Facebook</span>
-                        <div class="bg-[#445fa2] rounded-full px-4 py-3">
-                            <i class="fa-brands fa-facebook text-white"></i>
-                        </div>
-                    </a>
-                    <a href="#" class="w-full bg-black bg-opacity-80 rounded-full flex justify-between items-center">
-                        <span class="text-sm text-white ml-5">Twitter</span>
-                        <div class="bg-black rounded-full px-4 py-3">
-                            <i class="fa-brands fa-x-twitter text-white"></i>
-                        </div>
-                    </a>
-
-                    <a href="#" class="w-full bg-red-400 rounded-full flex justify-between items-center">
-                        <span class="text-sm text-white ml-5">Youtube</span>
-                        <div class="bg-red-600 rounded-full px-4 py-3">
-                            <i class="fa-brands fa-youtube text-white"></i>
-                        </div>
-                    </a>
-                    <a href="#" class="w-full rounded-full flex justify-between items-center" style="background: radial-gradient(circle at 33% 100%,#fed373 4%,#f15245 30%,#d92e7f 62%,#9b36b7 85%,#515ecf)">
-                        <span class="text-sm text-white ml-5">Instagram</span>
-                        <div class="bg-[#9b36b7] rounded-full px-4 py-3">
-                            <i class="fa-brands fa-instagram text-white"></i>
-                        </div>
-                    </a>
+                    <div>
+                        <div class="my-2 flex items-center justify-between space-x-1">
+                            <h4 class="capitalize rounded mb-2 font-Roboto-condensed text-[18px] bg-second-color font-bold" style="padding:0 10px 1px">Social Media</h4>
+                            <div class="flex-1 border-t-[1.5px] border-gray-200"></div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <a href="#" class=" bg-[#e9b5a8] px-3.5 py-2 border cursor-pointer  border-none rounded-full transition-all">
+                            <i class="fa-brands fa-facebook-f"></i>
+                          </a>
+                          <a href="https://www.instagram.com/gardenia.secret/" target="_blank" class="px-3 py-2 border cursor-pointer  bg-[#e9b5a8] border-none rounded-full transition-all">
+                            <i class="fa-brands fa-instagram"></i>
+                          </a>
+                          <a href="#" class="px-2.5 py-2 border cursor-pointer  bg-[#e9b5a8] border-none rounded-full transition-all">
+                            <i class="fa-brands fa-youtube"></i>
+                          </a>
+                          <a href="#" class="px-3 py-2 border cursor-pointer  bg-[#e9b5a8] border-none rounded-full transition-all">
+                            <i class="fa-brands fa-tiktok"></i>
+                          </a>
+                    </div>
                 </div>
                 {{-- <div class="mt-5">
                     <a href="#">
@@ -208,9 +197,9 @@
                     </a>
                 </div> --}}
                 <div>
-                    <a href="#">
+                    {{-- <a href="#">
                         <img src="{{ asset('images/coffe.jpeg') }}" style="height:250px;width:300px" alt="">
-                    </a>
+                    </a> --}}
                 </div>
             </div>
 
@@ -236,7 +225,7 @@
                         <div class="article-top md:w-[250px] md:h-[250px] lg:w-[268px] lg:h-[268px] relative">
                             <div class="absolute left-0 bottom-0 w-full h-full z-10"
                             style="background-image: linear-gradient(180deg,transparent,rgba(0,0,0,.3));"></div>
-                            <img src="{{ $relatedArticle->image }}" class="w-full h-full object-cover" alt="">
+                            <img src="{{ $relatedArticle->image }}" class="w-full h-[220px] md:h-full object-cover" alt="">
                             <a href="/blog/{{ $categorie->slug }}" class="absolute top-3 right-3 bg-red-500 rounded font-Roboto text-[11px] z-50 text-white" style="padding:4px 10px 3px;background-color: {{ $categorie->color }}">{{ $categorie->name }}</a>
                         </div>
                         <div class="article-body p-[15px] lg:w-[268px] md:w-[200px] ">

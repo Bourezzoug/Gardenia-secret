@@ -36,12 +36,12 @@
 
             owl.owlCarousel({
               autoplay: true,
-              autoplayTimeout: 2000,
+              autoplayTimeout: 6000,
               loop: true,
               margin: 10,
               dots: false,
-              animateOut: 'fadeOut',
-              animateIn: 'fadeIn',
+              // animateOut: 'fadeOut',
+              // animateIn: 'fadeIn',
               nav: false,
               dots:true,
               responsive: {
@@ -162,136 +162,7 @@
                           });
                       })
         </script>
-        <script>
-            var currentTab = 0; // Current tab is set to be the first tab (0)
-            showTab(currentTab); // Display the current tab
-            
-            function showTab(n) {
-              // This function will display the specified tab of the form...
-              var x = document.getElementsByClassName("step");
-              x[n].style.display = "block";
-              //... and fix the Previous/Next buttons:
-              if (n == 0) {
-                document.getElementById("prevBtn").style.display = "none";
-              } else {
-                document.getElementById("prevBtn").style.display = "inline";
-              }
-              if (n == (x.length - 1)) {
-                document.getElementById("nextBtn").innerHTML = "Submit";
-              } else {
-                document.getElementById("nextBtn").innerHTML = "Next";
-              }
-              //... and run a function that will display the correct step indicator:
-              fixStepIndicator(n)
-            }
-            
-            function nextPrev(n) {
-              // This function will figure out which tab to display
-              var x = document.getElementsByClassName("step");
-              // Exit the function if any field in the current tab is invalid:
-              if (n == 1 && !validateForm()) return false;
-              // Hide the current tab:
-              x[currentTab].style.display = "none";
-              // Increase or decrease the current tab by 1:
-              currentTab = currentTab + n;
-              // if you have reached the end of the form...
-              if (currentTab >= x.length) {
-                // ... the form gets submitted:
-                document.getElementById("signUpForm").submit();
-                return false;
-              }
-              // Otherwise, display the correct tab:
-              showTab(currentTab);
-            }
-            
-            function validateForm() {
-              // This function deals with validation of the form fields
-              var x, y, i, valid = true;
-              x = document.getElementsByClassName("step");
-              y = x[currentTab].getElementsByTagName("input");
-              // A loop that checks every input field in the current tab:
-              for (i = 0; i < y.length; i++) {
-                // If a field is empty...
-                if (y[i].value == "") {
-                  // add an "invalid" class to the field:
-                  y[i].className += " invalid";
-                  // and set the current valid status to false
-                  valid = false;
-                }
-              }
-              // If the valid status is true, mark the step as finished and valid:
-              if (valid) {
-                document.getElementsByClassName("stepIndicator")[currentTab].className += " finish";
-              }
-              return valid; // return the valid status
-            }
-            
-            function fixStepIndicator(n) {
-              // This function removes the "active" class of all steps...
-              var i, x = document.getElementsByClassName("stepIndicator");
-              for (i = 0; i < x.length; i++) {
-                x[i].className = x[i].className.replace(" active", "");
-              }
-              //... and adds the "active" class on the current step:
-              x[n].className += " active";
-            }
 
-
-                  var newsLetterFormSecond = document.getElementById('pop-newsletter');
-            var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            newsLetterFormSecond.addEventListener('submit', function(e) {
-              e.preventDefault();
-              var formData = new FormData(newsLetterFormSecond);
-
-              var xhr = new XMLHttpRequest();
-              xhr.open(newsLetterFormSecond.method, newsLetterFormSecond.action);
-              xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-              xhr.onreadystatechange = function() {
-                if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 422) { 
-                var errorObj = JSON.parse(xhr.responseText);
-                var errors = errorObj.errors || {};
-                for (var field in errors) {
-                    var inputField = document.querySelector('[name="' + field + '"]');
-                    inputField.classList.add('is-invalid');
-                    var errorElement = inputField.nextElementSibling;
-                    errorElement.innerHTML = errors[field][0];
-                    errorElement.style.display = 'block';
-                }
-
-                var message = errorObj.message || "Error";
-                if(message.includes('The email has already been taken.')) {
-                  Toastify({
-                        text: 'Email déjà utilisée',
-                        duration: 3000, 
-                        gravity: 'top', 
-                        position: 'center', 
-                        backgroundColor: '#ef4444', 
-                        stopOnFocus: true, 
-                      }).showToast();
-                }
-                }
-            else if (xhr.status === 200) {
-                // if (this.responseText == 'exists') {
-                  document.getElementById('pop-up').remove();
-                      Toastify({
-                        text: 'Merci pour votre inscription',
-                        duration: 3000, 
-                        gravity: 'top', 
-                        position: 'center', 
-                        backgroundColor: '#af8d6a', 
-                        stopOnFocus: true, 
-                      }).showToast();
-                    } else {
-                      handleSuccess();
-                    // }
-                  }
-                }
-              };
-              xhr.send(formData);
-            });
-        </script>
         <script>
                           function range() {
                             return {
@@ -336,40 +207,7 @@
                             }
                           }
         </script>
-        <script>
-          document.getElementById('cart').addEventListener('click',function() {
-            document.getElementById('cart-overlay').classList.remove('opacity-0')
-            document.getElementById('cart-overlay').classList.add('opacity-100')
-            document.getElementById('cart-overlay').classList.add('fixed')
-            document.getElementById('cart-wrapper').classList.remove('translate-x-full')
-            document.getElementById('cart-wrapper').classList.add('translate-x-0')
-          })
 
-          document.getElementById('close-cart').addEventListener('click',function() {
-            document.getElementById('cart-overlay').classList.add('opacity-0')
-            document.getElementById('cart-overlay').classList.remove('opacity-100')
-            document.getElementById('cart-overlay').classList.remove('fixed')
-            document.getElementById('cart-wrapper').classList.add('translate-x-full')
-            document.getElementById('cart-wrapper').classList.remove('translate-x-0')
-          })
-        </script>
-        <script>
-          document.getElementById('wishlist').addEventListener('click',function() {
-            document.getElementById('wishlist-overlay').classList.remove('opacity-0')
-            document.getElementById('wishlist-overlay').classList.add('opacity-100')
-            document.getElementById('wishlist-overlay').classList.add('fixed')
-            document.getElementById('wishlist-wrapper').classList.remove('translate-x-full')
-            document.getElementById('wishlist-wrapper').classList.add('translate-x-0')
-          })
-
-          document.getElementById('close-wishlist').addEventListener('click',function() {
-            document.getElementById('wishlist-overlay').classList.add('opacity-0')
-            document.getElementById('wishlist-overlay').classList.remove('opacity-100')
-            document.getElementById('wishlist-overlay').classList.remove('fixed')
-            document.getElementById('wishlist-wrapper').classList.add('translate-x-full')
-            document.getElementById('wishlist-wrapper').classList.remove('translate-x-0')
-          })
-        </script>
     <script>
       document.addEventListener("DOMContentLoaded", function() {
         var banners = document.querySelectorAll("[data-banner-id]");
@@ -442,6 +280,30 @@
 @endif
 
 
-    </body>
+{{-- <div class="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-black bg-opacity-50 py-10 z-[100]">
+  <div class="max-h-full w-full max-w-xl overflow-y-auto sm:rounded-2xl bg-white">
+    <div class="w-full">
+      <div class="m-8 my-20 max-w-[400px] mx-auto">
+        <div class="mb-8 text-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto" x="0px" y="0px" width="70" height="70" viewBox="0 0 512 512">
+            <path fill="#32BEA6" d="M504.1,256C504.1,119,393,7.9,256,7.9C119,7.9,7.9,119,7.9,256C7.9,393,119,504.1,256,504.1C393,504.1,504.1,393,504.1,256z"></path><path fill="#FFF" d="M392.6,172.9c-5.8-15.1-17.7-12.7-30.6-10.1c-7.7,1.6-42,11.6-96.1,68.8c-22.5,23.7-37.3,42.6-47.1,57c-6-7.3-12.8-15.2-20-22.3C176.7,244.2,152,229,151,228.4c-10.3-6.3-23.8-3.1-30.2,7.3c-6.3,10.3-3.1,23.8,7.2,30.2c0.2,0.1,21.4,13.2,39.6,31.5c18.6,18.6,35.5,43.8,35.7,44.1c4.1,6.2,11,9.8,18.3,9.8c1.2,0,2.5-0.1,3.8-0.3c8.6-1.5,15.4-7.9,17.5-16.3c0.1-0.2,8.8-24.3,54.7-72.7c37-39.1,61.7-51.5,70.3-54.9c0.1,0,0.1,0,0.3,0c0,0,0.3-0.1,0.8-0.4c1.5-0.6,2.3-0.8,2.3-0.8c-0.4,0.1-0.6,0.1-0.6,0.1l0-0.1c4-1.7,11.4-4.9,11.5-5C393.3,196.1,397,184.1,392.6,172.9z"></path>
+          </svg>
+          <h1 class="my-6 text-xl font-extrabold">
+            Thank you for registering with Gardenia Secret! We're excited to have you on board.
+          </h1>
+          <p class="text-gray-600">Help us suggest products you'll love! Take our quick survey, it'll only take a moment..</p>
+        </div>
+        <div class="space-y-4">
+          <button class="p-3 bg-main-color rounded-full text-black w-full font-semibold">Take the survey</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> --}}
+
+<!-- component -->
+
+
+  </body>
 
 </html>

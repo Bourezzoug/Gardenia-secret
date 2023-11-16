@@ -254,7 +254,40 @@
 
 </script>
 
+<script>
+  document.getElementById('cart').addEventListener('click',function() {
+    document.getElementById('cart-overlay').classList.remove('opacity-0')
+    document.getElementById('cart-overlay').classList.add('opacity-100')
+    document.getElementById('cart-overlay').classList.add('fixed')
+    document.getElementById('cart-wrapper').classList.remove('translate-x-full')
+    document.getElementById('cart-wrapper').classList.add('translate-x-0')
+  })
 
+  document.getElementById('close-cart').addEventListener('click',function() {
+    document.getElementById('cart-overlay').classList.add('opacity-0')
+    document.getElementById('cart-overlay').classList.remove('opacity-100')
+    document.getElementById('cart-overlay').classList.remove('fixed')
+    document.getElementById('cart-wrapper').classList.add('translate-x-full')
+    document.getElementById('cart-wrapper').classList.remove('translate-x-0')
+  })
+</script>
+<script>
+  document.getElementById('wishlist').addEventListener('click',function() {
+    document.getElementById('wishlist-overlay').classList.remove('opacity-0')
+    document.getElementById('wishlist-overlay').classList.add('opacity-100')
+    document.getElementById('wishlist-overlay').classList.add('fixed')
+    document.getElementById('wishlist-wrapper').classList.remove('translate-x-full')
+    document.getElementById('wishlist-wrapper').classList.add('translate-x-0')
+  })
+
+  document.getElementById('close-wishlist').addEventListener('click',function() {
+    document.getElementById('wishlist-overlay').classList.add('opacity-0')
+    document.getElementById('wishlist-overlay').classList.remove('opacity-100')
+    document.getElementById('wishlist-overlay').classList.remove('fixed')
+    document.getElementById('wishlist-wrapper').classList.add('translate-x-full')
+    document.getElementById('wishlist-wrapper').classList.remove('translate-x-0')
+  })
+</script>
 
 </div>
 

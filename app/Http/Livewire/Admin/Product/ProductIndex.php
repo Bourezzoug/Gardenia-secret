@@ -9,6 +9,10 @@ class ProductIndex extends Component
 {
     public ?string $term = null;
 
+    public $selectedProducts = [];
+
+    public $selecteAll = false;
+
     public int $perPage = 10;
 
     public string $orderBy = 'id';
@@ -19,6 +23,25 @@ class ProductIndex extends Component
     public function loadItems()
     {
         $this->readyToLoad = true;
+    }
+
+    public function mount() {
+        $this->selectedProducts = collect();
+    }
+
+    public function deleteSelected() {
+        Product::query()->whereIn('id',$this->selectedProducts)->forceDelete();
+        $this->selectedProducts = [];
+        $this->selecteAll = false;
+    }
+
+    public function updatedSelecteAll($value) {
+        if($value) {
+            $this->selectedProducts = $this->getItem()->pluck('id');
+        }
+        else{
+            $this->selectedProducts = [];
+        }
     }
 
     public function selectedItem($action ,$itemId = null){

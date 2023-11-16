@@ -15,7 +15,7 @@
         </nav>
     </aside>
 </div> --}}
-<aside id="separator-sidebar" class="z-40 w-64 transition-transform -translate-x-full sm:translate-x-0 border-r border-gray-200"  aria-label="Sidebar">
+<aside id="separator-sidebar" class="z-40 w-64 transition-transform -translate-x-full sm:translate-x-0 border-r border-gray-200 sticky top-0"  aria-label="Sidebar">
         <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
         <ul class="space-y-2 font-medium">
             <li>
@@ -46,9 +46,13 @@
                     <span class="ml-4">Orders</span>
                 </a>
             </li>
+            <li>
+                <a href="{{ Route('quiz.client.index') }}" class="flex items-center p-2 text-gray-900 transition duration-75 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 dark:text-white group">
 
-
-
+                    <i class="fa-solid fa-square-poll-vertical text-xl text-gray-500 hover:text-gray-900 transition duration-75"></i>
+                    <span class="ml-4">Quizz</span>
+                </a>
+            </li>
         </ul>
         </div>
 </aside>

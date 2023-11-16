@@ -2,18 +2,15 @@
 @section('content')
 <div class="fixed inset-0 bg-black opacity-80 z-[9999] header-overlay  hidden" id="header-overlay"></div>
 
-@include('pages.components.header')
+@include('pages.components.headerTest')
 <div class="container p-6 mx-auto">
     <div class="mx-auto max-w-screen-sm text-center mb-8 lg:mb-12">
         <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900">Contact <span class="border-b-4 border-r-4 border-second-color p-2 pb-1">Us</span></h2>
-        <p class="mb-5 font-light text-gray-500 sm:text-2xl 0">We use an agile approach to test assumptions and connect with the needs of your audience early and often. <br>
-            </p>
     </div>
-    <form action="{{ Route('contact.send') }}" method="POST" id="contactForm" class="grid grid-cols-12 gap-5  my-10 ">
+    <form action="{{ Route('contact.send') }}" method="POST" id="contactForm" class="gap-5  my-10 ">
         @csrf
-        <div class="md:col-span-8 col-span-12">
+        <div class="mx-auto" style="max-width:900px">
             <div >
-            <h2 class="text-xl font-Lato p-2 mt-5">Personal information</h2>
             <div class="py-5 xl:mr-6 ml-3 pb-2 ">
                 <x-label for="email"  value="{{ __('Your email') }}"/>
                 <x-input name="email" id="titre" type="text" class="mt-1 block w-full  input-field"/>
@@ -57,8 +54,15 @@
                 <x-label for="options"  value="{{ __('Your options') }}"/>
                 <x-select name="options"  class="input-field mt-1">
                     <option value="" readonly="true" hidden="true" selected>{{ __('options') }}</option>
-                    <option value="Delete my account">Delete my account</option>
-                    <option value="Ask about my products shipment">Ask about my products shipment</option>
+                    <option value="Customer Service">Customer Service</option>
+                    <option value="Partnerships">Partnerships</option>
+                    <option value="Collaborations and Influencers">Collaborations and Influencers</option>
+                    <option value="Technical Issues">Technical Issues</option>
+                    <option value="Suggestions and Feedback">Suggestions and Feedback</option>
+                    <option value="Press Inquiries">Press Inquiries</option>
+                    <option value="Returns and Refunds">Returns and Refunds</option>
+                    <option value="General Inquiries">General Inquiries</option>
+                    <option value="Unsubscribe from the Newsletter">Unsubscribe from the Newsletter</option>
                 </x-select>
                 <x-input-error for="options" class="mt-2 input-error"/>
             </div>
@@ -69,30 +73,13 @@
             </div>
             
             <p class="py-2 xl:mr-6 ml-3 pb-2 text-gray-500">By submitting this form you agree to our <a href="" class="text-blue-600">terms and conditions</a> and our <a href="" class="text-blue-600">privacy policy</a> which explains how we may collect, use and disclose your personal information including to third parties.</p>
+            <div class="my-6 ">
+                {!! NoCaptcha::renderJs() !!}
+                {!! NoCaptcha::display() !!}
+            </div>
             <button class="py-2 px-3 mt-2 rounded-lg xl:mr-6 ml-3  bg-[#e9b5a8] text-white">Submit</button>
             </div>
             
-        </div>
-        <div class="md:col-span-4 col-span-12">
-            <div class="flex flex-col space-y-16 items-center h-full">
-                <div class="flex flex-col items-center space-y-3">
-                    <i class="fa-solid fa-building text-2xl inline-block py-2 px-4 bg-[#fff5f2] text-[#e9b5a8] rounded-lg"></i>
-                    <h4 class="text-gray-900 font-bold font-Lato text-center text-xl">Company information:</h4>
-                    <p class="text-gray-900  font-Lato text-center text-lg">Gardenia Secret</p>
-                </div>
-                <div class="flex flex-col items-center space-y-3">
-                    <i class="fa-solid fa-location-dot text-2xl inline-block py-2 px-4 bg-[#fff5f2] text-[#e9b5a8] rounded-lg"></i>
-                    <h4 class="text-gray-900 font-bold font-Lato text-center text-xl">Address:</h4>
-                    <p class="text-gray-500  font-Lato text-center text-base">1, Angle rue Socrate et Abou Taour 1er étage. Maarif Ext</p>
-                    <p class="text-gray-900 font-bold  font-Lato text-center text-base">Casablanca, Morocco</p>
-                </div>
-                <div class="flex flex-col items-center space-y-3">
-                    <i class="fa-solid fa-phone text-2xl inline-block py-2 px-4 bg-[#fff5f2] text-[#e9b5a8] rounded-lg"></i>
-                    <h4 class="text-gray-900 font-bold font-Lato text-center text-xl">Phone:</h4>
-                    <p class="text-gray-500  font-Lato text-center text-base">Call us to speak to a member of our team. We are always happy to help.</p>
-                    <p class="text-gray-900 font-bold  font-Lato text-center text-base">+212 684 101 010</p>
-                </div>
-            </div>
         </div>
     </form>
 </div>

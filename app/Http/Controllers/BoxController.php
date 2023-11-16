@@ -64,15 +64,41 @@ class BoxController extends Controller
         // $expensiveBox = Box::orderByDesc('price')->first(); // Retrieve the most expensive box
         
         $boxMonth = Box::latest()->first();
+
+
+        $categories = Categorie::where('parent_id', null)
+        ->where('type', 'Blog')
+        ->get();
+    
+        $sous_categories = [];
+        
+        foreach ($categories as $category) {
+            $categoryId = $category->id;
+        
+            $hasSubcategories = Categorie::where('parent_id', $categoryId)
+                ->where('type', 'Blog')
+                ->exists();
+        
+            if ($hasSubcategories) {
+                $sous_categories[$categoryId] = Categorie::where('parent_id', $categoryId)
+                    ->where('type', 'Blog')
+                    ->get();
+            }
+        }
+
+
+
         return view('pages.BoxMois', [
-            'boxMonth'      =>  $boxMonth,
-            'cities'        =>  $cities,
-            'showPopup'     =>  $showPopup,
-            'carts'         =>  $carts,
-            'boxCarts'      =>  $boxCarts,
-            'wishlists'     =>  $wishlists,
-            'totalPrice'    =>  $totalPrice,
-            'blogCategorie' =>  Categorie::where('type','Blog')->get()
+            'boxMonth'          =>  $boxMonth,
+            'cities'            =>  $cities,
+            'showPopup'         =>  $showPopup,
+            'carts'             =>  $carts,
+            'boxCarts'          =>  $boxCarts,
+            'wishlists'         =>  $wishlists,
+            'totalPrice'        =>  $totalPrice,
+            'blogCategorie'     =>  Categorie::where('type','Blog')->get(),
+            'categories'        =>  $categories,
+            'sous_categories'   =>  $sous_categories,
         ]);
     }
     public function store_box_to_cart($id,Request $request) {
@@ -144,5 +170,49 @@ class BoxController extends Controller
             return response()->json(['success' => false]);
         }
 
+    }
+    public function boxPage(Request $request) {
+
+        $showPopup = false;
+        
+        // Check if the user's IP address has seen the popup before
+        $ipAddress = $request->ip();
+        if (!$request->session()->has("popup_$ipAddress")) {
+            $showPopup = true;
+            $request->session()->put("popup_$ipAddress", true);
+        }
+
+        $boxMonth = Box::latest()->first();
+        $boxMonths = Box::orderBy('created_at','DESC')->take(3)->get();
+
+
+
+        $categories = Categorie::where('parent_id', null)
+        ->where('type', 'Blog')
+        ->get();
+    
+        $sous_categories = [];
+        
+        foreach ($categories as $category) {
+            $categoryId = $category->id;
+        
+            $hasSubcategories = Categorie::where('parent_id', $categoryId)
+                ->where('type', 'Blog')
+                ->exists();
+        
+            if ($hasSubcategories) {
+                $sous_categories[$categoryId] = Categorie::where('parent_id', $categoryId)
+                    ->where('type', 'Blog')
+                    ->get();
+            }
+        }
+
+        return view('pages.BoxduMoisPage',[
+            'showPopup'         =>  $showPopup,
+            'categories'        =>  $categories,
+            'sous_categories'   =>  $sous_categories,
+            'boxMonth'          =>  $boxMonth,
+            'boxMonths'         =>  $boxMonths
+        ]);
     }
 }

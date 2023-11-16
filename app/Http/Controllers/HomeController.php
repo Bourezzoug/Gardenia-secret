@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Blog;
 use App\Models\Box;
 use App\Models\Cart;
+use App\Models\HomeSlider;
 use App\Models\Inscrit;
 use App\Models\Product;
 use App\Models\Wishlist;
@@ -30,16 +31,20 @@ class HomeController extends Controller
         //     });
         // }
 
-        $showPopup = false;
+        $showPopup = true;
         
         // Check if the user's IP address has seen the popup before
-        $ipAddress = $request->ip();
-        if (!$request->session()->has("popup_$ipAddress")) {
-            $showPopup = true;
-            $request->session()->put("popup_$ipAddress", true);
-        }
+        // $ipAddress = $request->ip();
+        // if (!$request->session()->has("popup_$ipAddress")) {
+        //     $showPopup = true;
+        //     $request->session()->put("popup_$ipAddress", true);
+        // }
         $url = 'https://raw.githubusercontent.com/linssen/country-flag-icons/master/countries.json';
+        $countries = json_decode(file_get_contents($url), true);
+
+        $url = 'https://raw.githubusercontent.com/alaouy/sql-moroccan-cities/master/json/ville.json';
         $cities = json_decode(file_get_contents($url), true);
+
         $posts = Blog::orderBy('created_at', 'desc')->where('status', 'publié')->take(4)->get();
         $carts = [];
         $wishlists = [];
@@ -89,11 +94,12 @@ class HomeController extends Controller
         
         // Bannieres
 
-
+            $homeSlider = HomeSlider::orderBy('created_at','desc')->take(2)->get();
     
         return view('pages.homepage', [
             'posts'         =>  $posts,
             'cities'        =>  $cities,
+            'countries'     =>  $countries,
             'products'      =>  Product::where('quantite','>',0)->paginate(5),
             'carts'         =>  $carts,
             'boxCarts'      =>  $boxCarts,
@@ -102,6 +108,7 @@ class HomeController extends Controller
             'wishlists'     =>  $wishlists,
             'boxMonth'      =>  $boxMonth,
             'boxMonths'     =>  $boxMonths,
+            'homeSlider'    =>  $homeSlider    
         ]);
         
     }
@@ -110,15 +117,17 @@ class HomeController extends Controller
     public function store(Request $request) {
         try {
             $request->validate([
-                'email' => ['required', 'string', 'email', 'max:255', Rule::unique(Inscrit::class)],
+                'email'         => ['required', 'string', 'email', 'max:255', Rule::unique(Inscrit::class)],
                 'nom_complet'   => ['nullable', 'string'],
                 'ville'         => ['nullable', 'string'],
+                'country'       => ['nullable', 'string'],
             ]);
     
             Inscrit::create([
                 'nom_complet'   =>  $request->nom_complet,
-                'email' => strtolower($request->email),
-                'ville'   =>  $request->ville
+                'email'         => strtolower($request->email),
+                'ville'         =>  $request->ville,
+                'country'       =>  $request->pays
             ]);
             return response()->json(['message' => 'Success!'], 200);
         

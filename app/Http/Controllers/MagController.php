@@ -68,7 +68,32 @@ class MagController extends Controller
                 // Calculate the combined total price
                 $totalPrice = $cartsTotalPrice + $boxCartsTotalPrice;
             }
-            $categories = Categorie::where('type','Blog')->get();
+            $categories = Categorie::where('parent_id', null)
+            ->where('type', 'Blog')
+            ->get();
+        
+        $sous_categories = [];
+        
+        foreach ($categories as $category) {
+            $categoryId = $category->id;
+        
+            $hasSubcategories = Categorie::where('parent_id', $categoryId)
+                ->where('type', 'Blog')
+                ->exists();
+        
+            if ($hasSubcategories) {
+                $sous_categories[$categoryId] = Categorie::where('parent_id', $categoryId)
+                    ->where('type', 'Blog')
+                    ->get();
+            }
+        }
+        
+        
+        // If you want to check if $sous_categories is empty and set it to an empty array if true, you can add the following check:
+        if (empty($sous_categories)) {
+            $sous_categories = [];
+        }
+        
             $first_article = Blog::latest()->first();
             $articles = Blog::where('id', '!=', $first_article->id)->take(3)->get();
             $posts = Blog::with('categorie')
@@ -121,6 +146,7 @@ class MagController extends Controller
             'bannerTop'         =>  $bannerTop,
             'bannerSmallRight'  =>  $bannerSmallRight,
             'bannerBigRight'    =>  $bannerBigRight,
+            'sous_categories'    =>  $sous_categories
         ]);
     }
     
@@ -169,7 +195,7 @@ class MagController extends Controller
         $url = 'https://raw.githubusercontent.com/linssen/country-flag-icons/master/countries.json';
         $cities = json_decode(file_get_contents($url), true);
 
-        $categories = Categorie::where('type','blog')->get();
+        $categories = Categorie::where('type','blog')->where('parent_id',null)->get();
 
         // Find the next post
         $nextPost = Blog::where('status', 'publié')
@@ -227,8 +253,34 @@ class MagController extends Controller
             ->get();
 
         $category = Categorie::where('slug', $category)->firstOrFail();
+
+
+    
+
+
+
         
         $posts = $category->post()->where('status', 'publié')->paginate(8);
+
+        $categories = Categorie::where('parent_id', null)
+        ->where('type', 'Blog')
+        ->get();
+    
+    $sous_categories = [];
+    
+    foreach ($categories as $category) {
+        $categoryId = $category->id;
+    
+        $hasSubcategories = Categorie::where('parent_id', $categoryId)
+            ->where('type', 'Blog')
+            ->exists();
+    
+        if ($hasSubcategories) {
+            $sous_categories[$categoryId] = Categorie::where('parent_id', $categoryId)
+                ->where('type', 'Blog')
+                ->get();
+        }
+    }
 
         
         
@@ -238,7 +290,8 @@ class MagController extends Controller
             'mostViewedArticle' =>  $mostViewedArticle,
             'showPopup'         =>  $showPopup,
             'category'          =>  $category,
-            'categories'        =>  Categorie::where('type','blog')->get()
+            'categories'        =>  $categories,
+            'sous_categories'   =>  $sous_categories
         ]);
     }
 }

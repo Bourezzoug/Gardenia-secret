@@ -2,7 +2,8 @@
 
 @section('content')
 
-@include('pages.components.header')
+@include('pages.components.BlogHeader')
+@include('pages.components.search')
 @if($bannerTop)
 <div class="xl:container mx-auto px-3 sm:px-4 xl:px-2 flex justify-center py-6" id="hero-section">
     <form id="bannerClickForm-{{ $bannerTop->id }}" action="{{ route('banner.click', ['id' => $bannerTop->id]) }}" method="POST" target="_blank">
@@ -13,16 +14,9 @@
     </form>
 </div>
 @endif
-{{-- @if($bannerTop)
-<div class="2xl:mx-auto 2xl:container lg:px-20 md:px-6 px-4 pt-2">
-  <form id="bannerClickForm-{{ $bannerTop->id }}" action="{{ route('banner.click', ['id' => $bannerTop->id]) }}" method="POST" target="_blank">
-      @csrf
-      <button type="submit" class=" bg-none border-none w-full">
-          <img id="banner-{{ $bannerTop->id }}" src="http://localhost:8000{{ $bannerTop->image }}" data-banner-id="{{ $bannerTop->id }}" class="w-full md:h-[290px] object-fill" alt="">
-      </button>
-  </form>
+<div class="container mx-auto p-6">
+  <img src="{{ asset('images/banner-top.jpeg') }}" class="mx-auto" alt="">
 </div>
-@endif --}}
 @php
   $categorie = App\Models\Categorie::find($first_article->categorie_id);
 @endphp
@@ -78,7 +72,7 @@
               </div>
             </article>
             @else
-            <article class="col-span-3 p-1">
+            <article class="col-span-6 md:col-span-3 p-1">
               <div class="relative hover-img h-[250px] overflow-hidden">
                 <a href="/blog/{{ $categorie_article->slug }}/{{ $article->slug }}">
                   <img class="max-w-full w-full mx-auto h-full object-cover" src="{{ $article->image }}" alt="Image description">
@@ -179,20 +173,25 @@
 
 
         <!-- right sidebar -->
-        <div class="w-full lg:w-[30%] px-3">
+        <div class="w-full lg:w-[30%] md:px-3">
 
-            <div class="pt-2 xl:col-span-3 lg:col-span-4 ml-10">
-                <div class="mt-5 bg-[#e9ecfe] p-5 flex flex-col items-center">
+            <div class="pt-2 xl:col-span-3 lg:col-span-4 md:ml-10">
+                <div>
+                  <img src="{{ asset('images/banner-right.jpeg') }}" alt="">
+                </div>
+                <form class="mt-5 bg-red-50 p-5 flex flex-col items-center" action="{{ Route('email.store') }}" method="POST" id="newsletter">
+                    @csrf
                     <img src="{{ asset('images/newsletter.png') }}" class="w-[150px] h-[150px]" alt="">
                     <h5 class="text-black text-lg font-medium">Daily Newsletter</h5>
                     <p class="py-3 text-center text-sm text-[#444c6c]">Apply Your Email and Get all the Top Stories of fbtemplates</p>
-                    <input type="text" class="w-full border-none rounded" placeholder="Enter your Email">
-                    <button class="bg-[#99abd3] w-full my-5 p-2 text-white">Subscribe</button>
+                    <input type="text" name="email" class="w-full border-none rounded" placeholder="Enter your Email" required>
+                    <button type="submit" class="bg-second-color w-full my-5 p-2 text-black">Subscribe</button>
                     <label for="" class="flex items-center text-sm">
-                        <input type="checkbox" class="border-none mr-1" name="" id="">
+                        <input type="checkbox" class="border-none mr-1" name="" id="" required>
                         I agree to the terms & conditions
                     </label>
-                </div>
+                </form>
+
                 <div class="mt-5">
                   <div class="my-2 flex items-center justify-between space-x-1">
                       <h4 class="capitalize rounded mb-2 font-Roboto-condensed text-[18px] bg-second-color font-bold" style="padding:0 10px 1px">Categories</h4>
@@ -206,6 +205,7 @@
                       @endforelse
                   </div>
               </div> 
+
                 @if($bannerBigRight)
                     <div class="mt-5" id="hero-section">
                         <form id="bannerClickForm-{{ $bannerBigRight->id }}" action="{{ route('banner.click', ['id' => $bannerBigRight->id]) }}" method="POST" target="_blank">
@@ -217,32 +217,24 @@
                     </div>
                 @endif
                 <div class="mt-5 flex flex-col space-y-5">
-                    <h4 class="font-Lato text-[17px] uppercase">Social Media</h4>
-                    <a href="#" class="w-full bg-[#506fbf] rounded-full flex justify-between items-center">
-                        <span class="text-sm text-white ml-5">Facebook</span>
-                        <div class="bg-[#445fa2] rounded-full px-4 py-3">
-                            <i class="fa-brands fa-facebook text-white"></i>
-                        </div>
-                    </a>
-                    <a href="#" class="w-full bg-black bg-opacity-80 rounded-full flex justify-between items-center">
-                        <span class="text-sm text-white ml-5">Twitter</span>
-                        <div class="bg-black rounded-full px-4 py-3">
-                            <i class="fa-brands fa-x-twitter text-white"></i>
-                        </div>
-                    </a>
-
-                    <a href="#" class="w-full bg-red-400 rounded-full flex justify-between items-center">
-                        <span class="text-sm text-white ml-5">Youtube</span>
-                        <div class="bg-red-600 rounded-full px-4 py-3">
-                            <i class="fa-brands fa-youtube text-white"></i>
-                        </div>
-                    </a>
-                    <a href="#" class="w-full rounded-full flex justify-between items-center" style="background: radial-gradient(circle at 33% 100%,#fed373 4%,#f15245 30%,#d92e7f 62%,#9b36b7 85%,#515ecf)">
-                        <span class="text-sm text-white ml-5">Instagram</span>
-                        <div class="bg-[#9b36b7] rounded-full px-4 py-3">
-                            <i class="fa-brands fa-instagram text-white"></i>
-                        </div>
-                    </a>
+                    <div class="my-2 flex items-center justify-between space-x-1">
+                        <h4 class="capitalize rounded mb-2 font-Roboto-condensed text-[18px] bg-second-color font-bold" style="padding:0 10px 1px">Join Us</h4>
+                        <div class="flex-1 border-t-[1.5px] border-gray-200"></div>
+                    </div>
+                    <div class="flex items-center my-2 gap-2">
+                        <a href="#" class=" bg-[#e9b5a8] px-3.5 py-2 border cursor-pointer  border-none rounded-full transition-all">
+                          <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.instagram.com/gardenia.secret/" target="_blank" class="px-3 py-2 border cursor-pointer  bg-[#e9b5a8] border-none rounded-full transition-all">
+                          <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="#" class="px-2.5 py-2 border cursor-pointer  bg-[#e9b5a8] border-none rounded-full transition-all">
+                          <i class="fa-brands fa-youtube"></i>
+                        </a>
+                        <a href="#" class="px-3 py-2 border cursor-pointer  bg-[#e9b5a8] border-none rounded-full transition-all">
+                          <i class="fa-brands fa-tiktok"></i>
+                        </a>
+                      </div>
                 </div>
                 @if($bannerSmallRight)
                     <div class="mt-5" id="hero-section">
@@ -254,51 +246,11 @@
                         </form>
                     </div>
                 @endif
+                <div class="mt-5">
+                  <img src="{{ asset('images/banner-right-s.jpeg') }}" alt="">
+              </div>
             </div>
 
-            {{-- <div class="mt-5 ">
-                <div>
-                    <h4 class="pb-5 font-Lato text-[17px] uppercase" >Instagram</h4>
-                    <div class="grid grid-cols-3 gap-5">
-                        <div class="col-span-1 relative insta-card">
-
-                            <a href="https://www.instagram.com/gardenia.secret/" target="_blank">
-                                <div class="absolute left-0 bottom-0 w-full h-0 z-10 insta-overlay transition-all"
-                                style="background-image: linear-gradient(180deg,transparent,rgba(255,255,255,.7));"></div>
-                                <img src="{{ asset('images/gardenia_insta.jpeg') }}" class="w-full  h-32 object-cover" alt="">
-                            </a>
-                        </div>
-                        <div class="col-span-1 relative insta-card">
-                            <a href="https://www.instagram.com/gardenia.secret/" target="_blank">
-                                <div class="absolute left-0 bottom-0 w-full h-0 z-10 insta-overlay transition-all"
-                                style="background-image: linear-gradient(180deg,transparent,rgba(255,255,255,.7));"></div>
-                                <img src="{{ asset('images/gardenia_insta_2.jpeg') }}" class="w-full  h-32 object-cover" alt="">
-                            </a>
-                        </div>
-                        <div class="col-span-1 relative insta-card">
-                            <a href="https://www.instagram.com/gardenia.secret/" target="_blank">
-                                <div class="absolute left-0 bottom-0 w-full h-0 z-10 insta-overlay transition-all"
-                                style="background-image: linear-gradient(180deg,transparent,rgba(255,255,255,.7));"></div>
-                                <img src="{{ asset('images/gardenia_test_3.jpeg') }}" class="w-full  h-32 object-cover" alt="">
-                            </a>
-                        </div>
-                        <div class="col-span-1 relative insta-card">
-                            <a href="https://www.instagram.com/gardenia.secret/" target="_blank">
-                                <div class="absolute left-0 bottom-0 w-full h-0 z-10 insta-overlay transition-all"
-                                style="background-image: linear-gradient(180deg,transparent,rgba(255,255,255,.7));"></div>
-                                <img src="{{ asset('images/gardenia_instagram_4.png') }}" class="w-full  h-32 object-cover" alt="">
-                            </a>
-                        </div>
-                        <div class="col-span-1 relative insta-card">
-                            <a href="https://www.instagram.com/gardenia.secret/" target="_blank">
-                                <div class="absolute left-0 bottom-0 w-full h-0 z-10 insta-overlay transition-all"
-                                style="background-image: linear-gradient(180deg,transparent,rgba(255,255,255,.7));"></div>
-                                <img src="{{ asset('images/gardenia_instagram_5.png') }}" class="w-full  h-32 object-cover" alt="">
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
 
 
         </div>
@@ -317,5 +269,63 @@
 @include('pages.components.footer')
 @include('pages.components.cart')
 @include('pages.components.wishlist')
+
+<script>
+    var newsLetterFormShop = document.getElementById('newsletter');
+    var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    newsLetterFormShop.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var formData = new FormData(newsLetterFormShop);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open(newsLetterFormShop.method, newsLetterFormShop.action);
+        xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+        xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+    if (xhr.status === 422) { 
+        var errorObj = JSON.parse(xhr.responseText);
+        var errors = errorObj.errors || {};
+        for (var field in errors) {
+            var inputField = document.querySelector('[name="' + field + '"]');
+            inputField.classList.add('is-invalid');
+            var errorElement = inputField.nextElementSibling;
+            errorElement.innerHTML = errors[field][0];
+            errorElement.style.display = 'block';
+        }
+
+        var message = errorObj.message || "Error";
+        if(message.includes('The email has already been taken.')) {
+            Toastify({
+                text: 'Email déjà utilisée',
+                duration: 3000, 
+                gravity: 'top', 
+                position: 'center', 
+                backgroundColor: '#ef4444', 
+                stopOnFocus: true, 
+                }).showToast();
+        }
+        }
+    else if (xhr.status === 200) {
+        // if (this.responseText == 'exists') {
+
+                Toastify({
+                text: 'Merci pour votre inscription',
+                duration: 3000, 
+                gravity: 'top', 
+                position: 'center', 
+                backgroundColor: '#af8d6a', 
+                stopOnFocus: true, 
+                }).showToast();
+            } else {
+                handleSuccess();
+            // }
+            }
+        }
+        };
+        xhr.send(formData);
+    });
+
+</script>
 
 @endsection

@@ -8,18 +8,22 @@
                 <i class="fas fa-tachometer-alt mr-3"></i>
                 Dashboard
             </a>
-            <a href="{{ Route('product.index') }}" class="flex items-center text-white opacity-75 hover:opacity-100  py-4 pl-6 nav-item">
+            <a href="{{ Route('admin.home.index') }}" class="flex items-center  py-4 text-white opacity-75 hover:opacity-100 pl-6 nav-item">
+                <i class="fa-solid fa-house mr-3"></i>
+                Home Slider
+            </a>
+            {{-- <a href="{{ Route('product.index') }}" class="flex items-center text-white opacity-75 hover:opacity-100  py-4 pl-6 nav-item">
                 <i class="fa-solid fa-store mr-3"></i>
                 Produits
-            </a>
+            </a> --}}
             <a href="{{ Route('category.index') }}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fa-solid fa-tags mr-3"></i>
                 Categories
             </a>
-            <a href="{{ Route('brand.index') }}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
+            {{-- <a href="{{ Route('brand.index') }}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fa-solid fa-copyright mr-3"></i>
                 Brands
-            </a>
+            </a> --}}
             <a href="{{ Route('blog.index') }}" class="flex items-center text-white opacity-75 hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fa-regular fa-newspaper mr-3"></i>
                 Articles
@@ -36,7 +40,7 @@
                 <i class="fa-solid fa-user-tie mr-4"></i>
                 Clients
             </a>
-            <a href="{{ Route('campagne.index') }}" class="flex items-center  opacity-75 text-white hover:opacity-100 py-4 pl-6 nav-item">
+            {{-- <a href="{{ Route('campagne.index') }}" class="flex items-center  opacity-75 text-white hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fa-solid fa-bullhorn mr-4"></i>
                 Campagnes
             </a>
@@ -47,6 +51,10 @@
             <a href="{{ Route('order.index') }}" class="flex items-center  opacity-75 text-white hover:opacity-100 py-4 pl-6 nav-item">
                 <i class="fa-solid fa-cart-shopping mr-4"></i>
                 Orders
+            </a> --}}
+            <a href="{{ Route('admin.faq.index') }}" class="flex items-center  opacity-75 text-white hover:opacity-100 py-4 pl-6 nav-item">
+                <i class="fa-regular fa-circle-question mr-3"></i>
+                FAQ
             </a>
         </nav>
     </aside>

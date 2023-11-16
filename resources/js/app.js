@@ -19,16 +19,20 @@ let closeSocial = document.querySelector('.close-social');
 burgerSocial.addEventListener('click',function() {
     document.querySelector('.social-media').classList.remove('-right-96')
     document.querySelector('.social-media').classList.add('right-0')
+    document.querySelector('#header-overlay').classList.add('block')
+    document.querySelector('#header-overlay').classList.remove('hidden')
 })
 closeSocial.addEventListener('click',function() {
     document.querySelector('.social-media').classList.add('-right-96')
     document.querySelector('.social-media').classList.remove('right-0')
+    document.querySelector('#header-overlay').classList.remove('block')
+    document.querySelector('#header-overlay').classList.add('hidden')
 })
 window.addEventListener('scroll',function() {
-    document.querySelector('.nav-links').classList.add('hidden')
-    document.querySelector('.nav-links').classList.remove('flex')
     document.querySelector('.social-media').classList.add('-right-96')
     document.querySelector('.social-media').classList.remove('right-0')
+    document.querySelector('#header-overlay').classList.remove('block')
+    document.querySelector('#header-overlay').classList.add('hidden')
     if(this.window.scrollY >= 200) {
       document.getElementById('top').classList.add('opacity-100')
       document.getElementById('top').classList.remove('opacity-0')
@@ -57,9 +61,17 @@ document.getElementById('top').addEventListener('click',function() {
     behavior: 'smooth',
   });
 })
-document.getElementById('close').addEventListener('click',function() {
-  document.getElementById('pop-up').remove();
-})
+var closeButton = document.getElementById('close');
+
+if (closeButton) {
+  closeButton.addEventListener('click', function() {
+    var popUpElement = document.getElementById('pop-up');
+    if (popUpElement) {
+      popUpElement.remove();
+    }
+  });
+}
+
 
 document.querySelector('.search').addEventListener('click',function() {
     document.querySelector('.logo-img').classList.add('hidden')

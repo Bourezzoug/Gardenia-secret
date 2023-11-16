@@ -40,7 +40,7 @@
     </div>
     <div class="nav-footer py-3 text-white border-t mt-12 border-[#5f5f5f]">
       <div class="container md:px-56 px-6 mx-auto py-3 flex flex-col md:flex-row md:justify-around text-sm  ">
-        <a href="#" class="uppercase font-Lato text-xs">CGV</a>
+        <a href="{{ Route('pdf/cgv.pdf') }}" class="uppercase font-Lato text-xs">CGV</a>
         <a href="#" class="uppercase font-Lato text-xs">Mentions Légales</a>
         <a href="#" class="uppercase font-Lato text-xs">Politique de Confidentialité</a>
         <a href="#" class="uppercase font-Lato text-xs ">Information sur les Cookies</a>
